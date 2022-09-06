@@ -1,0 +1,6 @@
+#! /bin/bash
+
+wal --theme random_dark&
+sleep 0.3 &
+qtile cmd-obj -o cmd -f reload_config &
+pkill dunst
