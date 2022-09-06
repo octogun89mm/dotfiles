@@ -54,8 +54,8 @@ widget_label_spacer = widget.Spacer(
 
 # Init weather widget
 weather_widget = widget.OpenWeather(
-    app_key = "2966b50b920faa427f8b92cceedb1068",
-    cityid = "5978353",
+    app_key = "7834197c2338888258f8cb94ae14ef49",
+    cityid = "2643743",
     format = '<span font_desc="Font Awesome 6 Free Solid, Solid">{icon}</span> {main_feels_like:.1f}°{units_temperature}',
     weather_symbols = {
        "Unknown": "",
