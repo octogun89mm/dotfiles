@@ -1,0 +1,103 @@
+@import "wallust.css";
+
+/* ALL */
+* {
+    border: none;
+    border-radius: 0;
+    font-family: Roboto Mono;
+    font-size: 8pt;
+    color: @fg;
+    padding: 0px;
+    margin: 0px;
+    min-height: 0;
+    min-width: 0;
+}
+
+/* BAR WINDOW */
+window#waybar.top_bar {
+  background-color: @bg;
+}
+
+window#waybar.bottom_bar {
+  background-color: @bg;
+}
+
+/* TOOLTIP */
+tooltip {
+  background: @bg;
+  border: 1px solid @c2;
+}
+
+/* EXPRESSVPN WIDGET */
+#custom-expressvpn.vpn-connected {
+  color: @c2;
+}
+
+#custom-expressvpn.vpn-disconnected {
+  color: @fg;
+}
+
+/* MODE */
+#mode {
+  color: @c11;
+}
+
+/* SEPARATOR */
+custom-separator {
+  color: @c1;
+}
+
+/* CLOCK AND DATE */
+#clock.clock {
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+/* SCRATCHPAD */
+#scratchpad {
+  font-size: 10pt;
+  font-weight: bold;
+}
+
+/* STATUS NOTIFIER (SYSTRAY) */
+menu {
+  background-color: @bg;
+  border: 0px;
+  padding: 5px;
+  outline: none;
+}
+
+menuitem:hover {
+  background-color: @c2;
+}
+
+menuitem:hover label {
+  color: @bg;
+}
+
+/* WORKSPACES - MUST BE AT THE END */
+#workspaces button {
+  padding: 0px 6px;
+}
+
+#workspaces button:hover {
+  background-image: none;
+}
+
+#workspaces button label {
+  color: @fg;
+  font-family: "Symbols Nerd Font Mono";
+  font-size: 10pt;
+}
+
+#workspaces button.focused {
+  background-color: @c8;
+}
+
+#workspaces button label {
+  color: @c2;
+}
+
+#workspaces button.empty label {
+  color: @fg;
+}
