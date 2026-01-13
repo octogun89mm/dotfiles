@@ -190,7 +190,7 @@ titlebar_padding 5
 smart_borders on
 smart_borders no_gaps
 smart_gaps on
-mouse_warping container
+mouse_warping output
 gaps inner 10
 gaps outer 0
 
