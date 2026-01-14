@@ -36,9 +36,13 @@ set $web_browser firefox
 set $newsboat foot --app-id=newsboat -- newsboat
 # Keybind helper
 set $swaykeybinds foot --app-id=swaykeybinds sh -c '/home/juju/.local/bin/sway-keybinds.sh; read -p "Press enter to close..."'
+# Woomer
+set $woomer $HOME/.cargo/bin/woomer
 
 ### Autostart + Window rules ###
 # Essentials
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 exec /usr/lib/polkit-kde-authentication-agent-1
 exec waypaper --restore
 exec dunst
@@ -98,6 +102,7 @@ input type:keyboard {
     bindsym $mod+Shift+slash exec $swaykeybinds
     bindsym $mod+s exec $symbolsmenu
     bindsym $mod+v exec $cliphistmenu
+    bindsym $mod+c exec $woomer
 ## Kill, reload and quit ##
     bindsym $mod+q kill
     bindsym $mod+shift+q $powermenu

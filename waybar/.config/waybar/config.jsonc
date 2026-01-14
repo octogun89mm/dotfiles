@@ -11,6 +11,10 @@
     "height": 24,
     "spacing": 0, 
     "modules-left": [
+      "custom/edgespacer",
+      "custom/archicon",
+      "custom/separator",
+      "sway/window",
       "sway/mode"
     ],
     "modules-center": [
@@ -33,6 +37,10 @@
     "custom/separator": {
       "format": " | "
     },
+    "custom/archicon": {
+      "format": "󰣇",
+      "tooltip": false
+    },
     "idle_inhibitor": {
       "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{icon}</span>",
       "format-icons": {
@@ -42,6 +50,11 @@
     },
     "sway/mode": {
       "format": "{}"
+    },
+    "sway/window": {
+      "format": "{title}",
+      "max-length": 100,
+      "tooltip": false
     },
     "sway/workspaces": {
       "format": "{icon}",
@@ -62,12 +75,12 @@
         "2": "󰭷",
         "3": "󰌀",
         "4": "",
-        "5": "",
+        "5": "󰺵",
         "6": "",
         "7": "󰝚",
         "8": "󱞁",
         "9": "󰍩",
-        "10": ""
+        "10": ""
       }
     },
     "sway/scratchpad": {
@@ -98,7 +111,7 @@
       }
     },
     "clock#clock": {
-      "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>󰥔</span> {:%I:%M%p}",
+      "format": "<span font_family='Symbols Nerd Font Mono' font_size='small'>󰥔</span> {:%I:%M %p}",
       "tooltip": false
     }
   },

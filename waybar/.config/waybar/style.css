@@ -11,6 +11,7 @@
     margin: 0px;
     min-height: 0;
     min-width: 0;
+    box-shadow: none;
 }
 
 /* BAR WINDOW */
@@ -26,6 +27,12 @@ window#waybar.bottom_bar {
 tooltip {
   background: @bg;
   border: 1px solid @c2;
+}
+
+/* MAIN MENU ICON */
+#custom-archicon {
+  font-family: "Symbols Nerd Font Mono";
+  font-size: 10pt;
 }
 
 /* EXPRESSVPN WIDGET */
@@ -60,19 +67,21 @@ custom-separator {
 }
 
 /* STATUS NOTIFIER (SYSTRAY) */
-menu {
+#tray menu {
   background-color: @bg;
-  border: 0px;
+  border: solid 2px @c2;
   padding: 5px;
   outline: none;
+  box-shadow: none;
 }
 
-menuitem:hover {
+#tray menuitem:hover {
   background-color: @c2;
 }
 
-menuitem:hover label {
+#tray menuitem:hover label {
   color: @bg;
+  font-weight: bold;
 }
 
 /* WORKSPACES - MUST BE AT THE END */
