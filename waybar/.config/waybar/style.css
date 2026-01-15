@@ -46,7 +46,7 @@ tooltip {
 
 /* IDLE INHIBITOR */
 #idle_inhibitor.activated {
-  color: @c2;
+  color: @c3;
 }
 
 /* MODE */
