@@ -105,7 +105,11 @@ custom-separator {
 }
 
 #workspaces button.focused {
-  background-color: @c8;
+  background-color: @c7;
+}
+
+#workspaces button.focused label {
+  color: @bg;
 }
 
 #workspaces button label {
@@ -113,5 +117,5 @@ custom-separator {
 }
 
 #workspaces button.empty label {
-  color: @fg;
+  color: @c8;
 }

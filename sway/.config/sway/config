@@ -41,13 +41,11 @@ set $woomer $HOME/.cargo/bin/woomer
 
 ### Autostart + Window rules ###
 # Essentials
-exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
-exec gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland
 exec /usr/lib/polkit-kde-authentication-agent-1
 exec waypaper --restore
 exec dunst
 exec wl-paste --watch cliphist store
-exec autotiling -l 2
 # Messaging on WS 9
 exec vesktop
 for_window [app_id="vesktop"] move container to workspace number 9
