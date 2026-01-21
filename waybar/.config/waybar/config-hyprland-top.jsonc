@@ -1,0 +1,133 @@
+{
+    "position": "top",
+    "id": "top_bar",
+    "name": "top_bar",
+    "height": 24,
+    "spacing": 0, 
+    "modules-left": [
+      "custom/edgespacer",
+      "custom/archicon",
+      "custom/separator",
+      "idle_inhibitor",
+      "custom/separator",
+      "hyprland/window"
+    ],
+    "modules-center": [
+      "hyprland/workspaces"
+    ],
+    "modules-right": [
+      "hyprland/submap",
+      "mpd",
+      "custom/separator",
+      "pulseaudio",
+      "custom/separator",
+      "clock#date",
+      "custom/separator",
+      "clock#clock",
+      "custom/edgespacer"
+    ],
+    "custom/edgespacer": {
+      "format": " "
+    },
+    "custom/separator": {
+      "format": " | "
+    },
+    "custom/archicon": {
+      "format": "󰣇",
+      "tooltip": false
+    },
+    "idle_inhibitor": {
+      "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{icon}</span>",
+      "format-icons": {
+        "activated": "󰈈",
+        "deactivated": "󰈉"
+      }
+    },
+    "hyprland/submap": {
+      "format": "<span text_transform='uppercase'>{}</span> MODE | "
+    },
+    "hyprland/window": {
+      "format": "{title}",
+      "max-length": 100,
+      "tooltip": false
+    },
+    "hyprland/workspaces": {
+      "format": "{icon}",
+      "show-special": true,
+      "persistent-workspaces": {
+        "1": [],
+        "2": [],
+        "3": [],
+        "4": [],
+        "5": [],
+        "6": [],
+        "7": [],
+        "8": [],
+        "9": [],
+        "10": [],
+        "dropdown": [],
+        "magic": []
+      },
+      "format-icons": {
+        "1": "",
+        "2": "",
+        "3": "󰌀",
+        "4": "",
+        "5": "󰺵",
+        "6": "󰭷",
+        "7": "󰝚",
+        "8": "󱞁",
+        "9": "󰍩",
+        "10": "",
+        "dropdown": "",
+        "magic": "󰜄"
+      }
+    },
+    "pulseaudio": {
+      "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{icon}</span> {volume:>2}%",
+      "on-click": "foot -e pulsemixer",
+      "max-volume": 99,
+      "format-icons": {
+        "alsa_output.pci-0000_00_1f.3.analog-stereo": "󰓃",
+        "alsa_output.usb-Razer_Razer_Kraken_V3_HyperSense_000000000001-00.analog-stereo": "󰋎"
+      }
+    },
+    "mpd": {
+      "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{stateIcon}</span> {artist} - {title} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
+      "format-disconnected": "",
+      "format-stopped": "<span font_family='Symbols Nerd Font Mono' font_size='large'>󰓛</span> Stopped",
+      "state-icons": {
+        "paused": "󰏤",
+        "playing": "󰐊"
+      },
+      "max-length": 100,
+      "tooltip-format": "{album} ({date})\n{title} by {artist}",
+      "tooltip-format-disconnected": "MPD disconnected",
+      "on-click": "mpc toggle",
+      "on-scroll-up": "mpc prev",
+      "on-scroll-down": "mpc next"
+    },
+    "clock#date": {
+      "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'></span> {:%a-%d-%m-%y}",
+      "tooltip": true,
+      "tooltip-format": "{calendar}",
+      "calendar": {
+        "mode": "month",
+        "on-scroll": 1,
+        "mode-mon-col": 3,
+        "format": {
+          "today": "<span font_weight='heavy' underline='single'>{}</span>"
+        }
+      },
+      "actions": {
+        "on-scroll-up": "shift_up",
+        "on-scroll-down": "shift_down",
+        "on-click": "shift_reset",
+        "on-click-right": "mode"
+      }
+    },
+    "clock#clock": {
+      "format": "<span font_family='Symbols Nerd Font Mono' font_size='small'>󰥔</span> {:%I:%M %p}",
+      "tooltip": false
+    }
+  }

@@ -15,11 +15,7 @@
 }
 
 /* BAR WINDOW */
-window#waybar.top_bar {
-  background-color: @bg;
-}
-
-window#waybar.bottom_bar {
+window#waybar {
   background-color: @bg;
 }
 
@@ -32,16 +28,8 @@ tooltip {
 /* MAIN MENU ICON */
 #custom-archicon {
   font-family: "Symbols Nerd Font Mono";
-  font-size: 10pt;
-}
-
-/* EXPRESSVPN WIDGET */
-#custom-expressvpn.vpn-connected {
+  font-size: 12pt;
   color: @c2;
-}
-
-#custom-expressvpn.vpn-disconnected {
-  color: @fg;
 }
 
 /* IDLE INHIBITOR */
@@ -65,25 +53,7 @@ custom-separator {
   font-weight: bold;
 }
 
-/* STATUS NOTIFIER (SYSTRAY) */
-#tray menu {
-  background-color: @bg;
-  border: solid 2px @c2;
-  padding: 5px;
-  outline: none;
-  box-shadow: none;
-}
-
-#tray menuitem:hover {
-  background-color: @c2;
-}
-
-#tray menuitem:hover label {
-  color: @bg;
-  font-weight: bold;
-}
-
-/* WORKSPACES - MUST BE AT THE END */
+/* WORKSPACES */
 #workspaces button {
   padding: 0px 6px;
   border-bottom: solid 2px transparent;
@@ -94,9 +64,16 @@ custom-separator {
 }
 
 #workspaces button label {
-  color: @fg;
   font-family: "Symbols Nerd Font Mono";
   font-size: 10pt;
+}
+
+#workspaces button.empty label {
+  color: @c8;
+}
+
+#workspaces button:not(.empty):not(.active) label {
+  color: @c2;
 }
 
 #workspaces button.active {
@@ -105,12 +82,4 @@ custom-separator {
 
 #workspaces button.active label {
   color: @fg;
-}
-
-#workspaces button label {
-  color: @c2;
-}
-
-#workspaces button.empty label {
-  color: @c8;
 }

@@ -1,0 +1,58 @@
+@import "wallust.css";
+
+/* ALL */
+* {
+    border: none;
+    border-radius: 0;
+    font-family: Roboto Mono;
+    font-size: 8pt;
+    color: @fg;
+    padding: 0px;
+    margin: 0px;
+    min-height: 0;
+    min-width: 0;
+    box-shadow: none;
+}
+
+/* BAR WINDOW */
+window#waybar {
+  background-color: @bg;
+}
+
+/* TOOLTIP */
+tooltip {
+  background: @bg;
+  border: 1px solid @c2;
+}
+
+/* EXPRESSVPN WIDGET */
+#custom-expressvpn.vpn-connected {
+  color: @c2;
+}
+
+#custom-expressvpn.vpn-disconnected {
+  color: @fg;
+}
+
+/* SEPARATOR */
+custom-separator {
+  color: @c1;
+}
+
+/* STATUS NOTIFIER (SYSTRAY) */
+#tray menu {
+  background-color: @bg;
+  border: solid 2px @c2;
+  padding: 5px;
+  outline: none;
+  box-shadow: none;
+}
+
+#tray menuitem:hover {
+  background-color: @c2;
+}
+
+#tray menuitem:hover label {
+  color: @bg;
+  font-weight: bold;
+}
