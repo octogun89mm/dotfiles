@@ -1,0 +1,25 @@
+configuration {
+  modes: "drun,run,window,power";
+  no-default-theme: true;
+  show-icons: false;
+  window-format: "{t}";
+  terminal: "foot";
+  me-select-entry: "";
+  me-accept-entry: "!MousePrimary";
+  hover-select: true;
+  drun-display-format: "{name}";
+  drun {
+    display-name: "App";
+  }
+  run {
+    display-name: "Run";
+  }
+  window {
+    display-name: "Windows";
+  }
+  power {
+    display-name: "Power";
+  }
+}
+
+@theme "~/.config/rofi/themes/dmenu.rasi"

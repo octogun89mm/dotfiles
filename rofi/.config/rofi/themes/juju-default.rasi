@@ -1,0 +1,80 @@
+@import "wallust.rasi"
+
+* {
+    font: "Roboto Mono 12";
+    font-bold: "Roboto Mono Bold 12";
+    font-alt: "RobotoMono Nerd Font Mono 14";
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+window {
+    fullscreen: true;
+    background-color: transparent;
+    transparency: "real";
+    font: "Roboto Mono 12";
+    border: 0px;
+}
+
+mainbox {
+    margin: 300px 600px;
+    background-color: @background-color;
+    border: 2px;
+    font: @font;
+    padding: 5px;
+}
+
+prompt {
+    font: @font-bold;
+}
+
+box {
+    background: @background-color;
+    font: @font;
+}
+
+inputbar {
+    background: @background-color;
+    font: @font;
+    border: 0px 0px 2px 0px;
+    padding: 3px;
+    children: [prompt, textbox-colon, entry];
+}
+
+textbox-colon {
+    content: "";
+    expand: false;
+    padding: 0px 3px;
+    font: @font-alt;
+}
+
+entry {
+    font: @font;
+    blink: false;
+}
+
+textbox {
+    font: @font;
+}
+
+inputbar {
+    font: @font;
+}
+
+listview {
+    font: @font;
+    padding: 0px;
+}
+
+element-text {
+    padding: 3px 3px;
+}
+
+
+element-text selected.normal {
+    background-color: @accent-color;
+    text-color: @background-color;
+}
+
+
