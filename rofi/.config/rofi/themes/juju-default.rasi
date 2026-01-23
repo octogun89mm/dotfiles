@@ -71,7 +71,6 @@ element-text {
     padding: 3px 3px;
 }
 
-
 element-text selected.normal {
     background-color: @accent-color;
     text-color: @background-color;

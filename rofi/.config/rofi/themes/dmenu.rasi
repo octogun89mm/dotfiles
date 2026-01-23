@@ -1,9 +1,10 @@
 @import "wallust.rasi"
 
 * {
-  background-color: @bg;
-  text-color: @fg;
+  background-color: @fg;
+  text-color: @bg;
   font: "Roboto Mono 8";
+  bold-font: "Roboto Mono Bold 8";
   padding: 0px;
   margin: 0px;
 }
@@ -24,7 +25,7 @@ horibox {
 prompt {
   text-color: @color4;
   vertical-align: 0.5;
-  font: "Roboto Mono Bold 8";
+  font: @bold-font;
 }
 
 listview {
@@ -38,14 +39,11 @@ entry {
   width: 200px;
   vertical-align: 0.5;
   blink: false;
-  cursor-color: @cursor;
+  cursor-color: @bg;
   margin: 0px 0px 0px 5px;
 }
 
-element {
-}
-
-element-text selected {
+element-text selected.normal {
   text-color: @color4;
 }
 
