@@ -1,8 +1,8 @@
 @import "wallust.rasi"
 
 * {
-  background-color: @fg;
-  text-color: @bg;
+  background-color: @bg;
+  text-color: @fg;
   font: "Roboto Mono 8";
   bold-font: "Roboto Mono Bold 8";
   padding: 0px;
