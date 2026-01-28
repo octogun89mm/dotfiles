@@ -85,7 +85,7 @@
     },
     "pulseaudio": {
       "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{icon}</span> {volume:>2}%",
-      "on-click": "foot -e pulsemixer",
+      "on-click": "foot --app-id=foot-pulsemixer -e pulsemixer",
       "max-volume": 99,
       "format-icons": {
         "alsa_output.pci-0000_00_1f.3.analog-stereo": "󰓃",
