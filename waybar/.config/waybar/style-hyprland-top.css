@@ -64,8 +64,9 @@ custom-separator {
 }
 
 #workspaces button label {
-  font-family: "Symbols Nerd Font Mono";
-  font-size: 10pt;
+  font-family: "Roboto Mono";
+  font-size: 11pt;
+  font-weight: bold;
 }
 
 #workspaces button.empty label {
