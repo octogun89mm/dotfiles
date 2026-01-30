@@ -78,9 +78,9 @@ custom-separator {
 }
 
 #workspaces button.active {
-  border-bottom: solid 2px @c7;
+  border-bottom: solid 2px @c3;
 }
 
 #workspaces button.active label {
-  color: @fg;
+  color: @c3;
 }
