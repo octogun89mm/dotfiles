@@ -38,10 +38,12 @@
     "custom/edgespacer"
   ],
   "custom/edgespacer": {
-    "format": " "
+    "format": " ",
+    "tooltip": false
   },
   "custom/separator": {
-    "format": " | "
+    "format": " | ",
+    "tooltip": false
   },
   "custom/archicon": {
     "format": "󰣇",
@@ -52,10 +54,12 @@
     "format-icons": {
       "activated": "󰈈",
       "deactivated": "󰈉"
-    }
+    },
+    "tooltip": false
   },
   "hyprland/submap": {
-    "format": "<span text_transform='uppercase'>{}</span> MODE | "
+    "format": "<span text_transform='uppercase'>{}</span> MODE | ",
+    "tooltip": false
   },
   "hyprland/window": {
     "format": "{title}",
