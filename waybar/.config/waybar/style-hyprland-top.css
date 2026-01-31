@@ -104,6 +104,10 @@ custom-separator {
   color: @c2;
 }
 
+#workspaces button.visible {
+  border-bottom: solid 2px @c2;
+}
+
 #workspaces button.active {
   border-bottom: solid 2px @c3;
 }
@@ -111,3 +115,4 @@ custom-separator {
 #workspaces button.active label {
   color: @c3;
 }
+
