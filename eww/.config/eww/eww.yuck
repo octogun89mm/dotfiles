@@ -84,11 +84,11 @@
     (info-row :label "Temperature" :value "${gpu.temp}°C")))
 
 (defwidget memory-card []
-  (card :title "Memory" :icon "" :css-class "card-memory"
+  (card :title "Memory" :icon "" :css-class "card-memory"
     (info-row :label "Used / Total" :value "${memory_used}G / ${memory_total}G")))
 
 (defwidget network-card []
-  (card :title "Network" :icon "" :css-class "card-network"
+  (card :title "Network" :icon "󰛳" :css-class "card-network"
     (info-row :label "Download" :value "${download_speed} MB/s")
     (info-row :label "Upload" :value "${upload_speed} MB/s")
     (info-row :label "WiFi Signal" :value "${wifi_strength}%")))
