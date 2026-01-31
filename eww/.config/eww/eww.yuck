@@ -1,0 +1,129 @@
+;; EWW Sidebar - System Vitals Panel
+;; Toggle with: eww open --toggle sidebar
+
+;; =============================================================================
+;; POLL VARIABLES
+;; =============================================================================
+
+;; CPU
+(defpoll cpu_usage :interval "2s" :initial "0"
+  "scripts/cpu_usage.sh")
+
+(defpoll cpu_freq :interval "2s" :initial "0.00"
+  "scripts/cpu_freq.sh")
+
+(defpoll cpu_temp :interval "5s" :initial "0"
+  "scripts/cpu_temp.sh")
+
+;; GPU (JSON: usage, vram_used, vram_total, temp)
+(defpoll gpu :interval "5s" :initial '{"usage":"0","vram_used":"0.0","vram_total":"0.0","temp":"0"}'
+  "scripts/gpu_monitor.sh")
+
+;; Memory
+(defpoll memory_used :interval "5s" :initial "0.0"
+  "scripts/memory_used.sh")
+
+(defpoll memory_total :interval "5s" :initial "0.0"
+  "scripts/memory_total.sh")
+
+;; Network
+(defpoll download_speed :interval "2s" :initial "00.00"
+  "scripts/download_speed.sh")
+
+(defpoll upload_speed :interval "2s" :initial "00.00"
+  "scripts/upload_speed.sh")
+
+(defpoll wifi_strength :interval "10s" :initial "0"
+  "scripts/wifi_strength.sh")
+
+;; Disks
+(defpoll disk_main :interval "30s" :initial "0/0G"
+  "scripts/disk_usage.sh /")
+
+(defpoll disk_fast :interval "30s" :initial "0/0G"
+  "scripts/disk_usage.sh /mnt/Fast")
+
+(defpoll disk_extra :interval "30s" :initial "0/0G"
+  "scripts/disk_usage.sh /mnt/Extra")
+
+(defpoll disk_extra2 :interval "30s" :initial "0/0G"
+  "scripts/disk_usage.sh /mnt/Extra2")
+
+;; =============================================================================
+;; REUSABLE WIDGETS
+;; =============================================================================
+
+;; A single row: label on left, value on right
+(defwidget info-row [label value]
+  (box :class "info-row" :orientation "h" :space-evenly false
+    (label :class "info-label" :text label :hexpand true :halign "start")
+    (label :class "info-value" :text value :halign "end")))
+
+;; Card container with header
+(defwidget card [title icon css-class]
+  (box :class "card ${css-class}" :orientation "v" :space-evenly false
+    (box :class "card-header" :orientation "h" :space-evenly false
+      (label :class "card-icon" :text icon)
+      (label :class "card-title" :text title))
+    (children)))
+
+;; =============================================================================
+;; CARD WIDGETS
+;; =============================================================================
+
+(defwidget cpu-card []
+  (card :title "CPU" :icon "󰻠" :css-class "card-cpu"
+    (info-row :label "Usage" :value "${cpu_usage}%")
+    (info-row :label "Frequency" :value "${cpu_freq} GHz")
+    (info-row :label "Temperature" :value "${cpu_temp}°C")))
+
+(defwidget gpu-card []
+  (card :title "GPU" :icon "󰢮" :css-class "card-gpu"
+    (info-row :label "Usage" :value "${gpu.usage}%")
+    (info-row :label "VRAM" :value "${gpu.vram_used}/${gpu.vram_total}G")
+    (info-row :label "Temperature" :value "${gpu.temp}°C")))
+
+(defwidget memory-card []
+  (card :title "Memory" :icon "" :css-class "card-memory"
+    (info-row :label "Used / Total" :value "${memory_used}G / ${memory_total}G")))
+
+(defwidget network-card []
+  (card :title "Network" :icon "" :css-class "card-network"
+    (info-row :label "Download" :value "${download_speed} MB/s")
+    (info-row :label "Upload" :value "${upload_speed} MB/s")
+    (info-row :label "WiFi Signal" :value "${wifi_strength}%")))
+
+(defwidget storage-card []
+  (card :title "Storage" :icon "󰋊" :css-class "card-storage"
+    (info-row :label "MAIN (/)" :value disk_main)
+    (info-row :label "FAST" :value disk_fast)
+    (info-row :label "EXTRA" :value disk_extra)
+    (info-row :label "EXTRA2" :value disk_extra2)))
+
+;; =============================================================================
+;; SIDEBAR
+;; =============================================================================
+
+(defwidget sidebar-widget []
+  (box :class "sidebar" :orientation "v" :space-evenly false
+    (cpu-card)
+    (gpu-card)
+    (memory-card)
+    (network-card)
+    (storage-card)))
+
+;; =============================================================================
+;; WINDOW
+;; =============================================================================
+
+(defwindow sidebar
+  :monitor 0
+  :geometry (geometry
+              :x "8px"
+              :y "0px"
+              :anchor "center left")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "eww_sidebar"
+  (sidebar-widget))

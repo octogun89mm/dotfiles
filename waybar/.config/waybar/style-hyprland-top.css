@@ -37,6 +37,33 @@ tooltip {
   color: @c3;
 }
 
+/* EXPRESSVPN WIDGET */
+#custom-expressvpn.vpn-connected {
+  color: @c2;
+}
+
+#custom-expressvpn.vpn-disconnected {
+  color: @fg;
+}
+
+/* STATUS NOTIFIER (SYSTRAY) */
+#tray menu {
+  background-color: @bg;
+  border: solid 2px @c2;
+  padding: 5px;
+  outline: none;
+  box-shadow: none;
+}
+
+#tray menuitem:hover {
+  background-color: @c2;
+}
+
+#tray menuitem:hover label {
+  color: @bg;
+  font-weight: bold;
+}
+
 /* MODE */
 #mode {
   color: @c11;

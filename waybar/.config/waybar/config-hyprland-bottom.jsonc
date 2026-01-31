@@ -5,12 +5,7 @@
   "height": 24,
   "spacing": 0, 
   "modules-left": [
-    "custom/edgespacer",
-    "hyprland/language",
-    "custom/separator",
-    "custom/expressvpn",
-    "custom/separator",
-    "custom/weather"
+    "custom/edgespacer"
   ],
   "modules-center": [
     "cpu",
@@ -33,7 +28,6 @@
     "disk#extra2"
   ],
   "modules-right": [
-    "tray",
     "custom/edgespacer"
   ],
   "custom/edgespacer": {
@@ -102,75 +96,5 @@
     "format": "EXTRA2: {specific_used:>5.1f}G/{specific_total:>5.1f}G",
     "path": "/mnt/Extra2/",
     "unit": "GB"
-  },
-  "tray": {
-    "icon-size": 15,
-    "spacing": 5
-  },
-  "hyprland/language": {
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>󰌌</span> <span text_transform='uppercase'>{short}</span>",
-    "tooltip": false
-  },
-  "custom/expressvpn": {
-    "exec": "~/.config/waybar/scripts/expressvpn.sh",
-    "return-type": "json",
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{alt}</span> {text:>12}",
-    "interval": 15
-  },
-  "custom/weather": {
-    "exec": "~/.config/waybar/scripts/weather.py",
-    "return-type": "json",
-    "interval": 1800,
-    "format": "<span font_family='Weather Icons' font_size='large'>{icon}</span> {text}",
-    "format-icons": {
-      "113": "",
-      "116": "",
-      "119": "",
-      "122": "",
-      "143": "",
-      "176": "",
-      "179": "",
-      "182": "",
-      "185": "",
-      "200": "",
-      "227": "",
-      "230": "",
-      "248": "",
-      "260": "",
-      "263": "",
-      "266": "",
-      "281": "",
-      "284": "",
-      "293": "",
-      "296": "",
-      "299": "",
-      "302": "",
-      "305": "",
-      "308": "",
-      "311": "",
-      "314": "",
-      "317": "",
-      "320": "",
-      "323": "",
-      "326": "",
-      "329": "",
-      "332": "",
-      "335": "",
-      "338": "",
-      "350": "",
-      "353": "",
-      "356": "",
-      "359": "",
-      "362": "",
-      "365": "",
-      "368": "",
-      "371": "",
-      "374": "",
-      "377": "",
-      "386": "",
-      "389": "",
-      "392": "",
-      "395": ""
-    }
   }
 }

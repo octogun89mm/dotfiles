@@ -1,0 +1,83 @@
+@import "wallust";
+
+* {
+  all: unset;
+  font-family: "Symbols Nerd Font Mono", "DejaVu Sans Mono", monospace;
+  font-size: 13px;
+}
+
+.sidebar {
+  background-color: $bg;
+  padding: 8px;
+  min-width: 260px;
+}
+
+// Cards
+.card {
+  background-color: $bg-light;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-left: 3px solid $c8;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.card-header {
+  margin-bottom: 6px;
+}
+
+.card-icon {
+  font-size: 16px;
+  margin-right: 8px;
+  color: $accent;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: $fg;
+}
+
+// Per-card accent borders
+.card-cpu {
+  border-left-color: $c1;
+  .card-icon { color: $c1; }
+}
+
+.card-gpu {
+  border-left-color: $c2;
+  .card-icon { color: $c2; }
+}
+
+.card-memory {
+  border-left-color: $c3;
+  .card-icon { color: $c3; }
+}
+
+.card-network {
+  border-left-color: $c4;
+  .card-icon { color: $c4; }
+}
+
+.card-storage {
+  border-left-color: $c6;
+  .card-icon { color: $c6; }
+}
+
+// Info rows
+.info-row {
+  padding: 2px 0;
+}
+
+.info-label {
+  color: $c8;
+  font-size: 12px;
+}
+
+.info-value {
+  color: $fg;
+  font-size: 12px;
+  font-family: "DejaVu Sans Mono", monospace;
+}
