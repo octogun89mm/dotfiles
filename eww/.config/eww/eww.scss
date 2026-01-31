@@ -1,8 +1,8 @@
-@import "wallust";
+@import "wallust.scss";
 
 * {
   all: unset;
-  font-family: "Symbols Nerd Font Mono", "DejaVu Sans Mono", monospace;
+  font-family: "Symbols Nerd Font Mono", "Roboto Mono";
   font-size: 13px;
 }
 
@@ -14,7 +14,7 @@
 
 // Cards
 .card {
-  background-color: $bg-light;
+  background-color: $c0;
   padding: 10px 12px;
   margin-bottom: 6px;
   border-left: 3px solid $c8;
@@ -31,7 +31,7 @@
 .card-icon {
   font-size: 16px;
   margin-right: 8px;
-  color: $accent;
+  color: $c2;
 }
 
 .card-title {
@@ -79,5 +79,5 @@
 .info-value {
   color: $fg;
   font-size: 12px;
-  font-family: "DejaVu Sans Mono", monospace;
+  font-family: "Roboto Mono", monospace;
 }
