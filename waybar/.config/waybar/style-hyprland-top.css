@@ -5,7 +5,7 @@
     border: none;
     border-radius: 0;
     font-family: Roboto Mono;
-    font-size: 8pt;
+    font-size: 9pt;
     color: @fg;
     padding: 0px;
     margin: 0px;
@@ -76,7 +76,7 @@ custom-separator {
 
 /* CLOCK AND DATE */
 #clock.clock {
-  font-size: 10pt;
+  font-size: 11pt;
   font-weight: bold;
 }
 
@@ -92,7 +92,7 @@ custom-separator {
 
 #workspaces button label {
   font-family: "Roboto Mono";
-  font-size: 11pt;
+  font-size: 12pt;
   font-weight: bold;
 }
 
