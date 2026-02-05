@@ -49,6 +49,10 @@
 (defpoll disk_extra2 :interval "30s" :initial "0/0G"
   "scripts/disk_usage.sh /mnt/Extra2")
 
+;; Update
+(defpoll pending_update :interval "60s" :initial "0"
+  "scripts/update.sh")
+
 ;; =============================================================================
 ;; REUSABLE WIDGETS
 ;; =============================================================================
@@ -100,6 +104,10 @@
     (info-row :label "EXTRA" :value disk_extra)
     (info-row :label "EXTRA2" :value disk_extra2)))
 
+(defwidget update-card []
+  (card :title "Update" :icon "󰚰" :css-class "card-update"
+    (info-row :label "Pending Updates" :value "${pending_update}")))
+
 ;; =============================================================================
 ;; SIDEBAR
 ;; =============================================================================
@@ -110,7 +118,8 @@
     (gpu-card)
     (memory-card)
     (network-card)
-    (storage-card)))
+    (storage-card)
+    (update-card)))
 
 ;; =============================================================================
 ;; WINDOW

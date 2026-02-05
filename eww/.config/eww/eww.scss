@@ -66,6 +66,11 @@
   .card-icon { color: $c6; }
 }
 
+.card-update {
+  border-left-color: $c7;
+  .card-icon { color: $c7; }
+}
+
 // Info rows
 .info-row {
   padding: 2px 0;
