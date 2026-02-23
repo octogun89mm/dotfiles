@@ -1,7 +1,6 @@
 configuration {
-  modes: "drun,run,window,power";
+  modes: "drun,run,window,power,mode,filebrowser";
   no-default-theme: true;
-  show-icons: false;
   window-format: "{t}";
   terminal: "foot";
   me-select-entry: "";
@@ -10,15 +9,28 @@ configuration {
   drun-display-format: "{name}";
   drun {
     display-name: "App";
+    show-icons: false;
   }
   run {
     display-name: "Run";
+    show-icons: false;
   }
   window {
     display-name: "Windows";
+    show-icons: false;
   }
   power {
     display-name: "Power";
+    show-icons: false;
+  }
+  mode {
+    display-name: "Mode";
+    show-icons: false;
+  }
+  filebrowser {
+    display-name: "Files";
+    icon-theme: "breeze-dark";
+    theme: "~/.config/rofi/themes/wallpaper.rasi";
   }
 }
 

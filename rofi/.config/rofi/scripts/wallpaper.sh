@@ -3,10 +3,12 @@
 WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 HYPRPAPER_CONF="$HOME/.config/hypr/hyprpaper.conf"
 
-# List image files with icons and let user pick one
+# List images with thumbnail:// prefix for preview
 selected=$(find "$WALLPAPER_DIR" -maxdepth 1 -type f \
     \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.jxl' \) \
-    -printf '%f\n' | sort | rofi -dmenu -i -p "Wallpaper")
+    -printf '%f\n' | sort | while read -r file; do
+        echo -en "$file\0icon\x1fthumbnail://$WALLPAPER_DIR/$file\n"
+    done | rofi -dmenu -i -p "Wallpaper" -theme ~/.config/rofi/themes/wallpaper.rasi -show-icons)
 
 [ -z "$selected" ] && exit 0
 

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 import json
+import os
+import subprocess
+import time
 import urllib.request
 import urllib.error
 import sys
@@ -9,6 +12,10 @@ import sys
 LOCATION = "~ynd"
 
 WTTR_URL = f"https://wttr.in/{LOCATION}?format=j1"
+
+MAX_RETRIES = 5
+RETRY_DELAY = 10
+WAYBAR_SIGNAL = 10
 
 
 def fetch_weather():
@@ -19,8 +26,20 @@ def fetch_weather():
         )
         with urllib.request.urlopen(req, timeout=10) as response:
             return json.loads(response.read().decode())
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as e:
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
         return None
+
+
+def retry_in_background():
+    if os.fork() != 0:
+        return
+    os.setsid()
+    for _ in range(MAX_RETRIES):
+        time.sleep(RETRY_DELAY)
+        if fetch_weather() is not None:
+            subprocess.run(["pkill", f"-RTMIN+{WAYBAR_SIGNAL}", "waybar"])
+            break
+    os._exit(0)
 
 
 def main():
@@ -35,6 +54,7 @@ def main():
             "percentage": 0
         }
         print(json.dumps(output))
+        retry_in_background()
         return
 
     try:

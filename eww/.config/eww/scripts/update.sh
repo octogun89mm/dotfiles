@@ -1,4 +1,4 @@
 #!/bin/env bash
 
-updates=$(yay -Pu | wc -l)
+updates=$(yay -Qua | wc -l)
 echo "$updates"

@@ -13,7 +13,7 @@
     "custom/separator",
     "custom/expressvpn",
     "custom/separator",
-    "idle_inhibitor",
+    "custom/idle-inhibit",
     "custom/separator",
     "hyprland/window"
   ],
@@ -49,21 +49,21 @@
     "format": "󰣇",
     "tooltip": false
   },
-  "idle_inhibitor": {
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{icon}</span>",
-    "format-icons": {
-      "activated": "󰈈",
-      "deactivated": "󰈉"
-    },
-    "tooltip": false
+  "custom/idle-inhibit": {
+    "exec": "~/.config/waybar/scripts/idle-inhibit.sh",
+    "return-type": "json",
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{alt}</span>",
+    "on-click": "~/.config/waybar/scripts/idle-inhibit.sh toggle",
+    "interval": "once",
+    "signal": 8
   },
   "hyprland/submap": {
     "format": "<span text_transform='uppercase'>{}</span> MODE | ",
     "tooltip": false
   },
   "hyprland/window": {
-    "format": "{title}",
-    "max-length": 100,
+    "format": "{class} - {title}",
+    "max-length": 80,
     "tooltip": false
   },
   "hyprland/workspaces": {
@@ -84,22 +84,23 @@
       "magic": []
     },
     "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
-      "9": "9",
-      "10": "0",
-      "dropdown": "=",
-      "magic": "-"
+      "1": "A1",
+      "2": "A2",
+      "3": "A3",
+      "4": "A4",
+      "5": "A5",
+      "6": "A6",
+      "7": "B7",
+      "8": "B8",
+      "9": "B9",
+      "10": "B0",
+      "dropdown": "D",
+      "magic": "M"
     }
   },
   "pulseaudio": {
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{icon}</span> {volume:>2}%",
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>{icon}</span> {volume:>2}%",
+    "format-muted": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>󰝟</span> {volume:>2}%",
     "on-click": "foot --app-id=foot-pulsemixer -e pulsemixer",
     "max-volume": 99,
     "format-icons": {
@@ -108,12 +109,12 @@
     }
   },
   "mpd": {
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{stateIcon}</span> {artist} - {title} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>{stateIcon}</span> {artist} - {title} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
     "format-disconnected": "",
-    "format-stopped": "<span font_family='Symbols Nerd Font Mono' font_size='large'>󰓛</span> Stopped",
+    "format-stopped": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>󰓛</span> Stopped",
     "state-icons": {
-      "paused": "󰏤",
-      "playing": "󰐊"
+      "paused": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>󰏤</span>",
+      "playing": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>󰐊</span>"
     },
     "max-length": 100,
     "tooltip-format": "{album} ({date})\n{title} by {artist}",
@@ -123,7 +124,7 @@
     "on-scroll-down": "mpc next"
   },
   "clock#date": {
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'></span> {:%a-%d-%m-%y}",
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium' rise='1pt'></span> {:%a-%d-%m-%y}",
     "tooltip": true,
     "tooltip-format": "{calendar}",
     "calendar": {
@@ -142,24 +143,27 @@
     }
   },
   "clock#clock": {
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='small'>󰥔</span> {:%I:%M %p}",
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='small' rise='1pt'>󰥔</span> {:%I:%M %p}",
     "tooltip": false
   },
   "hyprland/language": {
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>󰌌</span> <span text_transform='uppercase'>{short}</span>",
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium' rise='1pt'>󰌌</span> <span text_transform='uppercase'>{short}</span>",
     "tooltip": false
   },
   "custom/expressvpn": {
     "exec": "~/.config/waybar/scripts/expressvpn.sh",
     "return-type": "json",
-    "format": "<span font_family='Symbols Nerd Font Mono' font_size='large'>{alt}</span>",
-    "interval": 15
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>{alt}</span>",
+    "on-click": "~/.config/waybar/scripts/expressvpn.sh toggle",
+    "interval": "once",
+    "signal": 9
   },
   "custom/weather": {
     "exec": "~/.config/waybar/scripts/weather.py",
     "return-type": "json",
     "interval": 1800,
-    "format": "<span font_family='Weather Icons' font_size='large'>{icon}</span> {text}",
+    "signal": 10,
+    "format": "<span font_family='Weather Icons' font_size='medium'>{icon}</span> {text}",
     "format-icons": {
       "113": "",
       "116": "",

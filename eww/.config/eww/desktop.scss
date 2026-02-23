@@ -1,0 +1,201 @@
+// =============================================================================
+// DESKTOP MODE STYLES
+// =============================================================================
+
+// Clock
+.desktop-clock {
+  background-color: transparent;
+  padding: 10px 14px;
+  min-width: 280px;
+}
+
+.desktop-clock-time {
+  font-family: "Roboto Mono", monospace;
+  font-size: 42px;
+  font-weight: bold;
+  color: $fg;
+}
+
+.desktop-clock-date {
+  font-family: "Roboto Mono", monospace;
+  font-size: 14px;
+  color: $c8;
+  margin-top: 2px;
+}
+
+// Workspace OSD
+.desktop-osd {
+  background-color: $bg;
+  border: 2px solid $c8;
+  padding: 20px 40px;
+}
+
+.desktop-osd-number {
+  font-family: "Roboto Mono", monospace;
+  font-size: 64px;
+  font-weight: bold;
+  color: $fg;
+}
+
+// Workspace List
+.desktop-ws-list {
+  background-color: $bg;
+  padding: 10px 14px;
+  min-width: 200px;
+}
+
+.desktop-ws-entry {
+  padding: 6px 8px;
+  border-left: 2px solid transparent;
+  margin-bottom: 2px;
+}
+
+.desktop-ws-focused {
+  border-left-color: $c1;
+  background-color: $c0;
+}
+
+.desktop-ws-id {
+  font-family: "Roboto Mono", monospace;
+  font-size: 14px;
+  font-weight: bold;
+  color: $fg;
+}
+
+.desktop-ws-count {
+  font-size: 12px;
+  color: $c8;
+}
+
+.desktop-ws-client {
+  font-size: 11px;
+  color: $c8;
+  padding-left: 12px;
+}
+
+// MPD
+.desktop-mpd {
+  background-color: $bg;
+  padding: 10px 14px;
+}
+
+.desktop-mpd-icon {
+  font-size: 16px;
+  color: $c1;
+  margin-right: 8px;
+}
+
+.desktop-mpd-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: $fg;
+}
+
+.desktop-mpd-artist {
+  font-size: 12px;
+  color: $c8;
+  margin-top: 2px;
+}
+
+.desktop-mpd-time {
+  font-family: "Roboto Mono", monospace;
+  font-size: 11px;
+  color: $c8;
+  margin-top: 4px;
+}
+
+.desktop-mpd-progress-track {
+  min-width: 200px;
+  min-height: 3px;
+  background-color: $c0;
+  margin-top: 6px;
+}
+
+.desktop-mpd-progress-bar {
+  min-height: 3px;
+  background-color: $c1;
+}
+
+// Desktop card layout
+.desktop-card {
+  min-width: 260px;
+}
+
+// Box-based vertical graph bars
+.desktop-graph {
+  min-width: 20px;
+  margin-left: 12px;
+  min-height: 100px;
+}
+
+.desktop-graph-empty {
+  background-color: $c0;
+}
+
+.desktop-graph-fill {
+  background-color: $c8;
+}
+
+// Per-card graph accent colors
+.card-cpu .desktop-graph-fill {
+  background-color: $c1;
+}
+
+.card-gpu .desktop-graph-fill {
+  background-color: $c2;
+}
+
+.card-memory .desktop-graph-fill {
+  background-color: $c3;
+}
+
+.card-network .desktop-graph-fill {
+  background-color: $c4;
+}
+
+// Stats containers
+.desktop-stats {
+  background-color: $bg;
+  padding: 10px 14px;
+
+  .card {
+    background-color: transparent;
+    padding: 8px 0 8px 10px;
+    margin-bottom: 4px;
+    border-left: 3px solid $c8;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .card-cpu {
+    border-left-color: $c1;
+    .card-icon { color: $c1; }
+  }
+
+  .card-gpu {
+    border-left-color: $c2;
+    .card-icon { color: $c2; }
+  }
+
+  .card-memory {
+    border-left-color: $c3;
+    .card-icon { color: $c3; }
+  }
+
+  .card-network {
+    border-left-color: $c4;
+    .card-icon { color: $c4; }
+  }
+
+  .card-storage {
+    border-left-color: $c6;
+    .card-icon { color: $c6; }
+  }
+
+  .card-update {
+    border-left-color: $c7;
+    .card-icon { color: $c7; }
+  }
+}

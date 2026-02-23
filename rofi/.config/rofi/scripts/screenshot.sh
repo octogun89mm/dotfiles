@@ -52,6 +52,9 @@ select_area() {
         "Active output")
             echo "output"
             ;;
+        "All screens")
+            echo "allscreens"
+            ;;
         *)
             echo "CANCEL"
             ;;
@@ -178,7 +181,7 @@ take_screenshot() {
     
     # Get geometry based on area mode
     case $area_mode in
-        "fullscreen")
+        "fullscreen"|"allscreens")
             # No geometry needed, grim captures all outputs by default
             geometry=""
             ;;
@@ -271,7 +274,7 @@ take_screenshot() {
 # Main menu flow
 main() {
     # Step 1: Select area
-    area_options="Fullscreen\nActive window\nSelect region\nActive output"
+    area_options="Fullscreen\nActive window\nSelect region\nActive output\nAll screens"
     area=$(show_menu "Select Area" "$area_options")
 
     # Check for cancellation (empty selection)
@@ -298,7 +301,8 @@ main() {
     fi
 
     # Use hyprshot on Hyprland (no quality option needed)
-    if is_hyprland; then
+    # Exception: "allscreens" uses grim since hyprshot has no all-monitors mode
+    if is_hyprland && [ "$area_mode" != "allscreens" ]; then
         take_screenshot_hyprshot "$area_mode" "$action_mode"
         exit 0
     fi

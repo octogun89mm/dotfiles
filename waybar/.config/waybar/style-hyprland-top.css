@@ -33,13 +33,13 @@ tooltip {
 }
 
 /* IDLE INHIBITOR */
-#idle_inhibitor.activated {
+#custom-idle-inhibit.activated {
   color: @c3;
 }
 
 /* EXPRESSVPN WIDGET */
 #custom-expressvpn.vpn-connected {
-  color: @c2;
+  color: @c3;
 }
 
 #custom-expressvpn.vpn-disconnected {
@@ -70,8 +70,8 @@ tooltip {
 }
 
 /* SEPARATOR */
-custom-separator {
-  color: @c1;
+#custom-separator {
+  color: @c8;
 }
 
 /* CLOCK AND DATE */
@@ -82,8 +82,7 @@ custom-separator {
 
 /* WORKSPACES */
 #workspaces button {
-  padding: 0px 6px;
-  border-bottom: solid 2px transparent;
+  padding: 0px 5px;
 }
 
 #workspaces button:hover {
@@ -100,16 +99,17 @@ custom-separator {
   color: @c8;
 }
 
-#workspaces button:not(.empty):not(.active) label {
+#workspaces button:not(.empty):not(.active):not(.visible) label {
   color: @c2;
 }
 
-#workspaces button.visible {
-  border-bottom: solid 2px @c2;
+
+#workspaces button.visible label {
+  color: @c5;
 }
 
 #workspaces button.active {
-  border-bottom: solid 2px @c3;
+  background-color: @bg-light;
 }
 
 #workspaces button.active label {
