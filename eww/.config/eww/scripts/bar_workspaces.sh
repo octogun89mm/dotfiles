@@ -30,8 +30,8 @@ query_workspaces() {
         --argjson visible "$visible_ids" \
         --argjson special "$special_names" '
 
-        # Build a set of occupied workspace IDs
-        ([.[] | select(.id > 0) | .id]) as $occupied |
+        # Build a set of occupied workspace IDs (only those with windows)
+        ([.[] | select(.id > 0 and .windows > 0) | .id]) as $occupied |
 
         # Predefined workspaces 1-10 plus dropdown (id -99) and magic (id -98)
         [
@@ -75,7 +75,7 @@ query_workspaces
 
 socat -U - UNIX-CONNECT:"$SOCKET" 2>/dev/null | while read -r line; do
     case "$line" in
-        workspace\>\>*|createworkspace\>\>*|destroyworkspace\>\>*|openwindow\>\>*|closewindow\>\>*|movewindow\>\>*|activewindow\>\>*)
+        workspace\>\>*|focusedmon\>\>*|createworkspace\>\>*|destroyworkspace\>\>*|openwindow\>\>*|closewindow\>\>*|movewindow\>\>*|activewindow\>\>*)
             query_workspaces
             ;;
     esac

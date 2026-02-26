@@ -43,6 +43,36 @@
 (defpoll bar_idle_inhibit :interval "2s" :initial "false"
   "[ -f /tmp/idle-inhibit.pid ] && kill -0 $(cat /tmp/idle-inhibit.pid 2>/dev/null) 2>/dev/null && echo true || echo false")
 
+;; System vitals (only poll when popup is open)
+(defpoll cpu_usage :interval "2s" :initial "0" :run-while popup_visible
+  "scripts/cpu_usage.sh")
+(defpoll cpu_freq :interval "2s" :initial "0.00" :run-while popup_visible
+  "scripts/cpu_freq.sh")
+(defpoll cpu_temp :interval "5s" :initial "0" :run-while popup_visible
+  "scripts/cpu_temp.sh")
+(defpoll gpu :interval "5s" :initial '{"usage":"0","vram_used":"0.0","vram_total":"0.0","temp":"0"}' :run-while popup_visible
+  "scripts/gpu_monitor.sh")
+(defpoll memory_used :interval "5s" :initial "0.0" :run-while popup_visible
+  "scripts/memory_used.sh")
+(defpoll memory_total :interval "5s" :initial "0.0" :run-while popup_visible
+  "scripts/memory_total.sh")
+(defpoll download_speed :interval "2s" :initial "00.00" :run-while popup_visible
+  "scripts/download_speed.sh")
+(defpoll upload_speed :interval "2s" :initial "00.00" :run-while popup_visible
+  "scripts/upload_speed.sh")
+(defpoll wifi_strength :interval "10s" :initial "0" :run-while popup_visible
+  "scripts/wifi_strength.sh")
+(defpoll disk_main :interval "30s" :initial "0/0G" :run-while popup_visible
+  "scripts/disk_usage.sh /")
+(defpoll disk_fast :interval "30s" :initial "0/0G" :run-while popup_visible
+  "scripts/disk_usage.sh /mnt/Fast")
+(defpoll disk_extra :interval "30s" :initial "0/0G" :run-while popup_visible
+  "scripts/disk_usage.sh /mnt/Extra")
+(defpoll disk_extra2 :interval "30s" :initial "0/0G" :run-while popup_visible
+  "scripts/disk_usage.sh /mnt/Extra2")
+(defpoll pending_update :interval "60s" :initial "0" :run-while popup_visible
+  "scripts/update.sh")
+
 ;; =============================================================================
 ;; STATE VARIABLES
 ;; =============================================================================
@@ -98,58 +128,90 @@
     (label :class "popup-value" :text value :halign "end")))
 
 (defwidget popup-panel []
-  (box :class "popup-panel" :orientation "v" :space-evenly false
-    ;; Volume
-    (eventbox :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-      (popup-row :icon {bar_volume.icon}
-                 :label "Volume"
-                 :value {bar_volume.muted ? "Muted" : "${bar_volume.volume}%"}
-                 :css-class "popup-row-volume"))
-    ;; MPD
-    (popup-row :icon {mpd_data.state == "playing" ? "󰐊" : mpd_data.state == "paused" ? "󰏤" : "󰓛"}
-               :label "Music"
-               :value {mpd_data.state == "stopped" ? "Stopped" :
-                       "${mpd_data.artist != '' ? '${mpd_data.artist} - ' : ''}${mpd_data.title}"}
-               :css-class "popup-row-mpd")
-    ;; Language
-    (popup-row :icon "󰌌"
-               :label "Keyboard"
-               :value bar_language
-               :css-class "popup-row-language")
-    ;; VPN
-    (eventbox :onclick "~/.config/waybar/scripts/expressvpn.sh toggle"
-      (popup-row :icon {bar_vpn.icon}
-                 :label "VPN"
-                 :value {bar_vpn.status == "connected" ? bar_vpn.location : "Disconnected"}
-                 :css-class "popup-row-vpn"))
-    ;; Idle inhibitor
-    (eventbox :onclick "~/.config/waybar/scripts/idle-inhibit.sh toggle && eww update bar_idle_inhibit=$([ -f /tmp/idle-inhibit.pid ] && echo true || echo false)"
-      (popup-row :icon {bar_idle_inhibit == "true" ? "󰈈" : "󰈉"}
-                 :label "Idle Inhibit"
-                 :value {bar_idle_inhibit == "true" ? "ON" : "OFF"}
-                 :css-class "popup-row-idle ${bar_idle_inhibit == 'true' ? 'idle-active' : ''}"))
-    ;; Separator
-    (box :class "popup-separator")
-    ;; Weather (expanded, at bottom)
-    (box :class "popup-weather" :orientation "v" :space-evenly false
-      (box :class "popup-weather-header" :orientation "h" :space-evenly false :halign "center"
-        (label :class "popup-weather-icon" :text {bar_weather.icon})
-        (box :orientation "v" :space-evenly false
-          (label :class "popup-weather-desc" :text {bar_weather.desc} :halign "start")
-          (label :class "popup-weather-temp" :text {bar_weather.text} :halign "start")))
-      (box :class "popup-weather-details" :orientation "h" :space-evenly true
-        (box :orientation "v" :space-evenly false :halign "center"
-          (label :class "popup-weather-detail-icon" :text "")
-          (label :class "popup-weather-detail-val" :text "${bar_weather.feels}°C")
-          (label :class "popup-weather-detail-label" :text "Feels like"))
-        (box :orientation "v" :space-evenly false :halign "center"
-          (label :class "popup-weather-detail-icon" :text "")
-          (label :class "popup-weather-detail-val" :text "${bar_weather.humidity}%")
-          (label :class "popup-weather-detail-label" :text "Humidity"))
-        (box :orientation "v" :space-evenly false :halign "center"
-          (label :class "popup-weather-detail-icon" :text "")
-          (label :class "popup-weather-detail-val" :text "${bar_weather.wind} km/h")
-          (label :class "popup-weather-detail-label" :text "Wind"))))))
+  (box :class "popup-panel" :orientation "h" :space-evenly false
+    ;; Controls + Weather (left column)
+    (box :class "popup-column" :orientation "v" :space-evenly false
+      (eventbox :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+        (popup-row :icon {bar_volume.icon}
+                   :label "Volume"
+                   :value {bar_volume.muted ? "Muted" : "${bar_volume.volume}%"}
+                   :css-class "popup-row-volume"))
+      (popup-row :icon {mpd_data.state == "playing" ? "󰐊" : mpd_data.state == "paused" ? "󰏤" : "󰓛"}
+                 :label "Music"
+                 :value {mpd_data.state == "stopped" ? "Stopped" :
+                         "${mpd_data.artist != '' ? '${mpd_data.artist} - ' : ''}${mpd_data.title}"}
+                 :css-class "popup-row-mpd")
+      (popup-row :icon "󰌌"
+                 :label "Keyboard"
+                 :value bar_language
+                 :css-class "popup-row-language")
+      (eventbox :onclick "~/.config/waybar/scripts/expressvpn.sh toggle"
+        (popup-row :icon {bar_vpn.icon}
+                   :label "VPN"
+                   :value {bar_vpn.status == "connected" ? bar_vpn.location : "Disconnected"}
+                   :css-class "popup-row-vpn"))
+      (eventbox :onclick "~/.config/waybar/scripts/idle-inhibit.sh toggle && eww update bar_idle_inhibit=$([ -f /tmp/idle-inhibit.pid ] && echo true || echo false)"
+        (popup-row :icon {bar_idle_inhibit == "true" ? "󰈈" : "󰈉"}
+                   :label "Idle Inhibit"
+                   :value {bar_idle_inhibit == "true" ? "ON" : "OFF"}
+                   :css-class "popup-row-idle ${bar_idle_inhibit == 'true' ? 'idle-active' : ''}"))
+      ;; Weather (fills all remaining space)
+      (box :class "popup-weather" :orientation "v" :space-evenly false :vexpand true
+        (box :class "popup-weather-top" :orientation "v" :space-evenly false :vexpand true :valign "center" :halign "center"
+          (label :class "popup-weather-icon" :text {bar_weather.icon})
+          (label :class "popup-weather-temp" :text {bar_weather.text})
+          (label :class "popup-weather-desc" :text {bar_weather.desc}))
+        (box :class "popup-weather-details" :orientation "h" :space-evenly true
+          (box :orientation "v" :space-evenly false :halign "center"
+            (label :class "popup-weather-detail-val" :text "${bar_weather.feels}°C")
+            (label :class "popup-weather-detail-label" :text "Feels like"))
+          (box :orientation "v" :space-evenly false :halign "center"
+            (label :class "popup-weather-detail-val" :text "${bar_weather.humidity}%")
+            (label :class "popup-weather-detail-label" :text "Humidity"))
+          (box :orientation "v" :space-evenly false :halign "center"
+            (label :class "popup-weather-detail-val" :text "${bar_weather.wind} km/h")
+            (label :class "popup-weather-detail-label" :text "Wind")))))
+    ;; System vitals (right column)
+    (box :class "popup-column" :orientation "v" :space-evenly false
+      ;; CPU
+      (box :class "popup-subheader" :orientation "h" :space-evenly false
+        (label :class "popup-subheader-icon" :text "󰻠")
+        (label :class "popup-subheader-label" :text "CPU"))
+      (popup-row :icon "" :label "Usage" :value "${cpu_usage}%")
+      (popup-row :icon "" :label "Frequency" :value "${cpu_freq} GHz")
+      (popup-row :icon "" :label "Temperature" :value "${cpu_temp}°C")
+      ;; GPU
+      (box :class "popup-subheader" :orientation "h" :space-evenly false
+        (label :class "popup-subheader-icon" :text "󰢮")
+        (label :class "popup-subheader-label" :text "GPU"))
+      (popup-row :icon "" :label "Usage" :value "${gpu.usage}%")
+      (popup-row :icon "" :label "VRAM" :value "${gpu.vram_used}/${gpu.vram_total}G")
+      (popup-row :icon "" :label "Temperature" :value "${gpu.temp}°C")
+      ;; Memory
+      (box :class "popup-subheader" :orientation "h" :space-evenly false
+        (label :class "popup-subheader-icon" :text "")
+        (label :class "popup-subheader-label" :text "Memory"))
+      (popup-row :icon "" :label "Used / Total" :value "${memory_used}G / ${memory_total}G")
+      ;; Network
+      (box :class "popup-subheader" :orientation "h" :space-evenly false
+        (label :class "popup-subheader-icon" :text "󰛳")
+        (label :class "popup-subheader-label" :text "Network"))
+      (popup-row :icon "" :label "Download" :value "${download_speed} MB/s")
+      (popup-row :icon "" :label "Upload" :value "${upload_speed} MB/s")
+      (popup-row :icon "" :label "WiFi Signal" :value "${wifi_strength}%")
+      ;; Storage
+      (box :class "popup-subheader" :orientation "h" :space-evenly false
+        (label :class "popup-subheader-icon" :text "󰋊")
+        (label :class "popup-subheader-label" :text "Storage"))
+      (popup-row :icon "" :label "MAIN (/)" :value disk_main)
+      (popup-row :icon "" :label "FAST" :value disk_fast)
+      (popup-row :icon "" :label "EXTRA" :value disk_extra)
+      (popup-row :icon "" :label "EXTRA2" :value disk_extra2)
+      ;; Updates
+      (box :class "popup-subheader" :orientation "h" :space-evenly false
+        (label :class "popup-subheader-icon" :text "󰚰")
+        (label :class "popup-subheader-label" :text "Updates"))
+      (popup-row :icon "" :label "Pending" :value "${pending_update}"))))
 
 ;; =============================================================================
 ;; BAR COMPOSITIONS

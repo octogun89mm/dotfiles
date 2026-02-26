@@ -1,4 +1,5 @@
 #!/bin/env bash
 
-updates=$(yay -Qua | wc -l)
-echo "$updates"
+repo=$(checkupdates 2>/dev/null | wc -l)
+aur=$(yay -Qua 2>/dev/null | wc -l)
+echo $((repo + aur))

@@ -69,7 +69,6 @@
   font-size: 11pt;
   font-weight: bold;
   color: $fg;
-  margin-right: 10px;
 }
 
 .bar-tray {
@@ -93,17 +92,11 @@
 
 .popup-panel {
   background-color: $bg;
-  border: 1px solid $c8;
-  min-width: 280px;
+  border: 2px solid $c2;
 }
 
 .popup-row {
   padding: 6px 12px;
-  border-bottom: 1px solid $c8;
-
-  &:last-child {
-    border-bottom: none;
-  }
 }
 
 .popup-icon {
@@ -125,59 +118,83 @@
   font-family: "Roboto Mono", monospace;
 }
 
-.popup-separator {
-  min-height: 1px;
-  background-color: $c8;
-  margin: 4px 12px;
+// Popup columns (side by side)
+.popup-column {
+  min-width: 260px;
+
+  &:first-child {
+    border-right: 1px solid $c8;
+  }
 }
 
-// Weather section (expanded, at bottom of popup)
+// Vitals subheaders
+.popup-subheader {
+  padding: 6px 12px 2px 12px;
+  border-top: 1px solid $c8;
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.popup-subheader-icon {
+  font-family: "Symbols Nerd Font Mono";
+  font-size: 9pt;
+  color: $c2;
+  margin-right: 6px;
+}
+
+.popup-subheader-label {
+  color: $fg;
+  font-weight: bold;
+  font-size: 9pt;
+}
+
+// Weather (fills remaining left column space)
 .popup-weather {
-  padding: 8px 12px;
+  padding: 12px;
+  border-top: 1px solid $c8;
 }
 
-.popup-weather-header {
-  margin-bottom: 8px;
+.popup-weather-top {
+  margin-bottom: 12px;
 }
 
 .popup-weather-icon {
   font-family: "Weather Icons";
-  font-size: 24pt;
+  font-size: 40pt;
   color: $c2;
-  margin-right: 12px;
-  min-width: 36px;
-}
-
-.popup-weather-desc {
-  color: $fg;
-  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .popup-weather-temp {
-  color: $c2;
-  font-size: 11pt;
+  color: $fg;
+  font-size: 18pt;
   font-weight: bold;
 }
 
-.popup-weather-details {
-  padding-top: 4px;
+.popup-weather-desc {
+  color: $c8;
+  font-size: 9pt;
+  margin-top: 2px;
 }
 
-.popup-weather-detail-icon {
-  font-family: "Weather Icons";
-  font-size: 10pt;
-  color: $c8;
+.popup-weather-details {
+  padding: 8px 4px;
+  border-top: 1px solid $c8;
 }
 
 .popup-weather-detail-val {
   color: $fg;
   font-weight: bold;
+  font-size: 9pt;
   font-family: "Roboto Mono", monospace;
 }
 
 .popup-weather-detail-label {
   color: $c8;
   font-size: 7pt;
+  margin-top: 2px;
 }
 
 // Idle inhibitor active state
