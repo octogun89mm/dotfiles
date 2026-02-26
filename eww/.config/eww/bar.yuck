@@ -205,7 +205,7 @@
   :monitor 0
   :geometry (geometry
               :x "8px"
-              :y "26px"
+              :y "10px"
               :anchor "top left")
   :stacking "overlay"
   :exclusive false
