@@ -125,6 +125,61 @@
   font-family: "Roboto Mono", monospace;
 }
 
+.popup-separator {
+  min-height: 1px;
+  background-color: $c8;
+  margin: 4px 12px;
+}
+
+// Weather section (expanded, at bottom of popup)
+.popup-weather {
+  padding: 8px 12px;
+}
+
+.popup-weather-header {
+  margin-bottom: 8px;
+}
+
+.popup-weather-icon {
+  font-family: "Weather Icons";
+  font-size: 24pt;
+  color: $c2;
+  margin-right: 12px;
+  min-width: 36px;
+}
+
+.popup-weather-desc {
+  color: $fg;
+  font-weight: bold;
+}
+
+.popup-weather-temp {
+  color: $c2;
+  font-size: 11pt;
+  font-weight: bold;
+}
+
+.popup-weather-details {
+  padding-top: 4px;
+}
+
+.popup-weather-detail-icon {
+  font-family: "Weather Icons";
+  font-size: 10pt;
+  color: $c8;
+}
+
+.popup-weather-detail-val {
+  color: $fg;
+  font-weight: bold;
+  font-family: "Roboto Mono", monospace;
+}
+
+.popup-weather-detail-label {
+  color: $c8;
+  font-size: 7pt;
+}
+
 // Idle inhibitor active state
 .idle-active {
   .popup-value {

@@ -111,11 +111,6 @@
                :value {mpd_data.state == "stopped" ? "Stopped" :
                        "${mpd_data.artist != '' ? '${mpd_data.artist} - ' : ''}${mpd_data.title}"}
                :css-class "popup-row-mpd")
-    ;; Weather
-    (popup-row :icon ""
-               :label "Weather"
-               :value {bar_weather.text}
-               :css-class "popup-row-weather")
     ;; Language
     (popup-row :icon "󰌌"
                :label "Keyboard"
@@ -133,7 +128,28 @@
                  :label "Idle Inhibit"
                  :value {bar_idle_inhibit == "true" ? "ON" : "OFF"}
                  :css-class "popup-row-idle ${bar_idle_inhibit == 'true' ? 'idle-active' : ''}"))
-    ))
+    ;; Separator
+    (box :class "popup-separator")
+    ;; Weather (expanded, at bottom)
+    (box :class "popup-weather" :orientation "v" :space-evenly false
+      (box :class "popup-weather-header" :orientation "h" :space-evenly false :halign "center"
+        (label :class "popup-weather-icon" :text {bar_weather.icon})
+        (box :orientation "v" :space-evenly false
+          (label :class "popup-weather-desc" :text {bar_weather.desc} :halign "start")
+          (label :class "popup-weather-temp" :text {bar_weather.text} :halign "start")))
+      (box :class "popup-weather-details" :orientation "h" :space-evenly true
+        (box :orientation "v" :space-evenly false :halign "center"
+          (label :class "popup-weather-detail-icon" :text "")
+          (label :class "popup-weather-detail-val" :text "${bar_weather.feels}°C")
+          (label :class "popup-weather-detail-label" :text "Feels like"))
+        (box :orientation "v" :space-evenly false :halign "center"
+          (label :class "popup-weather-detail-icon" :text "")
+          (label :class "popup-weather-detail-val" :text "${bar_weather.humidity}%")
+          (label :class "popup-weather-detail-label" :text "Humidity"))
+        (box :orientation "v" :space-evenly false :halign "center"
+          (label :class "popup-weather-detail-icon" :text "")
+          (label :class "popup-weather-detail-val" :text "${bar_weather.wind} km/h")
+          (label :class "popup-weather-detail-label" :text "Wind"))))))
 
 ;; =============================================================================
 ;; BAR COMPOSITIONS
