@@ -18,6 +18,8 @@ to_bar() {
     sleep 0.3
     waybar -c /home/juju/.config/waybar/config-hyprland-top.jsonc \
            -s /home/juju/.config/waybar/style-hyprland-top.css &
+    waybar -c /home/juju/.config/waybar/config-hyprland-secondary.jsonc \
+           -s /home/juju/.config/waybar/style-hyprland-secondary.css &
 }
 
 status() {

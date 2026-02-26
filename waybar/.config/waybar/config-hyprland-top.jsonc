@@ -64,7 +64,10 @@
   "hyprland/window": {
     "format": "{class} - {title}",
     "max-length": 80,
-    "tooltip": false
+    "tooltip": false,
+    "rewrite": {
+      "^ - $": ""
+    }
   },
   "hyprland/workspaces": {
     "format": "{icon}",

@@ -1,0 +1,90 @@
+{
+  "output": [
+    "DP-1"
+  ],
+  "position": "top",
+  "id": "secondary_bar",
+  "name": "secondary_bar",
+  "height": 26,
+  "spacing": 0,
+  "modules-left": [
+    "custom/edgespacer",
+    "custom/archicon"
+  ],
+  "modules-center": [
+    "hyprland/workspaces"
+  ],
+  "modules-right": [
+    "clock#date",
+    "custom/separator",
+    "clock#clock",
+    "custom/edgespacer"
+  ],
+  "custom/edgespacer": {
+    "format": " ",
+    "tooltip": false
+  },
+  "custom/separator": {
+    "format": " | ",
+    "tooltip": false
+  },
+  "custom/archicon": {
+    "format": "󰣇",
+    "tooltip": false
+  },
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "show-special": true,
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": [],
+      "7": [],
+      "8": [],
+      "9": [],
+      "10": [],
+      "dropdown": [],
+      "magic": []
+    },
+    "format-icons": {
+      "1": "A1",
+      "2": "A2",
+      "3": "A3",
+      "4": "A4",
+      "5": "A5",
+      "6": "A6",
+      "7": "B7",
+      "8": "B8",
+      "9": "B9",
+      "10": "B0",
+      "dropdown": "D",
+      "magic": "M"
+    }
+  },
+  "clock#date": {
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium' rise='1pt'></span> {:%a-%d-%m-%y}",
+    "tooltip": true,
+    "tooltip-format": "{calendar}",
+    "calendar": {
+      "mode": "month",
+      "on-scroll": 1,
+      "mode-mon-col": 3,
+      "format": {
+        "today": "<span font_weight='heavy' underline='single'>{}</span>"
+      }
+    },
+    "actions": {
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down",
+      "on-click": "shift_reset",
+      "on-click-right": "mode"
+    }
+  },
+  "clock#clock": {
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='small' rise='1pt'>󰥔</span> {:%I:%M %p}",
+    "tooltip": false
+  }
+}
