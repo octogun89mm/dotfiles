@@ -1,10 +1,32 @@
 @import "wallust.scss";
-@import "desktop.scss";
+@import "bar.scss";
 
 * {
   all: unset;
   font-family: "Symbols Nerd Font Mono", "Roboto Mono";
   font-size: 13px;
+}
+
+// Systray dropdown menus (GTK widgets reset by `all: unset` above)
+menu {
+  background-color: $bg;
+  border: 1px solid $c8;
+}
+
+menu menuitem {
+  padding: 4px 12px;
+  color: $fg;
+
+  &:hover {
+    background-color: $c8;
+    color: $c7;
+  }
+}
+
+menu separator {
+  background-color: $c8;
+  min-height: 1px;
+  margin: 2px 0;
 }
 
 .sidebar {

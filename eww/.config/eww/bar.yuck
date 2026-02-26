@@ -1,0 +1,207 @@
+;; =============================================================================
+;; EWW BAR - Replaces Waybar
+;; =============================================================================
+
+;; =============================================================================
+;; LISTENER VARIABLES (IPC-based, zero idle CPU)
+;; =============================================================================
+
+(deflisten bar_workspaces
+  :initial "[]"
+  "scripts/bar_workspaces.sh")
+
+(deflisten bar_active_window
+  :initial '{"class": "", "title": ""}'
+  "scripts/bar_active_window.sh")
+
+(deflisten bar_submap
+  :initial ""
+  "scripts/bar_submap.sh")
+
+(deflisten bar_language
+  :initial "EN"
+  "scripts/bar_language.sh")
+
+(deflisten bar_volume
+  :initial '{"volume": 0, "muted": false, "icon": "󰕾"}'
+  "scripts/bar_volume.sh")
+
+;; Reuse existing MPD listener
+(deflisten mpd_data
+  :initial '{"state": "stopped", "artist": "", "title": "", "elapsed": "0:00", "total": "0:00", "progress": 0}'
+  "scripts/mpd_listen.sh")
+
+;; =============================================================================
+;; POLL VARIABLES
+;; =============================================================================
+
+(defpoll bar_time :interval "1s" "date '+%I:%M %p'")
+(defpoll bar_date :interval "60s" "date '+%a-%d-%m-%y'")
+(defpoll bar_weather :interval "1800s" :initial '{"text":"...","icon":"","class":""}' "scripts/bar_weather.sh")
+(defpoll bar_vpn :interval "10s" :initial '{"status":"disconnected","icon":"󰒙","location":""}' "scripts/bar_vpn.sh")
+
+(defpoll bar_idle_inhibit :interval "2s" :initial "false"
+  "[ -f /tmp/idle-inhibit.pid ] && kill -0 $(cat /tmp/idle-inhibit.pid 2>/dev/null) 2>/dev/null && echo true || echo false")
+
+;; =============================================================================
+;; STATE VARIABLES
+;; =============================================================================
+
+(defvar popup_visible false)
+
+;; =============================================================================
+;; BAR WIDGETS
+;; =============================================================================
+
+;; Left section: arch icon (toggles popup), submap, window title
+(defwidget bar-left []
+  (box :class "bar-left" :orientation "h" :space-evenly false :halign "start"
+    (eventbox :onclick "scripts/toggle_popup.sh"
+      (label :class "bar-archicon ${popup_visible ? 'bar-archicon-active' : ''}" :text "󰣇"))
+    (label :class "bar-submap" :text bar_submap
+           :visible {bar_submap != ""})
+    (label :class "bar-window-title" :text {bar_active_window.title}
+           :limit-width 80)))
+
+;; Center section: workspace buttons
+(defwidget bar-center []
+  (box :class "bar-center" :orientation "h" :space-evenly false :halign "center"
+    (for ws in bar_workspaces
+      (eventbox :onclick "hyprctl dispatch workspace ${ws.name}"
+                :class "bar-workspace-btn"
+        (label :class "bar-workspace ${ws.active ? 'ws-active' :
+                       ws.visible ? 'ws-visible' :
+                       ws.occupied ? 'ws-occupied' : 'ws-empty'}"
+               :text {ws.label})))))
+
+;; Right section: date, clock
+(defwidget bar-right []
+  (box :class "bar-right" :orientation "h" :space-evenly false :halign "end" :valign "center"
+    (systray :class "bar-tray" :icon-size 16 :spacing 6)
+    (label :class "bar-date" :text bar_date :valign "center")
+    (label :class "bar-clock" :text bar_time :valign "center")))
+
+;; Right section for secondary monitor
+(defwidget bar-right-secondary []
+  (box :class "bar-right" :orientation "h" :space-evenly false :halign "end"
+    (label :class "bar-date" :text bar_date)
+    (label :class "bar-clock" :text bar_time)))
+
+;; =============================================================================
+;; POPUP PANEL WIDGETS
+;; =============================================================================
+
+(defwidget popup-row [icon label value ?css-class]
+  (box :class "popup-row ${css-class}" :orientation "h" :space-evenly false
+    (label :class "popup-icon" :text icon)
+    (label :class "popup-label" :text label :hexpand true :halign "start")
+    (label :class "popup-value" :text value :halign "end")))
+
+(defwidget popup-panel []
+  (box :class "popup-panel" :orientation "v" :space-evenly false
+    ;; Volume
+    (eventbox :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+      (popup-row :icon {bar_volume.icon}
+                 :label "Volume"
+                 :value {bar_volume.muted ? "Muted" : "${bar_volume.volume}%"}
+                 :css-class "popup-row-volume"))
+    ;; MPD
+    (popup-row :icon {mpd_data.state == "playing" ? "󰐊" : mpd_data.state == "paused" ? "󰏤" : "󰓛"}
+               :label "Music"
+               :value {mpd_data.state == "stopped" ? "Stopped" :
+                       "${mpd_data.artist != '' ? '${mpd_data.artist} - ' : ''}${mpd_data.title}"}
+               :css-class "popup-row-mpd")
+    ;; Weather
+    (popup-row :icon ""
+               :label "Weather"
+               :value {bar_weather.text}
+               :css-class "popup-row-weather")
+    ;; Language
+    (popup-row :icon "󰌌"
+               :label "Keyboard"
+               :value bar_language
+               :css-class "popup-row-language")
+    ;; VPN
+    (eventbox :onclick "~/.config/waybar/scripts/expressvpn.sh toggle"
+      (popup-row :icon {bar_vpn.icon}
+                 :label "VPN"
+                 :value {bar_vpn.status == "connected" ? bar_vpn.location : "Disconnected"}
+                 :css-class "popup-row-vpn"))
+    ;; Idle inhibitor
+    (eventbox :onclick "~/.config/waybar/scripts/idle-inhibit.sh toggle && eww update bar_idle_inhibit=$([ -f /tmp/idle-inhibit.pid ] && echo true || echo false)"
+      (popup-row :icon {bar_idle_inhibit == "true" ? "󰈈" : "󰈉"}
+                 :label "Idle Inhibit"
+                 :value {bar_idle_inhibit == "true" ? "ON" : "OFF"}
+                 :css-class "popup-row-idle ${bar_idle_inhibit == 'true' ? 'idle-active' : ''}"))
+    ))
+
+;; =============================================================================
+;; BAR COMPOSITIONS
+;; =============================================================================
+
+(defwidget bar-primary-widget []
+  (centerbox :class "bar" :orientation "h"
+    (bar-left)
+    (bar-center)
+    (bar-right)))
+
+(defwidget bar-secondary-widget []
+  (centerbox :class "bar" :orientation "h"
+    (box :class "bar-left" :orientation "h" :space-evenly false :halign "start"
+      (eventbox :onclick "scripts/toggle_popup.sh"
+        (label :class "bar-archicon ${popup_visible ? 'bar-archicon-active' : ''}" :text "󰣇")))
+    (bar-center)
+    (bar-right-secondary)))
+
+;; =============================================================================
+;; WINDOWS
+;; =============================================================================
+
+(defwindow bar-primary
+  :monitor 0
+  :geometry (geometry
+              :x "0px"
+              :y "0px"
+              :width "100%"
+              :height "26px"
+              :anchor "top center")
+  :stacking "fg"
+  :exclusive true
+  :focusable false
+  :namespace "eww_bar"
+  (bar-primary-widget))
+
+(defwindow bar-secondary
+  :monitor 1
+  :geometry (geometry
+              :x "0px"
+              :y "0px"
+              :width "100%"
+              :height "26px"
+              :anchor "top center")
+  :stacking "fg"
+  :exclusive true
+  :focusable false
+  :namespace "eww_bar"
+  (bar-secondary-widget))
+
+(defwindow bar-popup
+  :monitor 0
+  :geometry (geometry
+              :x "0px"
+              :y "0px"
+              :width "100%"
+              :height "100%"
+              :anchor "top left")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "eww_bar_popup"
+  (eventbox :onclick "eww update popup_visible=false"
+    (box :class "popup-backdrop" :orientation "v" :space-evenly false
+      (box :orientation "h" :space-evenly false
+        (box :class "popup-anchor" :orientation "v" :space-evenly false :halign "start"
+          :style "margin-left: 8px; margin-top: 20px;"
+          (revealer :transition "slidedown" :reveal popup_visible :duration "200ms"
+            (eventbox :onclick "echo"
+              (popup-panel))))))))

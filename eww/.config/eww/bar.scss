@@ -1,0 +1,141 @@
+// =============================================================================
+// EWW BAR STYLES
+// =============================================================================
+
+// Bar container
+.bar {
+  background-color: $bg;
+  font-family: "Roboto Mono", monospace;
+  font-size: 9pt;
+}
+
+// Left section
+.bar-left {
+  margin-left: 8px;
+}
+
+.bar-archicon {
+  font-family: "Symbols Nerd Font Mono";
+  font-size: 12pt;
+  color: $c2;
+  margin-right: 10px;
+}
+
+.bar-submap {
+  color: $c11;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.bar-window-title {
+  color: $fg;
+}
+
+// Center section — workspaces
+.bar-center {
+  // no extra spacing
+}
+
+.bar-workspace {
+  font-size: 12pt;
+  font-weight: bold;
+  padding: 0 5px;
+  min-width: 20px;
+}
+
+.ws-empty {
+  color: $c8;
+}
+
+.ws-occupied {
+  color: $c2;
+}
+
+.ws-visible {
+  color: $c5;
+}
+
+.ws-active {
+  background-color: $c8;
+  color: $c3;
+}
+
+// Right section
+.bar-right {
+  margin-right: 8px;
+}
+
+.bar-clock {
+  font-size: 11pt;
+  font-weight: bold;
+  color: $fg;
+  margin-right: 10px;
+}
+
+.bar-tray {
+  margin-right: 10px;
+}
+
+.bar-date {
+  font-size: 9pt;
+  color: $fg;
+  margin-right: 10px;
+  padding-top: 1px;
+}
+
+.bar-archicon-active {
+  color: $c3;
+}
+
+// =============================================================================
+// POPUP PANEL
+// =============================================================================
+
+.popup-backdrop {
+  background-color: transparent;
+}
+
+.popup-panel {
+  background-color: $bg;
+  border: 1px solid $c8;
+  min-width: 280px;
+}
+
+.popup-row {
+  padding: 6px 12px;
+  border-bottom: 1px solid $c8;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.popup-icon {
+  font-family: "Symbols Nerd Font Mono";
+  font-size: 12pt;
+  color: $c2;
+  margin-right: 10px;
+  min-width: 18px;
+}
+
+.popup-label {
+  color: $fg;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.popup-value {
+  color: $c8;
+  font-family: "Roboto Mono", monospace;
+}
+
+// Idle inhibitor active state
+.idle-active {
+  .popup-value {
+    color: $c3;
+    font-weight: bold;
+  }
+  .popup-icon {
+    color: $c3;
+  }
+}

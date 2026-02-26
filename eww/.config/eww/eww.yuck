@@ -1,7 +1,7 @@
 ;; EWW Sidebar - System Vitals Panel
 ;; Toggle with: eww open --toggle sidebar
 
-(include "desktop.yuck")
+(include "bar.yuck")
 
 ;; =============================================================================
 ;; POLL VARIABLES
