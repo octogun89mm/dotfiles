@@ -78,6 +78,15 @@
 ;; =============================================================================
 
 (defvar popup_visible false)
+(defvar popup_monitor 0)
+
+(deflisten bar_layout_0
+  :initial "MASTER"
+  "scripts/bar_layout.sh 0")
+
+(deflisten bar_layout_1
+  :initial "MASTER"
+  "scripts/bar_layout.sh 1")
 
 ;; =============================================================================
 ;; BAR WIDGETS
@@ -86,8 +95,11 @@
 ;; Left section: arch icon (toggles popup), submap, window title
 (defwidget bar-left []
   (box :class "bar-left" :orientation "h" :space-evenly false :halign "start"
-    (eventbox :onclick "scripts/toggle_popup.sh"
-      (label :class "bar-archicon ${popup_visible ? 'bar-archicon-active' : ''}" :text "󰣇"))
+    (eventbox :onclick "scripts/toggle_popup.sh 0"
+      (label :class "bar-archicon ${popup_visible && popup_monitor == 0 ? 'bar-archicon-active' : ''}" :text "󰣇"))
+    (eventbox :onclick "~/.config/hypr/scripts/cycle-layout.sh"
+      (box :class "bar-layout layout-${bar_layout_0}" :orientation "h" :space-evenly false
+        (label :class "bar-layout-name" :halign "center" :hexpand true :text bar_layout_0)))
     (label :class "bar-submap" :text bar_submap
            :visible {bar_submap != ""})
     (label :class "bar-window-title" :text {bar_active_window.title}
@@ -191,7 +203,7 @@
       (box :class "popup-subheader" :orientation "h" :space-evenly false
         (label :class "popup-subheader-icon" :text "")
         (label :class "popup-subheader-label" :text "Memory"))
-      (popup-row :icon "" :label "Used / Total" :value "${memory_used}G / ${memory_total}G")
+      (popup-row :icon "" :label "Used / Total" :value "${memory_used}/${memory_total}G")
       ;; Network
       (box :class "popup-subheader" :orientation "h" :space-evenly false
         (label :class "popup-subheader-icon" :text "󰛳")
@@ -226,8 +238,11 @@
 (defwidget bar-secondary-widget []
   (centerbox :class "bar" :orientation "h"
     (box :class "bar-left" :orientation "h" :space-evenly false :halign "start"
-      (eventbox :onclick "scripts/toggle_popup.sh"
-        (label :class "bar-archicon ${popup_visible ? 'bar-archicon-active' : ''}" :text "󰣇")))
+      (eventbox :onclick "scripts/toggle_popup.sh 1"
+        (label :class "bar-archicon ${popup_visible && popup_monitor == 1 ? 'bar-archicon-active' : ''}" :text "󰣇"))
+      (eventbox :onclick "~/.config/hypr/scripts/cycle-layout.sh"
+        (box :class "bar-layout layout-${bar_layout_1}" :orientation "h" :space-evenly false
+          (label :class "bar-layout-name" :halign "center" :hexpand true :text bar_layout_1))))
     (bar-center)
     (bar-right-secondary)))
 
@@ -263,7 +278,7 @@
   :namespace "eww_bar"
   (bar-secondary-widget))
 
-(defwindow bar-popup
+(defwindow bar-popup-0
   :monitor 0
   :geometry (geometry
               :x "8px"
@@ -273,5 +288,18 @@
   :exclusive false
   :focusable false
   :namespace "eww_bar_popup"
-  (revealer :transition "slidedown" :reveal popup_visible :duration "200ms"
+  (revealer :transition "slidedown" :reveal {popup_visible && popup_monitor == 0} :duration "200ms"
+    (popup-panel)))
+
+(defwindow bar-popup-1
+  :monitor 1
+  :geometry (geometry
+              :x "8px"
+              :y "10px"
+              :anchor "top left")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "eww_bar_popup"
+  (revealer :transition "slidedown" :reveal {popup_visible && popup_monitor == 1} :duration "200ms"
     (popup-panel)))

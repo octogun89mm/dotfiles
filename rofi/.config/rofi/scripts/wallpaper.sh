@@ -27,4 +27,4 @@ wallpaper {
 }
 EOF
 
-notify-send -u low -t 3000 "Wallpaper" "Set to $selected"
+notify-send -a "Wallpaper" -u low -t 3000 "Wallpaper" "Set to $selected"

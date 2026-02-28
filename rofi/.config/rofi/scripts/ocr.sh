@@ -10,7 +10,7 @@ trap 'rm -f "$TMP_IMG"' EXIT
 
 # Select region and capture screenshot
 if ! grim -g "$(slurp)" "$TMP_IMG" 2>/dev/null; then
-    notify-send -u low "OCR" "Selection cancelled"
+    notify-send -a "OCR" -u low "OCR" "Selection cancelled"
     exit 1
 fi
 
@@ -18,7 +18,7 @@ fi
 TEXT=$(tesseract "$TMP_IMG" - 2>/dev/null | sed '/^$/d')
 
 if [[ -z "$TEXT" ]]; then
-    notify-send -u normal "OCR" "No text detected"
+    notify-send -a "OCR" -u normal "OCR" "No text detected"
     exit 0
 fi
 
@@ -29,4 +29,4 @@ printf '%s' "$TEXT" | wl-copy
 PREVIEW="${TEXT:0:100}"
 [[ ${#TEXT} -gt 100 ]] && PREVIEW="$PREVIEW..."
 
-notify-send -u normal "OCR" "Copied to clipboard:\n$PREVIEW"
+notify-send -a "OCR" -u normal "OCR" "Copied to clipboard:\n$PREVIEW"

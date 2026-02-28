@@ -1,5 +1,5 @@
 configuration {
-  modes: "drun,run,window,power,mode,filebrowser";
+  modes: "drun,run,window,power,filebrowser";
   no-default-theme: true;
   window-format: "{t}";
   terminal: "foot";
@@ -21,10 +21,6 @@ configuration {
   }
   power {
     display-name: "Power";
-    show-icons: false;
-  }
-  mode {
-    display-name: "Mode";
     show-icons: false;
   }
   filebrowser {

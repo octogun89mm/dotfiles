@@ -8,4 +8,5 @@ eww daemon &
 sleep 1
 eww open bar-primary
 eww open bar-secondary
-eww open bar-popup
+eww open bar-popup-0
+eww open bar-popup-1

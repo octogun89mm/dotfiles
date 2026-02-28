@@ -1167,7 +1167,7 @@ echo -n "$char" | wl-copy
 
 # Optional: Show notification that character was copied
 # Requires a notification daemon like mako or dunst
-notify-send "Unicode Picker" "Copied: $char" -t 2000
+notify-send -a "Emoji Picker" "Unicode Picker" "Copied: $char" -t 2000
 
 # Optional: Also type the character at cursor position
 # This uses wtype (Wayland equivalent of xdotool)

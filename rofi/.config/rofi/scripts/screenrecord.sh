@@ -204,7 +204,7 @@ start_recording() {
             if [ -n "$system_device" ]; then
                 cmd_args+=("--audio=$system_device")
             else
-                notify-send "Warning" "No system audio device found, recording without audio"
+                notify-send -a "Screen Recorder" "Warning" "No system audio device found, recording without audio"
             fi
             ;;
         "mic")
@@ -212,14 +212,14 @@ start_recording() {
             if [ -n "$mic_device" ]; then
                 cmd_args+=("--audio=$mic_device")
             else
-                notify-send "Warning" "No microphone found, recording without audio"
+                notify-send -a "Screen Recorder" "Warning" "No microphone found, recording without audio"
             fi
             ;;
         "both")
             system_device=$(get_system_audio_device)
             if [ -n "$system_device" ]; then
                 cmd_args+=("--audio=$system_device")
-                notify-send "Info" "Recording system audio. For mic+system, use PipeWire virtual sink."
+                notify-send -a "Screen Recorder" "Info" "Recording system audio. For mic+system, use PipeWire virtual sink."
             else
                 cmd_args+=(--audio)
             fi
@@ -237,7 +237,7 @@ start_recording() {
     echo "$output_file" > "$STATUS_FILE"
     echo "Area: $geometry, Audio: $audio_mode, Quality: $quality" > "$CONFIG_FILE"
 
-    notify-send "Recording started" "Quality: $quality\nSaving to: $(basename "$output_file")"
+    notify-send -a "Screen Recorder" "Recording started" "Quality: $quality\nSaving to: $(basename "$output_file")"
 }
 
 # Function to stop recording
@@ -272,10 +272,10 @@ stop_recording() {
 
         if [ -f "$STATUS_FILE" ]; then
             output_file=$(cat "$STATUS_FILE")
-            notify-send "Recording stopped" "Saved: $(basename "$output_file")"
+            notify-send -a "Screen Recorder" "Recording stopped" "Saved: $(basename "$output_file")"
             rm -f "$STATUS_FILE"
         else
-            notify-send "Recording stopped"
+            notify-send -a "Screen Recorder" "Recording stopped"
         fi
 
         rm -f "$PID_FILE" "$CONFIG_FILE"
@@ -306,7 +306,7 @@ main() {
     
     geometry=$(select_area "$area")
     if [ "$geometry" = "CANCEL" ]; then
-        notify-send "Recording cancelled" "No region selected"
+        notify-send -a "Screen Recorder" "Recording cancelled" "No region selected"
         exit 0
     fi
     

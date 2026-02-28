@@ -161,7 +161,7 @@ take_screenshot_hyprshot() {
             ;;
         "save")
             hyprshot -m "$hyprshot_mode" -o "$SCREENSHOTS_DIR" -f "$filename" --silent
-            notify-send "Screenshot saved" "Saved: $filename"
+            notify-send -a "Screenshot" "Screenshot saved" "Saved: $filename"
             ;;
         "both")
             hyprshot -m "$hyprshot_mode" -o "$SCREENSHOTS_DIR" -f "$filename"
@@ -189,7 +189,7 @@ take_screenshot() {
             # Get geometry of currently focused window
             geometry=$(get_active_window)
             if [ -z "$geometry" ]; then
-                notify-send "Screenshot failed" "Could not get active window"
+                notify-send -a "Screenshot" "Screenshot failed" "Could not get active window"
                 return 1
             fi
             ;;
@@ -198,7 +198,7 @@ take_screenshot() {
             # slurp returns geometry or nothing if cancelled
             geometry=$(slurp 2>/dev/null)
             if [ -z "$geometry" ]; then
-                notify-send "Screenshot cancelled" "No region selected"
+                notify-send -a "Screenshot" "Screenshot cancelled" "No region selected"
                 return 1
             fi
             ;;
@@ -206,7 +206,7 @@ take_screenshot() {
             # Get geometry of currently focused output (monitor)
             geometry=$(get_active_output)
             if [ -z "$geometry" ]; then
-                notify-send "Screenshot failed" "Could not get active output"
+                notify-send -a "Screenshot" "Screenshot failed" "Could not get active output"
                 return 1
             fi
             ;;
@@ -249,7 +249,7 @@ take_screenshot() {
     # Check if grim succeeded
     # $? contains exit code of last command (0 = success)
     if [ $? -ne 0 ]; then
-        notify-send "Screenshot failed" "grim returned an error"
+        notify-send -a "Screenshot" "Screenshot failed" "grim returned an error"
         return 1
     fi
     
@@ -257,16 +257,16 @@ take_screenshot() {
     case $action_mode in
         "clipboard")
             copy_to_clipboard "$TEMP_FILE"
-            notify-send "Screenshot copied" "Image copied to clipboard"
+            notify-send -a "Screenshot" "Screenshot copied" "Image copied to clipboard"
             # Clean up temp file
             rm -f "$TEMP_FILE"
             ;;
         "both")
             copy_to_clipboard "$output_file"
-            notify-send "Screenshot saved and copied" "Saved: $(basename "$output_file")"
+            notify-send -a "Screenshot" "Screenshot saved and copied" "Saved: $(basename "$output_file")"
             ;;
         "save")
-            notify-send "Screenshot saved" "Saved: $(basename "$output_file")"
+            notify-send -a "Screenshot" "Screenshot saved" "Saved: $(basename "$output_file")"
             ;;
     esac
 }

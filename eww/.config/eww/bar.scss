@@ -75,6 +75,24 @@
   margin-right: 10px;
 }
 
+.bar-layout {
+  margin-right: 10px;
+  min-width: 80px; // fixed width to fit "SCROLLING"
+  border-radius: 0px;
+  padding: 0px 6px;
+  transition: background-color 200ms ease;
+
+  &.layout-MASTER    { background-color: $c4; }
+  &.layout-DWINDLE   { background-color: $c2; }
+  &.layout-SCROLLING { background-color: $c5; }
+  &.layout-MONOCLE   { background-color: $c3; }
+}
+
+.bar-layout-name {
+  color: $bg;
+  font-weight: bold;
+}
+
 .bar-date {
   font-size: 9pt;
   color: $fg;
