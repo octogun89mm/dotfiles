@@ -88,6 +88,14 @@
   :initial "MASTER"
   "scripts/bar_layout.sh 1")
 
+(deflisten bar_wincount_0
+  :initial "0"
+  "scripts/bar_wincount.sh 0")
+
+(deflisten bar_wincount_1
+  :initial "0"
+  "scripts/bar_wincount.sh 1")
+
 ;; =============================================================================
 ;; BAR WIDGETS
 ;; =============================================================================
@@ -100,6 +108,7 @@
     (eventbox :onclick "~/.config/hypr/scripts/cycle-layout.sh"
       (box :class "bar-layout layout-${bar_layout_0}" :orientation "h" :space-evenly false
         (label :class "bar-layout-name" :halign "center" :hexpand true :text bar_layout_0)))
+    (label :class "bar-wincount" :text bar_wincount_0)
     (label :class "bar-submap" :text bar_submap
            :visible {bar_submap != ""})
     (label :class "bar-window-title" :text {bar_active_window.title}
@@ -242,7 +251,8 @@
         (label :class "bar-archicon ${popup_visible && popup_monitor == 1 ? 'bar-archicon-active' : ''}" :text "󰣇"))
       (eventbox :onclick "~/.config/hypr/scripts/cycle-layout.sh"
         (box :class "bar-layout layout-${bar_layout_1}" :orientation "h" :space-evenly false
-          (label :class "bar-layout-name" :halign "center" :hexpand true :text bar_layout_1))))
+          (label :class "bar-layout-name" :halign "center" :hexpand true :text bar_layout_1)))
+      (label :class "bar-wincount" :text bar_wincount_1))
     (bar-center)
     (bar-right-secondary)))
 

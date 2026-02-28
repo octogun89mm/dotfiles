@@ -93,6 +93,15 @@
   font-weight: bold;
 }
 
+.bar-wincount {
+  background-color: $c4;
+  color: $bg;
+  font-weight: bold;
+  min-width: 20px;
+  padding: 0 6px;
+  margin-right: 10px;
+}
+
 .bar-date {
   font-size: 9pt;
   color: $fg;
