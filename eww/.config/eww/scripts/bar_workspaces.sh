@@ -31,7 +31,7 @@ query_workspaces() {
         --argjson special "$special_names" '
 
         # Build a set of occupied workspace IDs (only those with windows)
-        ([.[] | select(.id > 0 and .windows > 0) | .id]) as $occupied |
+        ([.[] | select(.windows > 0) | .id]) as $occupied |
 
         # Predefined workspaces 1-10 plus dropdown (id -99) and magic (id -98)
         [
