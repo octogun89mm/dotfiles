@@ -112,7 +112,7 @@
     (label :class "bar-submap" :text bar_submap
            :visible {bar_submap != ""})
     (label :class "bar-window-title" :text {bar_active_window.title}
-           :limit-width 80)))
+           :limit-width 40)))
 
 ;; Center section: workspace buttons
 (defwidget bar-center []
