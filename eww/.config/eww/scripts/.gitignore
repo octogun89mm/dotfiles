@@ -1,3 +1,5 @@
 eww-bar
 src/*.o
 vendor/*.o
+pids/*.pid
+state/*.state
