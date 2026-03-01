@@ -4,36 +4,20 @@
 
 ;; =============================================================================
 ;; LISTENER VARIABLES (IPC-based, zero idle CPU)
+;; Direct listeners stream updates from scripts/eww-bar.
 ;; =============================================================================
 
-(deflisten bar_workspaces
-  :initial "[]"
-  "scripts/bar_workspaces.sh")
+(deflisten bar_workspaces :initial "[]"
+  "scripts/eww-bar workspaces")
 
-(deflisten bar_window_title_0
-  :initial ""
-  "scripts/bar_window_title.sh 0")
+(deflisten bar_window_title_0 :initial ""
+  "scripts/eww-bar window-title 0")
 
-(deflisten bar_window_title_1
-  :initial ""
-  "scripts/bar_window_title.sh 1")
+(deflisten bar_window_title_1 :initial ""
+  "scripts/eww-bar window-title 1")
 
-(deflisten bar_submap
-  :initial ""
-  "scripts/bar_submap.sh")
-
-(deflisten bar_language
-  :initial "EN"
-  "scripts/bar_language.sh")
-
-(deflisten bar_volume
-  :initial '{"volume": 0, "muted": false, "icon": "󰕾"}'
-  "scripts/bar_volume.sh")
-
-;; Reuse existing MPD listener
-(deflisten mpd_data
-  :initial '{"state": "stopped", "artist": "", "title": "", "elapsed": "0:00", "total": "0:00", "progress": 0}'
-  "scripts/mpd_listen.sh")
+(deflisten bar_submap :initial ""
+  "scripts/eww-bar submap")
 
 ;; =============================================================================
 ;; POLL VARIABLES
@@ -41,41 +25,41 @@
 
 (defpoll bar_time :interval "1s" "date '+%I:%M %p'")
 (defpoll bar_date :interval "60s" "date '+%a-%d-%m-%y'")
-(defpoll bar_weather :interval "1800s" :initial '{"text":"...","icon":"","class":""}' "scripts/bar_weather.sh")
-(defpoll bar_vpn :interval "10s" :initial '{"status":"disconnected","icon":"󰒙","location":""}' "scripts/bar_vpn.sh")
+(defpoll bar_weather :interval "1800s" :initial '{"text":"...","icon":"","class":""}' "scripts/eww-bar weather")
+(defpoll bar_vpn :interval "10s" :initial '{"status":"disconnected","icon":"󰒙","location":""}' "scripts/eww-bar vpn")
 
 (defpoll bar_idle_inhibit :interval "2s" :initial "false"
   "[ -f /tmp/idle-inhibit.pid ] && kill -0 $(cat /tmp/idle-inhibit.pid 2>/dev/null) 2>/dev/null && echo true || echo false")
 
 ;; System vitals (only poll when popup is open)
 (defpoll cpu_usage :interval "2s" :initial "0" :run-while popup_visible
-  "scripts/cpu_usage.sh")
+  "scripts/eww-bar cpu-usage")
 (defpoll cpu_freq :interval "2s" :initial "0.00" :run-while popup_visible
-  "scripts/cpu_freq.sh")
+  "scripts/eww-bar cpu-freq")
 (defpoll cpu_temp :interval "5s" :initial "0" :run-while popup_visible
-  "scripts/cpu_temp.sh")
+  "scripts/eww-bar cpu-temp")
 (defpoll gpu :interval "5s" :initial '{"usage":"0","vram_used":"0.0","vram_total":"0.0","temp":"0"}' :run-while popup_visible
-  "scripts/gpu_monitor.sh")
+  "scripts/eww-bar gpu")
 (defpoll memory_used :interval "5s" :initial "0.0" :run-while popup_visible
-  "scripts/memory_used.sh")
+  "scripts/eww-bar memory-used")
 (defpoll memory_total :interval "5s" :initial "0.0" :run-while popup_visible
-  "scripts/memory_total.sh")
+  "scripts/eww-bar memory-total")
 (defpoll download_speed :interval "2s" :initial "00.00" :run-while popup_visible
-  "scripts/download_speed.sh")
+  "scripts/eww-bar download-speed")
 (defpoll upload_speed :interval "2s" :initial "00.00" :run-while popup_visible
-  "scripts/upload_speed.sh")
+  "scripts/eww-bar upload-speed")
 (defpoll wifi_strength :interval "10s" :initial "0" :run-while popup_visible
-  "scripts/wifi_strength.sh")
+  "scripts/eww-bar wifi-strength")
 (defpoll disk_main :interval "30s" :initial "0/0G" :run-while popup_visible
-  "scripts/disk_usage.sh /")
+  "scripts/eww-bar disk-usage /")
 (defpoll disk_fast :interval "30s" :initial "0/0G" :run-while popup_visible
-  "scripts/disk_usage.sh /mnt/Fast")
+  "scripts/eww-bar disk-usage /mnt/Fast")
 (defpoll disk_extra :interval "30s" :initial "0/0G" :run-while popup_visible
-  "scripts/disk_usage.sh /mnt/Extra")
+  "scripts/eww-bar disk-usage /mnt/Extra")
 (defpoll disk_extra2 :interval "30s" :initial "0/0G" :run-while popup_visible
-  "scripts/disk_usage.sh /mnt/Extra2")
+  "scripts/eww-bar disk-usage /mnt/Extra2")
 (defpoll pending_update :interval "60s" :initial "0" :run-while popup_visible
-  "scripts/update.sh")
+  "scripts/eww-bar updates")
 
 ;; =============================================================================
 ;; STATE VARIABLES
@@ -84,21 +68,24 @@
 (defvar popup_visible false)
 (defvar popup_monitor 0)
 
-(deflisten bar_layout_0
-  :initial "MASTER"
-  "scripts/bar_layout.sh 0")
+(deflisten bar_layout_0 :initial "MASTER"
+  "scripts/eww-bar layout 0")
 
-(deflisten bar_layout_1
-  :initial "MASTER"
-  "scripts/bar_layout.sh 1")
+(deflisten bar_layout_1 :initial "MASTER"
+  "scripts/eww-bar layout 1")
 
-(deflisten bar_wincount_0
-  :initial "0"
-  "scripts/bar_wincount.sh 0")
+(deflisten bar_wincount_0 :initial "0"
+  "scripts/eww-bar wincount 0")
 
-(deflisten bar_wincount_1
-  :initial "0"
-  "scripts/bar_wincount.sh 1")
+(deflisten bar_wincount_1 :initial "0"
+  "scripts/eww-bar wincount 1")
+
+(deflisten bar_language :initial "EN"
+  "scripts/eww-bar language")
+(deflisten bar_volume :initial "{\"volume\":0,\"muted\":false,\"icon\":\"\"}"
+  "scripts/eww-bar volume")
+(deflisten mpd_data :initial "{\"state\":\"stopped\",\"artist\":\"\",\"title\":\"\",\"elapsed\":\"0:00\",\"total\":\"0:00\",\"progress\":0}"
+  "scripts/eww-bar mpd")
 
 ;; =============================================================================
 ;; BAR WIDGETS

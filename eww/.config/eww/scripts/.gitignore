@@ -1,0 +1,3 @@
+eww-bar
+src/*.o
+vendor/*.o
