@@ -1,0 +1,70 @@
+@import "wallust-todo.rasi"
+
+* {
+  background-color: @bg;
+  text-color: @fg;
+  font: "Roboto Mono 11";
+  bold-font: "Roboto Mono Bold 11";
+  padding: 0px;
+  margin: 0px;
+}
+
+window {
+  anchor: center;
+  location: center;
+  width: 60%;
+  height: 50%;
+  border: 2px;
+  border-color: @color2;
+  border-radius: 0;
+}
+
+mainbox {
+  padding: 10px;
+}
+
+inputbar {
+  border: 0px 0px 2px 0px;
+  border-color: @color2;
+  padding: 6px 4px;
+  children: [ prompt, textbox-colon, entry ];
+}
+
+prompt {
+  text-color: @color4;
+  vertical-align: 0.5;
+  font: @bold-font;
+}
+
+textbox-colon {
+  str: "⇒";
+  expand: false;
+  padding: 0px 4px;
+  vertical-align: 0.8;
+  text-color: @color5;
+}
+
+listview {
+  layout: vertical;
+  lines: 15;
+  columns: 1;
+  scrollbar: false;
+  padding: 6px 0px 0px 0px;
+}
+
+entry {
+  expand: true;
+  vertical-align: 0.5;
+  blink: false;
+  cursor-color: @fg;
+  text-color: @fg;
+}
+
+element {
+  padding: 4px 6px;
+}
+
+element-text selected.normal {
+  text-color: @color4;
+  font: @bold-font;
+}
