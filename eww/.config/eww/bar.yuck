@@ -10,9 +10,13 @@
   :initial "[]"
   "scripts/bar_workspaces.sh")
 
-(deflisten bar_active_window
-  :initial '{"class": "", "title": ""}'
-  "scripts/bar_active_window.sh")
+(deflisten bar_window_title_0
+  :initial ""
+  "scripts/bar_window_title.sh 0")
+
+(deflisten bar_window_title_1
+  :initial ""
+  "scripts/bar_window_title.sh 1")
 
 (deflisten bar_submap
   :initial ""
@@ -111,8 +115,9 @@
     (label :class "bar-wincount" :text bar_wincount_0)
     (label :class "bar-submap" :text bar_submap
            :visible {bar_submap != ""})
-    (label :class "bar-window-title" :text {bar_active_window.title}
-           :limit-width 40)))
+    (label :class "bar-window-title" :text bar_window_title_0
+           :limit-width 40
+           :visible {bar_window_title_0 != ""})))
 
 ;; Center section: workspace buttons
 (defwidget bar-center []
@@ -129,14 +134,18 @@
 (defwidget bar-right []
   (box :class "bar-right" :orientation "h" :space-evenly false :halign "end" :valign "center"
     (systray :class "bar-tray" :icon-size 16 :spacing 6)
-    (label :class "bar-date" :text bar_date :valign "center")
-    (label :class "bar-clock" :text bar_time :valign "center")))
+    (box :class "bar-datetime" :orientation "h" :space-evenly false :valign "center"
+      (label :class "bar-date" :text bar_date :valign "center")
+      (label :class "bar-datetime-sep" :text "│")
+      (label :class "bar-clock" :text bar_time :valign "center"))))
 
 ;; Right section for secondary monitor
 (defwidget bar-right-secondary []
   (box :class "bar-right" :orientation "h" :space-evenly false :halign "end"
-    (label :class "bar-date" :text bar_date)
-    (label :class "bar-clock" :text bar_time)))
+    (box :class "bar-datetime" :orientation "h" :space-evenly false :valign "center"
+      (label :class "bar-date" :text bar_date)
+      (label :class "bar-datetime-sep" :text "│")
+      (label :class "bar-clock" :text bar_time))))
 
 ;; =============================================================================
 ;; POPUP PANEL WIDGETS
@@ -252,7 +261,10 @@
       (eventbox :onclick "~/.config/hypr/scripts/cycle-layout.sh"
         (box :class "bar-layout layout-${bar_layout_1}" :orientation "h" :space-evenly false
           (label :class "bar-layout-name" :halign "center" :hexpand true :text bar_layout_1)))
-      (label :class "bar-wincount" :text bar_wincount_1))
+      (label :class "bar-wincount" :text bar_wincount_1)
+      (label :class "bar-window-title" :text bar_window_title_1
+             :limit-width 40
+             :visible {bar_window_title_1 != ""}))
     (bar-center)
     (bar-right-secondary)))
 

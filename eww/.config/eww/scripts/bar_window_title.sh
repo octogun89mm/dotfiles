@@ -1,30 +1,35 @@
 #!/usr/bin/env bash
 
-# Usage: bar_wincount.sh <monitor_id>
-# Outputs the window count for the active workspace on the given monitor.
-# Uses the same FIFO pattern as bar_layout.sh for zero idle CPU.
+# Usage: bar_window_title.sh <monitor_id>
+# Outputs the window title for the focused window on the given monitor.
+# Uses the same FIFO + socat pattern as bar_wincount.sh for zero idle CPU.
 
 MONITOR_ID="${1:-0}"
-PIPE="/tmp/eww-wincount-pipe-${MONITOR_ID}"
+PIPE="/tmp/eww-wintitle-pipe-${MONITOR_ID}"
 [ -p "$PIPE" ] || mkfifo "$PIPE"
 
-get_wincount() {
-    local ws_id
-    ws_id=$(hyprctl monitors -j | jq -r ".[] | select(.id == $MONITOR_ID) | .activeWorkspace.id")
-    if [ -n "$ws_id" ]; then
-        hyprctl workspaces -j | jq -r ".[] | select(.id == $ws_id) | .windows"
+get_title() {
+    local info monitor title
+    info=$(hyprctl activewindow -j 2>/dev/null)
+    if [[ $? -ne 0 ]] || [[ -z "$info" ]] || [[ "$info" == "null" ]]; then
+        echo ""
+        return
+    fi
+    monitor=$(echo "$info" | jq -r '.monitor // -1')
+    if [[ "$monitor" == "$MONITOR_ID" ]]; then
+        echo "$info" | jq -r '.title // ""'
     else
-        echo "0"
+        echo ""
     fi
 }
 
-# Print initial count
-get_wincount
+# Print initial title
+get_title
 
 # Background: listen for relevant events
 socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r line; do
     case "$line" in
-        openwindow\>\>*|closewindow\>\>*|movewindow\>\>*|workspace\>\>*|focusedmon\>\>*) echo "RELOAD" > "$PIPE" ;;
+        activewindow\>\>*|closewindow\>\>*|movewindow\>\>*|focusedmon\>\>*) echo "RELOAD" > "$PIPE" ;;
     esac
 done &
 SOCKET_PID=$!
@@ -39,7 +44,7 @@ while true; do
         if [ "$msg" = "RELOAD" ]; then
             # Debounce: drain queued events before querying
             while read -r -t 0.05 _ <&3; do :; done
-            get_wincount
+            get_title
         else
             echo "$msg"
         fi

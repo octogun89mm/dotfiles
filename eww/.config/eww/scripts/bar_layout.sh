@@ -27,10 +27,15 @@ done &
 SOCKET_PID=$!
 trap "kill $SOCKET_PID 2>/dev/null; rm -f $PIPE" EXIT
 
+# Hold FIFO open on fd 3 so reads don't block on open()
+exec 3<>"$PIPE"
+
 # Main loop: read from FIFO (blocks until data arrives — zero CPU)
 while true; do
-    if read -r msg < "$PIPE"; then
+    if read -r msg <&3; then
         if [ "$msg" = "RELOAD" ]; then
+            # Debounce: drain queued events before querying
+            while read -r -t 0.05 _ <&3; do :; done
             get_layout
         else
             echo "$msg"

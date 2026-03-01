@@ -12,14 +12,17 @@
 
 // Left section
 .bar-left {
-  margin-left: 8px;
+  margin-left: 0px;
 }
 
 .bar-archicon {
   font-family: "Symbols Nerd Font Mono";
   font-size: 12pt;
-  color: $c2;
+  color: $bg;
+  background-color: $c2;
   margin-right: 10px;
+  padding: 0 6px;
+  min-width: 20px;
 }
 
 .bar-submap {
@@ -57,19 +60,19 @@
 }
 
 .ws-active {
-  background-color: $c8;
+  background-color: $bg-light;
   color: $c3;
 }
 
 // Right section
 .bar-right {
-  margin-right: 8px;
+  margin-right: 0px;
 }
 
 .bar-clock {
   font-size: 11pt;
   font-weight: bold;
-  color: $fg;
+  color: $bg;
 }
 
 .bar-tray {
@@ -103,15 +106,24 @@
   margin-right: 10px;
 }
 
+.bar-datetime {
+  background-color: $c4;
+  padding: 0 6px;
+}
+
+.bar-datetime-sep {
+  color: $bg;
+  margin: 0 6px;
+}
+
 .bar-date {
   font-size: 9pt;
-  color: $fg;
-  margin-right: 10px;
+  color: $bg;
   padding-top: 1px;
 }
 
 .bar-archicon-active {
-  color: $c3;
+  background-color: $c3;
 }
 
 // =============================================================================
