@@ -5,7 +5,7 @@
     height = (50,200)
     notification_limit = 20
     origin = top-center
-    offset = (0,5)
+    offset = (0,10)
     gap_size = 5
     indicate_hidden = true
     show_indicators = false

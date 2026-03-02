@@ -67,6 +67,9 @@
 
 (defvar popup_visible false)
 (defvar popup_monitor 0)
+(defvar calendar_visible false)
+(defvar calendar_monitor 0)
+(defvar calendar_pinned false)
 
 (deflisten bar_layout_0 :initial "MASTER"
   "scripts/eww-bar layout 0")
@@ -121,18 +124,32 @@
 (defwidget bar-right []
   (box :class "bar-right" :orientation "h" :space-evenly false :halign "end" :valign "center"
     (systray :class "bar-tray" :icon-size 16 :spacing 6)
-    (box :class "bar-datetime" :orientation "h" :space-evenly false :valign "center"
-      (label :class "bar-date" :text bar_date :valign "center")
-      (label :class "bar-datetime-sep" :text "│")
-      (label :class "bar-clock" :text bar_time :valign "center"))))
+    (eventbox :onclick "sh -c 'if [ \"$(eww get calendar_pinned)\" = \"true\" ] && [ \"$(eww get calendar_monitor)\" = \"0\" ]; then eww update calendar_pinned=false calendar_visible=false; else eww update calendar_pinned=true calendar_visible=true calendar_monitor=0; fi'"
+              :onhover "eww update calendar_visible=true calendar_monitor=0"
+              :onhoverlost "sh -c '[ \"$(eww get calendar_pinned)\" = \"true\" ] || eww update calendar_visible=false'"
+      (box :class "bar-datetime" :orientation "h" :space-evenly false :valign "center"
+        (label :class "bar-date" :text bar_date :valign "center")
+        (label :class "bar-datetime-sep" :text "│")
+        (label :class "bar-clock" :text bar_time :valign "center")))))
 
 ;; Right section for secondary monitor
 (defwidget bar-right-secondary []
   (box :class "bar-right" :orientation "h" :space-evenly false :halign "end"
-    (box :class "bar-datetime" :orientation "h" :space-evenly false :valign "center"
-      (label :class "bar-date" :text bar_date)
-      (label :class "bar-datetime-sep" :text "│")
-      (label :class "bar-clock" :text bar_time))))
+    (eventbox :onclick "sh -c 'if [ \"$(eww get calendar_pinned)\" = \"true\" ] && [ \"$(eww get calendar_monitor)\" = \"1\" ]; then eww update calendar_pinned=false calendar_visible=false; else eww update calendar_pinned=true calendar_visible=true calendar_monitor=1; fi'"
+              :onhover "eww update calendar_visible=true calendar_monitor=1"
+              :onhoverlost "sh -c '[ \"$(eww get calendar_pinned)\" = \"true\" ] || eww update calendar_visible=false'"
+      (box :class "bar-datetime" :orientation "h" :space-evenly false :valign "center"
+        (label :class "bar-date" :text bar_date)
+        (label :class "bar-datetime-sep" :text "│")
+        (label :class "bar-clock" :text bar_time)))))
+
+(defwidget calendar-popup []
+  (box :class "calendar-popup" :orientation "v" :space-evenly false
+    (calendar :class "calendar-widget"
+              :show-heading true
+              :show-day-names true
+              :show-week-numbers false
+              :show-details false)))
 
 ;; =============================================================================
 ;; POPUP PANEL WIDGETS
@@ -290,25 +307,51 @@
 (defwindow bar-popup-0
   :monitor 0
   :geometry (geometry
-              :x "8px"
+              :x "10px"
               :y "10px"
               :anchor "top left")
   :stacking "overlay"
   :exclusive false
   :focusable false
   :namespace "eww_bar_popup"
-  (revealer :transition "slidedown" :reveal {popup_visible && popup_monitor == 0} :duration "200ms"
+  (revealer :transition "slidedown" :reveal {popup_visible && popup_monitor == 0} :duration "75ms"
     (popup-panel)))
 
 (defwindow bar-popup-1
   :monitor 1
   :geometry (geometry
-              :x "8px"
+              :x "10px"
               :y "10px"
               :anchor "top left")
   :stacking "overlay"
   :exclusive false
   :focusable false
   :namespace "eww_bar_popup"
-  (revealer :transition "slidedown" :reveal {popup_visible && popup_monitor == 1} :duration "200ms"
+  (revealer :transition "slidedown" :reveal {popup_visible && popup_monitor == 1} :duration "75ms"
     (popup-panel)))
+
+(defwindow bar-calendar-0
+  :monitor 0
+  :geometry (geometry
+              :x "10px"
+              :y "10px"
+              :anchor "top right")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "eww_bar_calendar"
+  (revealer :transition "slidedown" :reveal {(calendar_visible || calendar_pinned) && calendar_monitor == 0} :duration "60ms"
+    (calendar-popup)))
+
+(defwindow bar-calendar-1
+  :monitor 1
+  :geometry (geometry
+              :x "10px"
+              :y "10px"
+              :anchor "top right")
+  :stacking "overlay"
+  :exclusive false
+  :focusable false
+  :namespace "eww_bar_calendar"
+  (revealer :transition "slidedown" :reveal {(calendar_visible || calendar_pinned) && calendar_monitor == 1} :duration "60ms"
+    (calendar-popup)))

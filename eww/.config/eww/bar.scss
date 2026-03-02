@@ -126,6 +126,57 @@
   background-color: $c3;
 }
 
+.calendar-popup {
+  background-color: $bg;
+  border: 2px solid $c4;
+  padding: 10px 12px 8px 12px;
+}
+
+.calendar-widget {
+  color: $fg;
+  background-color: transparent;
+  font-family: "Roboto Mono", monospace;
+  font-size: 10pt;
+  min-width: 260px;
+  padding: 4px 6px 2px 6px;
+
+  &:selected {
+    background-color: $c4;
+    color: $bg;
+  }
+
+  header {
+    margin-bottom: 8px;
+  }
+
+  button {
+    color: $c2;
+    min-width: 22px;
+    min-height: 22px;
+    padding: 2px;
+  }
+
+  .highlight {
+    color: $c2;
+    font-weight: bold;
+  }
+
+  grid {
+    margin-top: 6px;
+  }
+
+  label {
+    min-width: 28px;
+    margin: 0 3px;
+    padding: 2px 5px;
+    color: $fg;
+  }
+
+  &:indeterminate {
+    color: $c8;
+  }
+}
+
 // =============================================================================
 // POPUP PANEL
 // =============================================================================
