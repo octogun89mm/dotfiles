@@ -12,9 +12,6 @@ int hypr_event_connect(void);
    Handles partial reads internally. */
 int hypr_event_readline(int fd, char *buf, size_t buflen);
 
-/* Reset buffered event-reader state before consuming a new event socket. */
-void hypr_event_reset_reader(void);
-
 /* Send a request to Hyprland (.socket.sock) and return the response.
    e.g. hypr_request("j/workspaces") for JSON output.
    Returns malloc'd string (caller frees), or NULL on error. */

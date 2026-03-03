@@ -1,5 +1,4 @@
 #include "hypr_ipc.h"
-#include "hypr_listener.h"
 #include "signal_handler.h"
 #include "../vendor/cJSON.h"
 #include <stdio.h>
@@ -9,7 +8,6 @@
 #include <unistd.h>
 
 static char last_lang[8];
-static hypr_listener_t listener;
 
 static void shorten_layout(const char *layout, char *out, size_t outlen)
 {
@@ -69,26 +67,6 @@ static void print_initial(void)
     cJSON_Delete(json);
 }
 
-static int handle_layout_event(const char *line, void *userdata)
-{
-    (void)userdata;
-
-    if (strncmp(line, "activelayout>>", 14) != 0 &&
-        strncmp(line, "activelayoutv2>>", 16) != 0)
-        return 0;
-
-    /* format: activelayout>>KEYBOARD,LAYOUT_NAME */
-    char *payload = (char *)line + ((line[13] == '>') ? 14 : 16);
-    char *comma = strchr(payload, ',');
-    if (!comma)
-        return 0;
-
-    char shortened[8];
-    shorten_layout(comma + 1, shortened, sizeof(shortened));
-    emit_lang(shortened);
-    return 0;
-}
-
 int cmd_language(int argc, char **argv)
 {
     (void)argc; (void)argv;
@@ -96,12 +74,28 @@ int cmd_language(int argc, char **argv)
     last_lang[0] = '\0';
 
     print_initial();
-    hypr_listener_init(&listener, NULL, handle_layout_event, NULL, 0);
-    if (hypr_listener_start(&listener) < 0)
-        return 1;
 
-    for (;;)
-        pause();
+    for (;;) {
+        int fd = hypr_event_connect();
+        if (fd < 0) { sleep(1); continue; }
 
+        char line[1024];
+        int n;
+        while ((n = hypr_event_readline(fd, line, sizeof(line))) > 0) {
+            if (strncmp(line, "activelayout>>", 14) == 0 ||
+                strncmp(line, "activelayoutv2>>", 16) == 0) {
+                /* format: activelayout>>KEYBOARD,LAYOUT_NAME */
+                char *payload = line + ((line[13] == '>') ? 14 : 16);
+                char *comma = strchr(payload, ',');
+                if (comma) {
+                    char shortened[8];
+                    shorten_layout(comma + 1, shortened, sizeof(shortened));
+                    emit_lang(shortened);
+                }
+            }
+        }
+        close(fd);
+        sleep(1);
+    }
     return 0;
 }

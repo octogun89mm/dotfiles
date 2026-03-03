@@ -1,5 +1,4 @@
 #include "hypr_ipc.h"
-#include "hypr_listener.h"
 #include "debounce.h"
 #include "signal_handler.h"
 #include "../vendor/cJSON.h"
@@ -7,11 +6,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pthread.h>
 
 static debounce_t db;
 static int monitor_id;
 static int last_wincount = -1;
-static hypr_listener_t listener;
 
 static void get_wincount(void)
 {
@@ -66,9 +65,8 @@ emit:
     }
 }
 
-static int should_refresh_on_event(const char *line, void *userdata)
+static int should_refresh_on_event(const char *line)
 {
-    (void)userdata;
     return strncmp(line, "openwindow>>", 12) == 0 ||
            strncmp(line, "closewindow>>", 13) == 0 ||
            strncmp(line, "movewindow>>", 12) == 0 ||
@@ -76,6 +74,26 @@ static int should_refresh_on_event(const char *line, void *userdata)
            strncmp(line, "workspacev2>>", 13) == 0 ||
            strncmp(line, "focusedmon>>", 12) == 0 ||
            strncmp(line, "focusedmonv2>>", 14) == 0;
+}
+
+static void *event_thread(void *arg)
+{
+    (void)arg;
+    for (;;) {
+        int fd = hypr_event_connect();
+        if (fd < 0) { sleep(1); continue; }
+
+        char line[1024];
+        int n;
+        while ((n = hypr_event_readline(fd, line, sizeof(line))) > 0) {
+            if (should_refresh_on_event(line)) {
+                debounce_signal(&db);
+            }
+        }
+        close(fd);
+        sleep(1);
+    }
+    return NULL;
 }
 
 int cmd_wincount(int argc, char **argv)
@@ -88,11 +106,9 @@ int cmd_wincount(int argc, char **argv)
 
     get_wincount();
 
-    hypr_listener_init(&listener, &db, should_refresh_on_event, NULL, 1);
-    if (hypr_listener_start(&listener) < 0) {
-        debounce_destroy(&db);
-        return 1;
-    }
+    pthread_t tid;
+    pthread_create(&tid, NULL, event_thread, NULL);
+    pthread_detach(tid);
 
     while (debounce_wait(&db) == 0)
         get_wincount();

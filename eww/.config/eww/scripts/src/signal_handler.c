@@ -1,12 +1,30 @@
 #include "signal_handler.h"
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
+#define MAX_CLEANUPS 16
 #define MAX_CHILDREN 16
 
+static cleanup_fn cleanups[MAX_CLEANUPS];
+static int num_cleanups;
 static pid_t children[MAX_CHILDREN];
 static int num_children;
+
+static void run_cleanups(void)
+{
+    for (int i = 0; i < num_cleanups; i++) {
+        if (cleanups[i])
+            cleanups[i]();
+    }
+}
+
+void signal_register_cleanup(cleanup_fn fn)
+{
+    if (num_cleanups < MAX_CLEANUPS)
+        cleanups[num_cleanups++] = fn;
+}
 
 void signal_register_child(pid_t pid)
 {
@@ -31,4 +49,5 @@ void signal_setup(void)
     sigaction(SIGTERM, &sa, NULL);
     sigaction(SIGINT, &sa, NULL);
     sigaction(SIGHUP, &sa, NULL);
+    atexit(run_cleanups);
 }
