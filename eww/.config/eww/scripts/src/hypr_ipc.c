@@ -68,7 +68,19 @@ int hypr_event_readline(int fd, char *buf, size_t buflen)
             rlen = 0;
         }
         int n = read(fd, rbuf + rlen, sizeof(rbuf) - rlen);
-        if (n <= 0) return n;
+        if (n <= 0) {
+            if (n == 0 && rlen > 0) {
+                int line_len = rlen - rpos;
+                if ((size_t)line_len >= buflen)
+                    line_len = (int)buflen - 1;
+                memcpy(buf, rbuf + rpos, line_len);
+                buf[line_len] = '\0';
+                rpos = 0;
+                rlen = 0;
+                return line_len;
+            }
+            return n;
+        }
         rlen += n;
     }
 }

@@ -162,9 +162,7 @@ static int should_refresh_on_event(const char *line)
            strncmp(line, "openwindow>>", 12) == 0 ||
            strncmp(line, "closewindow>>", 13) == 0 ||
            strncmp(line, "movewindow>>", 12) == 0 ||
-           strncmp(line, "movewindowv2>>", 14) == 0 ||
-           strncmp(line, "activewindow>>", 14) == 0 ||
-           strncmp(line, "activewindowv2>>", 16) == 0;
+           strncmp(line, "movewindowv2>>", 14) == 0;
 }
 
 static void *event_thread(void *arg)
@@ -172,7 +170,7 @@ static void *event_thread(void *arg)
     (void)arg;
     for (;;) {
         int fd = hypr_event_connect();
-        if (fd < 0) { sleep(1); continue; }
+        if (fd < 0) { usleep(HYPR_EVENT_RECONNECT_DELAY_US); continue; }
 
         char line[1024];
         int n;
@@ -183,7 +181,7 @@ static void *event_thread(void *arg)
             }
         }
         close(fd);
-        sleep(1);
+        usleep(HYPR_EVENT_RECONNECT_DELAY_US);
     }
     return NULL;
 }

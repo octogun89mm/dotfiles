@@ -109,7 +109,7 @@ static void *event_thread(void *arg)
     (void)arg;
     for (;;) {
         int fd = hypr_event_connect();
-        if (fd < 0) { sleep(1); continue; }
+        if (fd < 0) { usleep(HYPR_EVENT_RECONNECT_DELAY_US); continue; }
 
         char line[1024];
         int n;
@@ -120,7 +120,7 @@ static void *event_thread(void *arg)
             }
         }
         close(fd);
-        sleep(1);
+        usleep(HYPR_EVENT_RECONNECT_DELAY_US);
     }
     return NULL;
 }

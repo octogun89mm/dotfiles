@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+#define HYPR_EVENT_RECONNECT_DELAY_US 100000
+
 /* Connect to Hyprland event socket (.socket2.sock).
    Returns fd on success, -1 on error. */
 int hypr_event_connect(void);

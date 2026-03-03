@@ -17,7 +17,7 @@ int cmd_submap(int argc, char **argv)
 
     for (;;) {
         int fd = hypr_event_connect();
-        if (fd < 0) { sleep(1); continue; }
+        if (fd < 0) { usleep(HYPR_EVENT_RECONNECT_DELAY_US); continue; }
 
         char line[1024];
         int n;
@@ -36,7 +36,7 @@ int cmd_submap(int argc, char **argv)
             }
         }
         close(fd);
-        sleep(1);
+        usleep(HYPR_EVENT_RECONNECT_DELAY_US);
     }
     return 0;
 }
