@@ -1,2 +1,4 @@
 .stow-local-ignore
 **/wallust.*
+**/.claude/
+**/.codex/
