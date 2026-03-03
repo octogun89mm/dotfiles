@@ -3,8 +3,8 @@
 # Start EWW bar windows (daemonless listener model)
 #
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_DIR="$(dirname "$SCRIPT_DIR")"
+SHELL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_DIR="$(dirname "$SHELL_DIR")"
 
 # Start eww daemon if needed and open windows
 cd "$CONFIG_DIR"

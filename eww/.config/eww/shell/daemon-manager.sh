@@ -4,10 +4,12 @@
 # Starts/stops daemon processes that continuously update state files
 #
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-STATE_DIR="$SCRIPT_DIR/state"
-PID_DIR="$SCRIPT_DIR/pids"
-BIN="$SCRIPT_DIR/eww-bar"
+SHELL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_DIR="$(dirname "$SHELL_DIR")"
+SCRIPTS_DIR="$CONFIG_DIR/scripts"
+STATE_DIR="$SCRIPTS_DIR/state"
+PID_DIR="$SCRIPTS_DIR/pids"
+BIN="$SCRIPTS_DIR/eww-bar"
 
 mkdir -p "$STATE_DIR" "$PID_DIR"
 

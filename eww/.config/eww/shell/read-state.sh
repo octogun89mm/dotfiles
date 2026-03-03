@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Wrapper script for EWW defpoll to read state files
-STATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/state"
+SHELL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+STATE_DIR="$(dirname "$SHELL_DIR")/scripts/state"
 VAR_NAME="$1"
 DEFAULT="$2"
 
