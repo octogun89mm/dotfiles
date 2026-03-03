@@ -3,6 +3,7 @@
 set -euo pipefail
 
 workspace_id=7
+startup_workspace_id=1
 max_attempts=120
 sleep_interval=0.25
 
@@ -66,8 +67,6 @@ direction_to_anchor() {
     fi
 }
 
-original_workspace="$(hyprctl activeworkspace -j | jq -r '.name // empty')"
-
 telegram_json=''
 vesktop_json=''
 
@@ -107,7 +106,4 @@ hyprctl dispatch focuswindow "address:${telegram_address}" >/dev/null
 hyprctl dispatch togglegroup >/dev/null
 hyprctl dispatch focuswindow "address:${vesktop_address}" >/dev/null
 hyprctl dispatch moveintogroup "$direction" >/dev/null
-
-if [[ -n "$original_workspace" && "$original_workspace" != "$workspace_id" ]]; then
-    hyprctl dispatch workspace "$original_workspace" >/dev/null
-fi
+hyprctl dispatch workspace "$startup_workspace_id" >/dev/null
