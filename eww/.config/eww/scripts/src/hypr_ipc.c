@@ -7,6 +7,11 @@
 #include <sys/un.h>
 #include <errno.h>
 
+static char event_rbuf[8192];
+static int event_rpos = 0;
+static int event_rlen = 0;
+static int event_last_fd = -1;
+
 static int hypr_connect(const char *suffix)
 {
     const char *xdg = getenv("XDG_RUNTIME_DIR");
@@ -33,43 +38,58 @@ int hypr_event_connect(void)
     return hypr_connect(".socket2.sock");
 }
 
+void hypr_event_reset_reader(void)
+{
+    event_rpos = 0;
+    event_rlen = 0;
+    event_last_fd = -1;
+}
+
 int hypr_event_readline(int fd, char *buf, size_t buflen)
 {
-    static char rbuf[8192];
-    static int rpos = 0, rlen = 0;
-    static int last_fd = -1;
-
-    if (fd != last_fd) {
-        rpos = 0;
-        rlen = 0;
-        last_fd = fd;
+    if (fd != event_last_fd) {
+        event_rpos = 0;
+        event_rlen = 0;
+        event_last_fd = fd;
     }
 
     for (;;) {
         /* scan for newline in buffered data */
-        for (int i = rpos; i < rlen; i++) {
-            if (rbuf[i] == '\n') {
-                int lineLen = i - rpos;
+        for (int i = event_rpos; i < event_rlen; i++) {
+            if (event_rbuf[i] == '\n') {
+                int lineLen = i - event_rpos;
                 if ((size_t)lineLen >= buflen) lineLen = (int)buflen - 1;
-                memcpy(buf, rbuf + rpos, lineLen);
+                memcpy(buf, event_rbuf + event_rpos, lineLen);
                 buf[lineLen] = '\0';
-                rpos = i + 1;
+                event_rpos = i + 1;
                 return lineLen;
             }
         }
         /* compact buffer */
-        if (rpos > 0) {
-            memmove(rbuf, rbuf + rpos, rlen - rpos);
-            rlen -= rpos;
-            rpos = 0;
+        if (event_rpos > 0) {
+            memmove(event_rbuf, event_rbuf + event_rpos, event_rlen - event_rpos);
+            event_rlen -= event_rpos;
+            event_rpos = 0;
         }
-        if (rlen >= (int)sizeof(rbuf)) {
+        if (event_rlen >= (int)sizeof(event_rbuf)) {
             /* line too long, discard */
-            rlen = 0;
+            event_rlen = 0;
         }
-        int n = read(fd, rbuf + rlen, sizeof(rbuf) - rlen);
-        if (n <= 0) return n;
-        rlen += n;
+        int n = read(fd, event_rbuf + event_rlen, sizeof(event_rbuf) - event_rlen);
+        if (n <= 0) {
+            if (n == 0 && event_rlen > event_rpos) {
+                int line_len = event_rlen - event_rpos;
+                if ((size_t)line_len >= buflen)
+                    line_len = (int)buflen - 1;
+                memcpy(buf, event_rbuf + event_rpos, line_len);
+                buf[line_len] = '\0';
+                event_rpos = 0;
+                event_rlen = 0;
+                return line_len;
+            }
+            return n;
+        }
+        event_rlen += n;
     }
 }
 
