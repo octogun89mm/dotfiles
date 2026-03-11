@@ -7,18 +7,26 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | Package | Description |
 |---------|-------------|
 | **hyprland** | Hyprland compositor config, hypridle, hyprpaper, layout cycling, keyboard layout notifications |
-| **eww** | Top bar (dual-monitor), popup panel with system info/weather/media, per-monitor layout widget |
+| **quickshell** | Current top bar and popup shell for Hyprland, with workspaces, tray, audio, VPN, idle inhibitor, weather, system stats, and calendar popup |
+| **eww** | Legacy bar config and helper scripts still kept in-repo for migration reuse |
 | **rofi** | App launcher, screenshot/screenrecord/OCR/wallpaper/emoji picker scripts |
-| **waybar** | Secondary bar config and idle inhibitor script |
+| **waybar** | Secondary bar config and utility scripts reused by other packages |
+| **dunst** | Notification daemon config |
 | **sway** | Sway compositor config (legacy) |
+| **tmux** | Terminal multiplexer config |
 
-## Current Focus
+## Current State
 
-I am replacing the current `eww` bar with a redesigned bar built in quickshell.
+The main bar work has moved to `quickshell`, and `eww` is now retained mostly as a source of scripts and reference modules during the migration.
 
-This will be built organically: decide on the design while adding modules and implementing the bar step by step.
+The Quickshell config is modular and currently includes:
 
-Codex is acting as my teacher for quickshell during this process.
+- multi-monitor bar windows
+- Hyprland workspace chips, including special workspaces
+- centered clock popup with quick actions, weather, and system metrics
+- date-triggered calendar popup with pin support
+- tray, sound, VPN, idle inhibitor, and keyboard layout indicators
+- Wallust-driven colors via `wallust.js`
 
 ## Screenshots
 
