@@ -7,7 +7,7 @@ Rectangle {
 
   property bool active: false
 
-  color: Wallust.base01
+  color: Wallust.base03
   implicitWidth: 132
   implicitHeight: 54
 

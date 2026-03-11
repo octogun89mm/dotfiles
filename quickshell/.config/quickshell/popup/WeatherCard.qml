@@ -13,7 +13,7 @@ Rectangle {
   property string humidity: "--"
   property string wind: "--"
 
-  color: Wallust.base01
+  color: Wallust.base03
   implicitWidth: 320
   implicitHeight: 210
 

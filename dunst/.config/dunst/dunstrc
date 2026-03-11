@@ -4,6 +4,7 @@
     width = (300,450)
     height = (50,200)
     notification_limit = 20
+    sort = update
     origin = top-center
     offset = (0,10)
     gap_size = 5

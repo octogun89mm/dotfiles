@@ -9,7 +9,7 @@ Rectangle {
 
   color: Wallust.base00
   border.width: 2
-  border.color: pinned ? Wallust.base0E : Wallust.base01
+  border.color: pinned ? Wallust.base0E : Wallust.base03
   implicitWidth: 590
   implicitHeight: content.implicitHeight + 24
 

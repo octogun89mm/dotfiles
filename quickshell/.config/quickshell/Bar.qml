@@ -39,12 +39,17 @@ Scope {
         anchors.fill: parent
         color: Wallust.base00
         border.width: 2
-        border.color: Wallust.base01
+        border.color: Wallust.base03
 
         Row {
           anchors.left: parent.left
           anchors.verticalCenter: parent.verticalCenter
           spacing: 8
+
+          LayoutIndicator {
+            monitorName: barWindow.modelData.name
+            monitorId: String(barWindow.modelData.id)
+          }
 
           Workspace {}
         }

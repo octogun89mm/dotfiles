@@ -11,7 +11,7 @@ Rectangle {
 
   signal clicked
 
-  color: highlighted ? Wallust.base0D : Wallust.base01
+  color: highlighted ? Wallust.base0D : Wallust.base03
   implicitWidth: 132
   implicitHeight: 54
 

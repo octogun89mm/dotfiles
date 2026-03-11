@@ -31,7 +31,7 @@ Rectangle {
 
   color: isHighlighted ? Wallust.base0D : "transparent"
   border.width: 2
-  border.color: Wallust.base01
+  border.color: Wallust.base03
   implicitHeight: 24
   implicitWidth: label.implicitWidth + 24
   

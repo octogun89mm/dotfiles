@@ -9,7 +9,7 @@ Rectangle {
 
   color: "transparent"
   border.width: 2
-  border.color: Wallust.base01
+  border.color: Wallust.base03
   implicitWidth: indicator.implicitWidth + 10
   implicitHeight: 24
 

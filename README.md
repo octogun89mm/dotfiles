@@ -43,4 +43,6 @@ The Neovim config currently includes:
 ## Screenshots
 
 ### Hyprland
-<img width="1920" height="1080" alt="Hyprland screenshot" src="assets/screenshots/hyprland-20260311.png" />
+<img width="1920" height="1080" alt="Hyprland screenshot 1" src="assets/screenshots/screenshot_20260311_023721.png" />
+<img width="1920" height="1080" alt="Hyprland screenshot 2" src="assets/screenshots/screenshot_20260311_023739.png" />
+<img width="1920" height="1080" alt="Hyprland screenshot 3" src="assets/screenshots/screenshot_20260311_023451.png" />

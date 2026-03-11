@@ -8,7 +8,7 @@ Rectangle {
   property bool active: false
   property var disks: []
 
-  color: Wallust.base01
+  color: Wallust.base03
   implicitWidth: 320
   implicitHeight: diskColumn.implicitHeight + 24
 

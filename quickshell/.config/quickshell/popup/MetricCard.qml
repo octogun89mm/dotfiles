@@ -9,7 +9,7 @@ Rectangle {
   property string detail: ""
   property string detail2: ""
 
-  color: Wallust.base01
+  color: Wallust.base03
   implicitWidth: 240
   implicitHeight: 62 + (detail !== "" ? 18 : 0) + (detail2 !== "" ? 18 : 0)
 

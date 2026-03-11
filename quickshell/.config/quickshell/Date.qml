@@ -7,12 +7,37 @@ Rectangle {
 
   property bool hovered: dateMouse.containsMouse
   property bool pinned: false
+  readonly property int edgeWidth: 2
 
   signal clicked
 
   color: pinned ? Wallust.base0E : Wallust.base0D
   implicitWidth: dateLabel.implicitWidth + 10
   implicitHeight: 24
+
+  Rectangle {
+    anchors.top: parent.top
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: root.edgeWidth
+    color: Wallust.base03
+  }
+
+  Rectangle {
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+    anchors.right: parent.right
+    height: root.edgeWidth
+    color: Wallust.base03
+  }
+
+  Rectangle {
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    width: root.edgeWidth
+    color: Wallust.base03
+  }
 
   Text {
     id: dateLabel
