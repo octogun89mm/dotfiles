@@ -1,0 +1,7 @@
+^/\.stow-local-ignore$
+^/\.config/nvim/\.claude(/.*)?$
+^/\.config/nvim/\.ruff_cache(/.*)?$
+^/\.config/nvim/\.cache(/.*)?$
+^/\.config/nvim/cache(/.*)?$
+^/\.config/nvim/colors/wallust\.lua$
+^/\.config/nvim/lua/lualine/themes/wallust\.lua$

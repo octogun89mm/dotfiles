@@ -6,7 +6,7 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
 | Package | Description |
 |---------|-------------|
-| **hyprland** | Hyprland compositor config, hypridle, hyprpaper, layout cycling, keyboard layout notifications |
+| **hyprland** | Hyprland compositor config, hypridle, helper scripts, layout cycling, keyboard layout notifications, plus a local-only hyprpaper template |
 | **quickshell** | Current top bar and popup shell for Hyprland, with workspaces, tray, audio, VPN, idle inhibitor, weather, system stats, and calendar popup |
 | **eww** | Legacy bar config and helper scripts still kept in-repo for migration reuse |
 | **rofi** | App launcher, screenshot/screenrecord/OCR/wallpaper/emoji picker scripts |
@@ -14,6 +14,7 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **dunst** | Notification daemon config |
 | **sway** | Sway compositor config (legacy) |
 | **tmux** | Terminal multiplexer config |
+| **nvim** | Lazy.nvim-based Neovim config with LSP, completion, Telescope, git tooling, AI helpers, and focused editing UX |
 
 ## Current State
 
@@ -27,6 +28,17 @@ The Quickshell config is modular and currently includes:
 - date-triggered calendar popup with pin support
 - tray, sound, VPN, idle inhibitor, and keyboard layout indicators
 - Wallust-driven colors via `wallust.js`
+
+The Neovim config currently includes:
+
+- `lazy.nvim` plugin management with a small modular Lua layout
+- LSP via Mason and `nvim-lspconfig` for Lua, Python, JSON, HTML, QML, and CSS, including a separate GTK CSS flow for Waybar files
+- completion with `nvim-cmp`, LuaSnip, path/buffer sources, and command-line completion
+- Treesitter highlighting and indentation for the main languages used in this repo
+- Telescope file finding, buffer switching, and file-browser picker
+- git workflow support through Neogit and Gitsigns
+- AI-assisted editing through CodeCompanion chat/inline actions and Minuet inline completion against a local `llama.cpp` endpoint
+- `which-key` leader menus, Zen Mode, multi-cursor editing, indent guides, color previews, persistent undo, and a global `lualine` statusline
 
 ## Screenshots
 

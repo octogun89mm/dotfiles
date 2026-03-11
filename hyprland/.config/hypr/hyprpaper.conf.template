@@ -1,0 +1,9 @@
+# Template only. This file is intentionally ignored by Stow.
+# Copy it to ~/.config/hypr/hyprpaper.conf and adjust locally.
+
+splash = false
+
+wallpaper {
+    monitor =
+    path = /path/to/wallpaper.png
+}
