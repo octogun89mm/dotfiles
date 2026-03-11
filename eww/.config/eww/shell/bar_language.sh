@@ -9,7 +9,7 @@ shorten_layout() {
     local layout="$1"
     case "$layout" in
         *English*|*us*) echo "EN" ;;
-        *French*|*Canadian*|*ca*) echo "FR" ;;
+        *French*|*Canadian*|*ca*) echo "CA" ;;
         *German*|*de*) echo "DE" ;;
         *Spanish*|*es*) echo "ES" ;;
         *) echo "${layout:0:2}" | tr '[:lower:]' '[:upper:]' ;;

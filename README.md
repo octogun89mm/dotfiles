@@ -12,6 +12,14 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **waybar** | Secondary bar config and idle inhibitor script |
 | **sway** | Sway compositor config (legacy) |
 
+## Current Focus
+
+I am replacing the current `eww` bar with a redesigned bar built in quickshell.
+
+This will be built organically: decide on the design while adding modules and implementing the bar step by step.
+
+Codex is acting as my teacher for quickshell during this process.
+
 ## Screenshots
 
 ### Sway
