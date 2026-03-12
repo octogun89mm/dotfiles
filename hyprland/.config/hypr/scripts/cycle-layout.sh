@@ -20,8 +20,7 @@ done
 hyprctl keyword workspace "$WS_ID",layout:"$next"
 
 MONITOR_NAME=$(hyprctl monitors -j | jq -r ".[] | select(.id == $MONITOR_ID) | .name")
-RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
-PIPE="$RUNTIME_DIR/quickshell-layout-pipe-${MONITOR_NAME//[^[:alnum:]_-]/_}"
-[ -p "$PIPE" ] && echo "RELOAD" > "$PIPE"
+REFRESH_STAMP="/tmp/quickshell-layout-refresh.state"
+date +%s > "$REFRESH_STAMP"
 
 notify-send -a "Display Layout" -t 2000 "Layout" "${next^^}"

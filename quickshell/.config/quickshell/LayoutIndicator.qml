@@ -10,12 +10,15 @@ Rectangle {
   required property string monitorName
   required property string monitorId
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string runtimeDir: Quickshell.env("XDG_RUNTIME_DIR") ?? "/tmp"
   readonly property string cycleScript: home + "/.config/hypr/scripts/cycle-layout.sh"
   readonly property string layoutScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/bar_layout.sh"
-  readonly property string reloadPipe: runtimeDir + "/quickshell-layout-pipe-" + monitorName.replace(/[^a-zA-Z0-9_-]/g, "_")
+  readonly property string refreshStamp: "/tmp/quickshell-layout-refresh.state"
   property string layout: "MASTER"
   readonly property int edgeWidth: 2
+
+  function refreshLayout() {
+    statusProcess.exec([root.layoutScript, root.monitorName])
+  }
 
   color: backgroundColor(layout)
   implicitWidth: 28
@@ -103,24 +106,39 @@ Rectangle {
   }
 
   Process {
-    command: [root.layoutScript, root.monitorName, root.monitorId]
-    running: true
+    id: statusProcess
 
-    stdout: SplitParser {
-      splitMarker: "\n"
-      onRead: function(data) {
-        if (!data || !data.trim()) return
-        root.layout = root.normalizedLayout(data)
+    stdout: StdioCollector {
+      waitForEnd: true
+      onStreamFinished: {
+        if (!text || !text.trim())
+          return
+
+        root.layout = root.normalizedLayout(text)
       }
     }
   }
 
-  Process {
-    id: cycleProcess
-    onExited: reloadProcess.exec(["/bin/sh", "-c", "echo RELOAD > \"" + root.reloadPipe + "\""])
+  Component.onCompleted: refreshLayout()
+
+  Timer {
+    interval: 3000
+    running: true
+    repeat: true
+    onTriggered: root.refreshLayout()
+  }
+
+  FileView {
+    path: root.refreshStamp
+    preload: true
+    watchChanges: true
+    printErrors: false
+
+    onFileChanged: root.refreshLayout()
   }
 
   Process {
-    id: reloadProcess
+    id: cycleProcess
+    onExited: root.refreshLayout()
   }
 }
