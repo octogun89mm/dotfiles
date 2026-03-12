@@ -5,3 +5,30 @@
 **/AGENTS.md
 **/CLAUDE.md
 **/PLAN.md
+
+# Local logs and traces
+*.log
+*.log.*
+*.out
+*.err
+.nvimlog
+
+# Local screenshots and recordings can capture personal information
+assets/screenshots/
+*.screencast
+*.cast
+
+# Common personal or machine-local artifacts
+.env
+.env.*
+*.local
+*.sqlite
+*.sqlite3
+*.db
+*.db-*
+*.pem
+*.p12
+*.ovpn
+*.pcap
+*.pid
+*.pid.lock

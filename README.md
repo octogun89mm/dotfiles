@@ -11,7 +11,6 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **eww** | Legacy bar config and helper scripts still kept in-repo for migration reuse |
 | **rofi** | App launcher, screenshot/screenrecord/OCR/wallpaper/emoji picker scripts |
 | **waybar** | Secondary bar config and utility scripts reused by other packages |
-| **dunst** | Notification daemon config |
 | **sway** | Sway compositor config (legacy) |
 | **tmux** | Terminal multiplexer config |
 | **nvim** | Lazy.nvim-based Neovim config with LSP, completion, Telescope, git tooling, AI helpers, and focused editing UX |
@@ -42,7 +41,4 @@ The Neovim config currently includes:
 
 ## Screenshots
 
-### Hyprland
-<img width="1920" height="1080" alt="Hyprland screenshot 1" src="assets/screenshots/screenshot_20260311_023721.png" />
-<img width="1920" height="1080" alt="Hyprland screenshot 2" src="assets/screenshots/screenshot_20260311_023739.png" />
-<img width="1920" height="1080" alt="Hyprland screenshot 3" src="assets/screenshots/screenshot_20260311_023451.png" />
+Screenshots are intentionally kept out of git because they can capture personal information from the local desktop session.

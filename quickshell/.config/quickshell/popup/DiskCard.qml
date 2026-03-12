@@ -1,9 +1,12 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 import "../wallust.js" as Wallust
 
 Rectangle {
   id: root
+  readonly property string home: Quickshell.env("HOME") || ""
+  readonly property string diskScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/disk-usage.sh"
 
   property bool active: false
   property var disks: []
@@ -13,7 +16,7 @@ Rectangle {
   implicitHeight: diskColumn.implicitHeight + 24
 
   function refreshDisk() {
-    diskProcess.exec(["/bin/bash", "-c", "df -BG / /mnt/*/ 2>/dev/null | awk 'NR>1 && !seen[$1]++ {gsub(/G/,\"\",$2); gsub(/G/,\"\",$3); print $6 \"|\" $3 \"|\" $2}'"])
+    diskProcess.exec([diskScript])
   }
 
   onActiveChanged: if (active) refreshDisk()
@@ -31,19 +34,12 @@ Rectangle {
       waitForEnd: true
       onStreamFinished: {
         if (!text || !text.trim()) return
-        const lines = text.trim().split("\n")
-        const result = []
-        for (const line of lines) {
-          const parts = line.split("|")
-          if (parts.length === 3) {
-            const mount = parts[0]
-            const used = parts[1]
-            const total = parts[2]
-            const label = mount === "/" ? "Main" : mount.split("/").pop()
-            result.push({ label: label, used: used, total: total })
-          }
+        try {
+          const data = JSON.parse(text)
+          root.disks = Array.isArray(data) ? data : []
+        } catch (e) {
+          console.warn("DiskCard: failed to parse JSON:", e)
         }
-        root.disks = result
       }
     }
   }
@@ -80,7 +76,7 @@ Rectangle {
         }
 
         Text {
-          text: modelData.used.padStart(3, "0") + " / " + modelData.total + "G"
+          text: modelData.used.toString().padStart(3, "0") + " / " + modelData.total + "G"
           color: Wallust.base05
           font.family: "Roboto Mono"
           font.pixelSize: 10

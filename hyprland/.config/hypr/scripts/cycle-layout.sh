@@ -18,5 +18,10 @@ for i in "${!LAYOUTS[@]}"; do
 done
 
 hyprctl keyword workspace "$WS_ID",layout:"$next"
-echo "${next^^}" > "/tmp/eww-layout-pipe-${MONITOR_ID}"
-notify-send -a "Display Layout" -t 2000 -i preferences-desktop-display "Layout" "${next^^}"
+
+MONITOR_NAME=$(hyprctl monitors -j | jq -r ".[] | select(.id == $MONITOR_ID) | .name")
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+PIPE="$RUNTIME_DIR/quickshell-layout-pipe-${MONITOR_NAME//[^[:alnum:]_-]/_}"
+[ -p "$PIPE" ] && echo "RELOAD" > "$PIPE"
+
+notify-send -a "Display Layout" -t 2000 "Layout" "${next^^}"

@@ -35,7 +35,7 @@ set $web_browser firefox
 # RSS feed
 set $newsboat foot --app-id=newsboat -- newsboat
 # Keybind helper
-set $swaykeybinds foot --app-id=swaykeybinds sh -c '/home/juju/.local/bin/sway-keybinds.sh; read -p "Press enter to close..."'
+set $swaykeybinds foot --app-id=swaykeybinds sh -c '$HOME/.local/bin/sway-keybinds.sh; read -p "Press enter to close..."'
 # Woomer
 set $woomer $HOME/.cargo/bin/woomer
 
@@ -44,7 +44,6 @@ set $woomer $HOME/.cargo/bin/woomer
 exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland
 exec /usr/lib/polkit-kde-authentication-agent-1
 exec waypaper --restore
-exec dunst
 exec wl-paste --watch cliphist store
 # Messaging on WS 9
 exec vesktop

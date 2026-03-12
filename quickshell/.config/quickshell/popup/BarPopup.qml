@@ -27,17 +27,20 @@ Rectangle {
     Row {
       id: bodyRow
       spacing: 12
-      height: Math.max(leftColumn.implicitHeight, systemColumn.implicitHeight)
+      height: leftColumn.implicitHeight
 
       Column {
         id: leftColumn
         spacing: 10
-        height: bodyRow.height
+
+        MediaCard {
+          id: mediaCard
+          active: root.active
+        }
 
         WeatherCard {
           id: weatherCard
           active: root.active
-          height: parent.height - diskCard.implicitHeight - parent.spacing
         }
 
         DiskCard {
@@ -49,6 +52,7 @@ Rectangle {
       SystemColumn {
         id: systemColumn
         active: root.active
+        height: bodyRow.height
       }
     }
   }

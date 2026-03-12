@@ -1,9 +1,12 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 import "../wallust.js" as Wallust
 
 Rectangle {
   id: root
+  readonly property string home: Quickshell.env("HOME") || ""
+  readonly property string weatherScript: home + "/.dotfiles/eww/.config/eww/shell/bar_weather.sh"
 
   property bool active: false
   property string weatherIcon: ""
@@ -18,18 +21,22 @@ Rectangle {
   implicitHeight: 210
 
   function refreshWeather() {
-    weatherProcess.exec(["/home/juju/.dotfiles/eww/.config/eww/shell/bar_weather.sh"])
+    weatherProcess.exec([weatherScript])
   }
 
   function parseWeather(text) {
     if (!text || !text.trim()) return
-    const data = JSON.parse(text)
-    weatherIcon = data.icon || ""
-    weatherText = data.text || "N/A"
-    weatherDesc = data.desc || ""
-    feelsLike = data.feels || "--"
-    humidity = data.humidity || "--"
-    wind = data.wind || "--"
+    try {
+      const data = JSON.parse(text)
+      weatherIcon = data.icon || ""
+      weatherText = data.text || "N/A"
+      weatherDesc = data.desc || ""
+      feelsLike = data.feels || "--"
+      humidity = data.humidity || "--"
+      wind = data.wind || "--"
+    } catch (e) {
+      console.warn("WeatherCard: failed to parse JSON:", e)
+    }
   }
 
   onActiveChanged: if (active) refreshWeather()

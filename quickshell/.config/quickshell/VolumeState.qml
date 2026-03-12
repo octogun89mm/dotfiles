@@ -2,81 +2,97 @@ pragma Singleton
 
 import QtQuick
 import Quickshell
-import Quickshell.Io
+import Quickshell.Services.Pipewire
 
 Singleton {
   id: root
 
-  property int volume: 0
-  property bool muted: false
-  property string sinkName: ""
-  property bool settling: false
+  readonly property var sink: Pipewire.defaultAudioSink
+  readonly property var sinkAudio: sink ? sink.audio : null
+
+  property int volume: volumeFromSink()
+  property bool muted: sinkAudio ? sinkAudio.muted : false
+  property string sinkName: sinkLabel(sink)
+  property bool ready: false
+
+  function clampVolume(value) {
+    return Math.max(0, Math.min(99, Math.round(value)))
+  }
+
+  function volumeFromSink() {
+    if (!sinkAudio) return 0
+    return clampVolume(sinkAudio.volume * 100)
+  }
+
+  function sinkLabel(node) {
+    if (!node) return ""
+    return node.description || node.nickname || node.name || ""
+  }
+
+  function availableSinks() {
+    const nodes = Pipewire.nodes && Pipewire.nodes.values ? Pipewire.nodes.values : []
+    return nodes.filter(node => node && node.ready && node.isSink && node.audio)
+  }
 
   function setVolume(val) {
-    root.volume = val
-    root.settling = true
-    scrollDebounce.restart()
-    settleTimer.restart()
+    if (!sinkAudio) return
+    sinkAudio.volume = clampVolume(val) / 100
   }
 
   function toggleMute() {
-    root.muted = !root.muted
-    root.settling = true
-    settleTimer.restart()
-    muteProcess.running = true
+    if (!sinkAudio) return
+    sinkAudio.muted = !sinkAudio.muted
   }
 
   function switchSink() {
-    switchSinkProcess.running = true
-  }
+    const sinks = availableSinks()
+    if (!sink || sinks.length < 2) return
 
-  Timer {
-    id: scrollDebounce
-    interval: 80
-    onTriggered: {
-      setVolumeProcess.command = ["/home/juju/.dotfiles/quickshell/.config/quickshell/scripts/volume.sh", "set", root.volume.toString()]
-      setVolumeProcess.running = true
+    const currentSinkId = sink.id
+    const currentIndex = sinks.findIndex(node => node && node.id === currentSinkId)
+    if (currentIndex === -1) {
+      const fallback = sinks.find(node => node && node.id !== currentSinkId)
+      if (fallback) Pipewire.preferredDefaultAudioSink = fallback
+      return
     }
+
+    Pipewire.preferredDefaultAudioSink = sinks[(currentIndex + 1) % sinks.length]
   }
 
-  Timer {
-    id: settleTimer
-    interval: 500
-    onTriggered: root.settling = false
+  function syncFromSink() {
+    root.volume = volumeFromSink()
+    root.muted = sinkAudio ? sinkAudio.muted : false
+    root.sinkName = sinkLabel(sink)
   }
 
-  Process {
-    command: ["/home/juju/.dotfiles/quickshell/.config/quickshell/scripts/volume-monitor.sh"]
-    running: true
+  onSinkChanged: syncFromSink()
+  onSinkAudioChanged: syncFromSink()
+  Component.onCompleted: {
+    syncFromSink()
+    ready = true
+  }
 
-    stdout: SplitParser {
-      splitMarker: "\n"
-      onRead: function(data) {
-        if (!data || !data.trim()) return
-        if (root.settling) return
-        const parsed = JSON.parse(data)
-        const vol = parsed.volume
-        if (typeof vol === "number") root.volume = Math.min(vol, 99)
-        root.muted = !!parsed.muted
-        if (parsed.sink) root.sinkName = parsed.sink
+  PwObjectTracker {
+    objects: root.sink ? [root.sink] : []
+  }
+
+  Connections {
+    target: root.sinkAudio
+
+    function onMutedChanged() {
+      root.muted = root.sinkAudio ? root.sinkAudio.muted : false
+      if (root.ready) {
+        OsdState.show(root.muted ? "󰖁" : root.volume >= 66 ? "󰕾" : root.volume >= 33 ? "󰖀" : "󰕿",
+          root.muted ? "VOLUME MUTED" : "VOLUME " + root.volume + "%")
       }
     }
-  }
 
-  Process {
-    id: setVolumeProcess
-    running: false
-  }
-
-  Process {
-    id: muteProcess
-    command: ["/home/juju/.dotfiles/quickshell/.config/quickshell/scripts/volume.sh", "mute"]
-    running: false
-  }
-
-  Process {
-    id: switchSinkProcess
-    command: ["/home/juju/.dotfiles/quickshell/.config/quickshell/scripts/volume.sh", "switch-sink"]
-    running: false
+    function onVolumesChanged() {
+      root.volume = root.volumeFromSink()
+      if (root.ready && !root.muted) {
+        OsdState.show(root.volume >= 66 ? "󰕾" : root.volume >= 33 ? "󰖀" : "󰕿",
+          "VOLUME " + root.volume + "%")
+      }
+    }
   }
 }

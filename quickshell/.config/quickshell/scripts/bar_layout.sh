@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
+set -u
+
 MONITOR_NAME="${1:-}"
-MONITOR_ID="${2:-}"
-PIPE="/tmp/quickshell-layout-pipe-${MONITOR_NAME//[^[:alnum:]_-]/_}"
-LEGACY_PIPE="/tmp/eww-layout-pipe-${MONITOR_ID}"
-POLL_SECONDS=2
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+PIPE="$RUNTIME_DIR/quickshell-layout-pipe-${MONITOR_NAME//[^[:alnum:]_-]/_}"
+POLL_SECONDS=3
 
 [ -n "$MONITOR_NAME" ] || exit 1
 [ -p "$PIPE" ] || mkfifo "$PIPE"
+
+trap 'rm -f "$PIPE"; kill 0' EXIT HUP INT TERM PIPE
 
 get_layout() {
     local ws_id
@@ -19,9 +22,6 @@ get_layout() {
 
 get_layout
 
-# Hyprland does not emit a dedicated socket2 event for workspace tiledLayout changes.
-# Refresh immediately on monitor/workspace-related events and use a light polling
-# fallback so layout flips on the current workspace still show up.
 socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r line; do
     case "$line" in
         workspace\>\>*|workspacev2\>\>*|focusedmon\>\>*|focusedmonv2\>\>*|moveworkspace\>\>*|moveworkspacev2\>\>*|configreloaded*)
@@ -29,25 +29,11 @@ socat -U - UNIX-CONNECT:"$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.soc
             ;;
     esac
 done &
-SOCKET_PID=$!
-
-if [ -n "$MONITOR_ID" ]; then
-    [ -p "$LEGACY_PIPE" ] || mkfifo "$LEGACY_PIPE"
-    while read -r _; do
-        echo "RELOAD" > "$PIPE"
-    done < "$LEGACY_PIPE" &
-    LEGACY_PID=$!
-else
-    LEGACY_PID=""
-fi
 
 while true; do
     sleep "$POLL_SECONDS"
     echo "POLL" > "$PIPE"
 done &
-POLL_PID=$!
-
-trap "kill $SOCKET_PID $LEGACY_PID $POLL_PID 2>/dev/null; rm -f '$PIPE'" EXIT
 
 exec 3<>"$PIPE"
 
@@ -59,5 +45,7 @@ while true; do
         else
             echo "$msg"
         fi
+    else
+        sleep 1
     fi
 done

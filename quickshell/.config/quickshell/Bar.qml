@@ -52,6 +52,10 @@ Scope {
           }
 
           Workspace {}
+
+          MediaChip {
+            anchors.verticalCenter: parent.verticalCenter
+          }
         }
 
         Sound {
@@ -63,6 +67,13 @@ Scope {
 
         Vpn {
           id: vpnIndicator
+          anchors.right: llmToggle.left
+          anchors.rightMargin: 4
+          anchors.verticalCenter: centerClock.verticalCenter
+        }
+
+        LlmToggle {
+          id: llmToggle
           anchors.right: centerClock.left
           anchors.rightMargin: 4
           anchors.verticalCenter: centerClock.verticalCenter
@@ -80,9 +91,17 @@ Scope {
           }
         }
 
+        NotificationChip {
+          id: notifChip
+          screenName: barWindow.modelData.name
+          anchors.left: centerClock.right
+          anchors.leftMargin: 4
+          anchors.verticalCenter: centerClock.verticalCenter
+        }
+
         IdleInhibitor {
           id: idleIndicator
-          anchors.left: centerClock.right
+          anchors.left: notifChip.right
           anchors.leftMargin: 4
           anchors.verticalCenter: centerClock.verticalCenter
         }

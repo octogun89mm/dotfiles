@@ -2,8 +2,6 @@ import QtQuick
 import "wallust.js" as Wallust
 
 Rectangle {
-  id: root
-
   color: "transparent"
   border.width: 2
   border.color: Wallust.base03
@@ -13,10 +11,15 @@ Rectangle {
   Text {
     id: indicator
     anchors.centerIn: parent
-    text: LanguageState.layout
-    color: Wallust.base0D
-    font.family: "Roboto Mono"
-    font.pixelSize: 12
-    font.bold: true
+    text: LlmState.icon
+    color: LlmState.active ? Wallust.base0D : Wallust.base03
+    font.family: "Symbols Nerd Font Mono"
+    font.pixelSize: 14
+  }
+
+  MouseArea {
+    anchors.fill: parent
+
+    onClicked: LlmState.toggle()
   }
 }

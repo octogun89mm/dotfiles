@@ -1,8 +1,11 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 
 Column {
   id: root
+  readonly property string home: Quickshell.env("HOME") || ""
+  readonly property string metricsScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/system-metrics.sh"
 
   property bool active: false
   property string cpuUsage: "--"
@@ -14,120 +17,83 @@ Column {
   property string gpuTemp: "--"
   property string gpuVramUsed: "--"
   property string gpuVramTotal: "--"
+  readonly property real cardHeight: Math.max(62, (height - (spacing * 3)) / 4)
 
   spacing: 10
 
   MetricCard {
+    id: cpuCard
     title: "CPU"
     value: root.cpuUsage.padStart(2, "0") + "%"
     detail: root.cpuTemp.padStart(2, "0") + "°C"
+    height: root.cardHeight
   }
 
   MetricCard {
+    id: gpuCard
     title: "GPU"
     value: root.gpuUsage.padStart(2, "0") + "%"
     detail: root.gpuVramUsed + " / " + root.gpuVramTotal + "G"
     detail2: root.gpuTemp.padStart(2, "0") + "°C"
+    height: root.cardHeight
   }
 
   MetricCard {
+    id: memoryCard
     title: "MEMORY"
     value: root.memoryUsed.padStart(4, "0") + " / " + root.memoryTotal + "G"
+    height: root.cardHeight
   }
 
   MetricCard {
+    id: updatesCard
     title: "UPDATES"
     value: root.updates.padStart(3, "0")
+    height: root.cardHeight
   }
 
-  function refreshCpu() {
-    cpuUsageProcess.exec(["/home/juju/.dotfiles/eww/.config/eww/scripts/eww-bar", "cpu-usage"])
-    cpuTempProcess.exec(["/home/juju/.dotfiles/eww/.config/eww/scripts/eww-bar", "cpu-temp"])
+  function refreshMetrics() {
+    metricsProcess.exec([metricsScript])
   }
 
-  function refreshMemory() {
-    memoryUsedProcess.exec(["/home/juju/.dotfiles/eww/.config/eww/scripts/eww-bar", "memory-used"])
-    memoryTotalProcess.exec(["/home/juju/.dotfiles/eww/.config/eww/scripts/eww-bar", "memory-total"])
-  }
-
-  function refreshUpdates() {
-    updatesProcess.exec(["/home/juju/.dotfiles/eww/.config/eww/scripts/eww-bar", "updates"])
-  }
-
-  function refreshGpu() {
-    gpuProcess.exec(["/home/juju/.dotfiles/eww/.config/eww/scripts/eww-bar", "gpu"])
+  function formatInt(value, fallback) {
+    if (value === null || value === undefined || value === "") return fallback
+    return String(value)
   }
 
   onActiveChanged: {
-    if (active) {
-      refreshCpu()
-      refreshMemory()
-      refreshUpdates()
-      refreshGpu()
-    }
+    if (active) refreshMetrics()
   }
 
   Timer {
     interval: 3000
     running: root.active
     repeat: true
-    onTriggered: {
-      root.refreshCpu()
-      root.refreshGpu()
-    }
-  }
-
-  Timer {
-    interval: 5000
-    running: root.active
-    repeat: true
-    onTriggered: root.refreshMemory()
-  }
-
-  Timer {
-    interval: 60000
-    running: root.active
-    repeat: true
-    onTriggered: root.refreshUpdates()
+    onTriggered: root.refreshMetrics()
   }
 
   Process {
-    id: cpuUsageProcess
-    stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.cpuUsage = text.trim() || "--" }
-  }
-
-  Process {
-    id: cpuTempProcess
-    stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.cpuTemp = text.trim() || "--" }
-  }
-
-  Process {
-    id: memoryUsedProcess
-    stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.memoryUsed = text.trim() || "--" }
-  }
-
-  Process {
-    id: memoryTotalProcess
-    stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.memoryTotal = text.trim() || "--" }
-  }
-
-  Process {
-    id: updatesProcess
-    stdout: StdioCollector { waitForEnd: true; onStreamFinished: root.updates = text.trim() || "--" }
-  }
-
-  Process {
-    id: gpuProcess
+    id: metricsProcess
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
         if (!text || !text.trim()) return
-        const data = JSON.parse(text)
-        root.gpuUsage = data.usage || "--"
-        root.gpuTemp = data.temp || "--"
-        const used = parseFloat(data.vram_used || 0)
-        root.gpuVramUsed = used.toFixed(1).padStart(4, "0")
-        root.gpuVramTotal = data.vram_total || "--"
+        try {
+          const data = JSON.parse(text)
+          root.cpuUsage = root.formatInt(data.cpu, "--")
+          root.cpuTemp = root.formatInt(data.cpu_temp, "--")
+          root.memoryUsed = data.mem_used || "--"
+          root.memoryTotal = data.mem_total || "--"
+          root.updates = root.formatInt(data.updates, "--")
+          root.gpuUsage = root.formatInt(data.gpu, "--")
+          root.gpuTemp = root.formatInt(data.gpu_temp, "--")
+
+          const used = parseFloat(data.gpu_vram_used || 0)
+          root.gpuVramUsed = isNaN(used) ? "--" : used.toFixed(1).padStart(4, "0")
+          root.gpuVramTotal = data.gpu_vram_total || "--"
+        } catch (e) {
+          console.warn("SystemColumn: failed to parse JSON:", e)
+        }
       }
     }
   }
