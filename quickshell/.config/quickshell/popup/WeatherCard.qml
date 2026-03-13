@@ -17,7 +17,6 @@ Rectangle {
   property string wind: "--"
 
   color: Wallust.base03
-  implicitWidth: 320
   implicitHeight: 210
 
   function refreshWeather() {

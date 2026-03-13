@@ -173,7 +173,7 @@ Scope {
                 required property int notificationId
                 required property int timestamp
 
-                width: historyList.width - 10
+                width: historyList.width
                 compact: true
                 notification: Notif.NotificationServer.notificationById(notificationId)
                 createdAt: timestamp

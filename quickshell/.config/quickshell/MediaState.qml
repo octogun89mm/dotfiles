@@ -64,8 +64,9 @@ Singleton {
     }
 
     const parts = line.split("|")
-    available = true
-    playing = (parts[0] || "").toLowerCase() === "playing"
+    const status = (parts[0] || "").toLowerCase()
+    playing = status === "playing"
+    available = status !== "stopped"
     playerName = parts[1] || ""
     artist = parts[2] || ""
     title = parts[3] || ""

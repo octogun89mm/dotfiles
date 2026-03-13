@@ -117,6 +117,10 @@ Scope {
           anchors.verticalCenter: parent.verticalCenter
           spacing: 8
 
+          LlmChip {
+            anchors.verticalCenter: parent.verticalCenter
+          }
+
           Tray {
             anchors.verticalCenter: parent.verticalCenter
           }

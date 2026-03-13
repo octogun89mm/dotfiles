@@ -12,6 +12,8 @@ Singleton {
   property bool active: false
   property string icon: "󰧑"
   property string statusText: "OFF"
+  property string modelAlias: "llm"
+  property string port: "3002"
   property bool ready: false
   property bool pendingToggleFeedback: false
 
@@ -35,6 +37,8 @@ Singleton {
       active = nextActive
       icon = data.alt || "󰧑"
       statusText = active ? "ON" : "OFF"
+      modelAlias = data.model || modelAlias
+      port = data.port || port
 
       if (changed || pendingToggleFeedback) {
         OsdState.show(icon, "LLM " + statusText)

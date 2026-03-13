@@ -26,25 +26,30 @@ Rectangle {
 
     Row {
       id: bodyRow
+      width: parent.width
       spacing: 12
       height: leftColumn.implicitHeight
 
       Column {
         id: leftColumn
+        width: parent.width - systemColumn.implicitWidth - parent.spacing
         spacing: 10
 
         MediaCard {
           id: mediaCard
+          width: parent.width
           active: root.active
         }
 
         WeatherCard {
           id: weatherCard
+          width: parent.width
           active: root.active
         }
 
         DiskCard {
           id: diskCard
+          width: parent.width
           active: root.active
         }
       }

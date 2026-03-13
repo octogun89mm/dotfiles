@@ -6,7 +6,6 @@ LAYOUTS=(master dwindle scrolling monocle)
 
 # Get active workspace ID and its current layout
 eval "$(hyprctl activeworkspace -j | jq -r '@sh "WS_ID=\(.id) current=\(.tiledLayout)"')"
-MONITOR_ID=$(hyprctl monitors -j | jq -r ".[] | .activeWorkspace.id as \$ws | select(\$ws == $WS_ID) | .id")
 
 # Find current index and advance
 next="master"
@@ -19,8 +18,5 @@ done
 
 hyprctl keyword workspace "$WS_ID",layout:"$next"
 
-MONITOR_NAME=$(hyprctl monitors -j | jq -r ".[] | select(.id == $MONITOR_ID) | .name")
 REFRESH_STAMP="/tmp/quickshell-layout-refresh.state"
 date +%s > "$REFRESH_STAMP"
-
-notify-send -a "Display Layout" -t 2000 "Layout" "${next^^}"

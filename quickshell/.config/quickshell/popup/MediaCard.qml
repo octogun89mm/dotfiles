@@ -9,7 +9,6 @@ Rectangle {
   readonly property int contentPadding: 12
 
   color: Wallust.base03
-  implicitWidth: 320
   implicitHeight: Math.max(albumArtFrame.height, detailsColumn.implicitHeight) + (contentPadding * 2)
 
   Row {
