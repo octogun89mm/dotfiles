@@ -1,5 +1,6 @@
 .stow-local-ignore
 **/wallust.*
+rofi/.config/rofi/themes/wallust-todo.rasi
 **/.claude/
 **/.codex/
 **/AGENTS.md
