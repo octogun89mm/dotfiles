@@ -14,7 +14,7 @@ Rectangle {
     id: indicator
     anchors.centerIn: parent
     text: VolumeState.volume.toString().padStart(2, "0")
-    color: VolumeState.muted ? Wallust.base03 : Wallust.base0D
+    color: VolumeState.muted ? Wallust.base03 : Wallust.accent
     font.family: "Roboto Mono"
     font.pixelSize: 12
     font.bold: true

@@ -53,7 +53,7 @@ Scope {
         opacity: root.visible ? 1 : 0
         color: Wallust.base00
         border.width: 2
-        border.color: Wallust.base0D
+        border.color: Wallust.accent
         implicitWidth: content.implicitWidth + 20
         implicitHeight: content.implicitHeight + 14
 
@@ -80,7 +80,7 @@ Scope {
 
           Text {
             text: OsdState.icon
-            color: Wallust.base0D
+            color: Wallust.accent
             font.family: "Symbols Nerd Font Mono"
             font.pixelSize: 18
           }

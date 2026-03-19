@@ -40,7 +40,7 @@ Column {
     detail: root.cpuTemp.padStart(2, "0") + "°C"
     height: root.graphCardHeight
     graphs: [
-      {values: root.cpuUsageHistory, color: Wallust.base0D, label: "USE", maxValue: 100},
+      {values: root.cpuUsageHistory, color: Wallust.accent, label: "USE", maxValue: 100},
       {values: root.cpuTempHistory, color: Wallust.base08, label: "TMP", maxValue: 100}
     ]
   }
@@ -65,7 +65,7 @@ Column {
     value: root.memoryUsed.padStart(4, "0") + " / " + root.memoryTotal + "G"
     height: root.graphCardHeight
     graphs: [
-      {values: root.memUsageHistory, color: Wallust.base0D, label: "USE", maxValue: 100},
+      {values: root.memUsageHistory, color: Wallust.accent, label: "USE", maxValue: 100},
       {values: root.memLoadHistory, color: Wallust.base0E, label: "LOAD", maxValue: parseFloat(root.memoryTotal) || 32}
     ]
   }

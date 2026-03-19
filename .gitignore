@@ -32,3 +32,4 @@ assets/screenshots/
 *.pcap
 *.pid
 *.pid.lock
+hyprland/.config/hypr/generated/

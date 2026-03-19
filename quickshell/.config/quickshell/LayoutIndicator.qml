@@ -9,6 +9,7 @@ Rectangle {
 
   required property string monitorName
   required property string monitorId
+  property bool compact: false
   readonly property string home: Quickshell.env("HOME") || ""
   readonly property string cycleScript: home + "/.config/hypr/scripts/cycle-layout.sh"
   readonly property string layoutScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/bar_layout.sh"
@@ -21,10 +22,11 @@ Rectangle {
   }
 
   color: backgroundColor(layout)
-  implicitWidth: 28
-  implicitHeight: 24
+  implicitWidth: compact ? layoutLabel.implicitWidth + 8 : 28
+  implicitHeight: compact ? 20 : 24
 
   Rectangle {
+    visible: !root.compact
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
@@ -33,6 +35,7 @@ Rectangle {
   }
 
   Rectangle {
+    visible: !root.compact
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     anchors.left: parent.left
@@ -41,6 +44,7 @@ Rectangle {
   }
 
   Rectangle {
+    visible: !root.compact
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
@@ -55,7 +59,7 @@ Rectangle {
   function backgroundColor(value) {
     switch (normalizedLayout(value)) {
     case "MASTER":
-      return Wallust.base0D
+      return Wallust.accent
     case "DWINDLE":
       return Wallust.base0B
     case "SCROLLING":
@@ -82,6 +86,17 @@ Rectangle {
     }
   }
 
+  Text {
+    id: layoutLabel
+    anchors.centerIn: parent
+    visible: root.compact
+    text: root.normalizedLayout(root.layout).slice(0, 3)
+    color: Wallust.base00
+    font.family: "Roboto Mono"
+    font.pixelSize: 11
+    font.bold: true
+  }
+
   Image {
     id: iconImage
     anchors.centerIn: parent
@@ -90,10 +105,11 @@ Rectangle {
     source: root.iconSource(root.layout)
     fillMode: Image.PreserveAspectFit
     smooth: true
-    visible: false
+    visible: !root.compact
   }
 
   MultiEffect {
+    visible: !root.compact
     anchors.fill: iconImage
     source: iconImage
     colorization: 1.0

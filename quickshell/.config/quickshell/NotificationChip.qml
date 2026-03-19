@@ -8,14 +8,14 @@ Rectangle {
 
   readonly property color foregroundColor: {
     if (Notif.NotificationServer.dnd) return Wallust.base03
-    if (Notif.NotificationServer.centerVisible && Notif.NotificationServer.centerScreenName === screenName) return Wallust.base0D
+    if (Notif.NotificationServer.centerVisible && Notif.NotificationServer.centerScreenName === screenName) return Wallust.accent
     if (Notif.NotificationServer.criticalCount > 0) return Wallust.base08
     return Wallust.base05
   }
 
   color: "transparent"
   border.width: 2
-  border.color: Notif.NotificationServer.centerVisible && Notif.NotificationServer.centerScreenName === screenName ? Wallust.base0D : Wallust.base03
+  border.color: Notif.NotificationServer.centerVisible && Notif.NotificationServer.centerScreenName === screenName ? Wallust.accent : Wallust.base03
   implicitWidth: countLabel.implicitWidth + 10
   implicitHeight: 24
 

@@ -47,7 +47,7 @@ Scope {
         anchors.topMargin: 10
         color: Wallust.base00
         border.width: 2
-        border.color: Wallust.base0D
+        border.color: Wallust.accent
 
         transform: Translate {
           y: Notif.NotificationServer.centerVisible && centerWindow.activeScreen ? 0 : -(panel.height + 12)
@@ -92,7 +92,7 @@ Scope {
               height: 20
               color: "transparent"
               border.width: 2
-              border.color: Wallust.base0D
+              border.color: Wallust.accent
 
               Text {
                 id: unreadLabel

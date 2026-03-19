@@ -29,7 +29,7 @@ Rectangle {
     }
   }
 
-  color: isHighlighted ? Wallust.base0D : "transparent"
+  color: isHighlighted ? Wallust.accent : "transparent"
   border.width: 2
   border.color: Wallust.base03
   implicitHeight: 24

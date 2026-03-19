@@ -27,7 +27,7 @@ Rectangle {
       Text {
         anchors.centerIn: parent
         text: Root.VolumeState.muted ? "󰖁" : Root.VolumeState.volume >= 66 ? "󰕾" : Root.VolumeState.volume >= 33 ? "󰖀" : "󰕿"
-        color: Root.VolumeState.muted ? Wallust.base03 : Wallust.base0D
+        color: Root.VolumeState.muted ? Wallust.base03 : Wallust.accent
         font.family: "Symbols Nerd Font Mono"
         font.pixelSize: 16
       }

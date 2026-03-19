@@ -15,7 +15,7 @@ PopupWindow {
 
   readonly property bool popupHovered: popupHover.containsMouse
   readonly property bool showPopup: pinned || triggerHovered || popupHovered || closeDelay.running
-  readonly property color popupBorderColor: pinned ? Wallust.base0D : Wallust.base03
+  readonly property color popupBorderColor: pinned ? Wallust.accent : Wallust.base03
 
   function syncLoadedItem() {
     if (!contentLoader.item) return

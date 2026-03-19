@@ -4,7 +4,7 @@ import "wallust.js" as Wallust
 Rectangle {
   color: "transparent"
   border.width: 2
-  border.color: Wallust.base0D
+  border.color: Wallust.accent
   implicitWidth: llmLabel.implicitWidth + 18
   implicitHeight: 24
   visible: LlmState.active

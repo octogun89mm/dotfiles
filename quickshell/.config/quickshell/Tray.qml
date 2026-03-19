@@ -5,6 +5,8 @@ import "wallust.js" as Wallust
 Row {
   spacing: 6
   property bool expanded: false
+  property bool showToggle: true
+  property color iconColor: Wallust.base04
   clip: true
 
   Repeater {
@@ -36,6 +38,7 @@ Row {
   }
 
   Item {
+    visible: showToggle
     implicitWidth: toggleLabel.implicitWidth
     implicitHeight: toggleLabel.implicitHeight
 
@@ -43,7 +46,7 @@ Row {
       id: toggleLabel
       anchors.centerIn: parent
       text: expanded ? "󰅂" : "󰅁"
-      color: Wallust.base04
+      color: iconColor
       font.family: "Symbols Nerd Font Mono"
       font.pixelSize: 14
     }

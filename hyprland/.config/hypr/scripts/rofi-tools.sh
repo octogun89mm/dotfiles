@@ -4,6 +4,7 @@ set -euo pipefail
 
 selection=$(
     printf '%s\n' \
+        "Bar style" \
         "Screenshot" \
         "Screen record" \
         "Clipboard history" \
@@ -18,6 +19,9 @@ selection=$(
 [ -z "$selection" ] && exit 0
 
 case "$selection" in
+    "Bar style")
+        exec ~/.config/rofi/scripts/bar-style.sh
+        ;;
     "Screenshot")
         exec ~/.config/rofi/scripts/screenshot.sh
         ;;

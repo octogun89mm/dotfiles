@@ -12,7 +12,7 @@ Rectangle {
     id: indicator
     anchors.centerIn: parent
     text: LlmState.icon
-    color: LlmState.active ? Wallust.base0D : Wallust.base03
+    color: LlmState.active ? Wallust.accent : Wallust.base03
     font.family: "Symbols Nerd Font Mono"
     font.pixelSize: 14
   }

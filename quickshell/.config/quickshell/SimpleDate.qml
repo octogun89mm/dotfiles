@@ -2,25 +2,24 @@ import QtQuick
 import Quickshell
 import "wallust.js" as Wallust
 
-Rectangle {
+Item {
   id: root
 
-  property bool hovered: clockMouse.containsMouse
+  property bool hovered: dateMouse.containsMouse
   property bool pinned: false
 
   signal clicked
 
-  color: pinned ? Wallust.base0E : Wallust.accent
-  implicitWidth: clockLabel.implicitWidth + 10
-  implicitHeight: clockLabel.implicitHeight + 4
+  implicitWidth: dateLabel.implicitWidth
+  implicitHeight: 20
 
   Text {
-    id: clockLabel
+    id: dateLabel
     anchors.centerIn: parent
-    text: Qt.formatTime(clock.date, "hh:mm AP")
-    color: Wallust.base00
+    text: Qt.formatDate(clock.date, "ddd-dd-MM-yy")
+    color: root.pinned ? Wallust.accent : Wallust.base05
     font.family: "Roboto Mono"
-    font.pixelSize: 14
+    font.pixelSize: 12
     font.bold: true
   }
 
@@ -30,7 +29,7 @@ Rectangle {
   }
 
   MouseArea {
-    id: clockMouse
+    id: dateMouse
     anchors.fill: parent
     hoverEnabled: true
     onClicked: root.clicked()

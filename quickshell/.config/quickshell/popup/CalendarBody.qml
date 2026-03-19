@@ -249,7 +249,7 @@ Rectangle {
 
                 width: 28
                 height: 28
-                color: isToday ? Wallust.base0D : "transparent"
+                color: isToday ? Wallust.accent : "transparent"
 
                 Text {
                   anchors.centerIn: parent

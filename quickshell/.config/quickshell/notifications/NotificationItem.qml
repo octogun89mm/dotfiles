@@ -23,7 +23,7 @@ Rectangle {
     case Notifications.NotificationUrgency.Critical:
       return Wallust.base08
     default:
-      return Wallust.base0D
+      return Wallust.accent
     }
   }
 

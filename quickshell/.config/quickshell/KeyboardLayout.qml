@@ -14,7 +14,7 @@ Rectangle {
     id: indicator
     anchors.centerIn: parent
     text: LanguageState.layout
-    color: Wallust.base0D
+    color: Wallust.accent
     font.family: "Roboto Mono"
     font.pixelSize: 12
     font.bold: true

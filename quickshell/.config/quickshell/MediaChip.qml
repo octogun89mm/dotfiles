@@ -6,7 +6,7 @@ Rectangle {
 
   color: "transparent"
   border.width: 2
-  border.color: MediaState.playing ? Wallust.base0D : Wallust.base03
+  border.color: MediaState.playing ? Wallust.accent : Wallust.base03
   implicitWidth: mediaLabel.implicitWidth + 18
   implicitHeight: 24
   visible: MediaState.available

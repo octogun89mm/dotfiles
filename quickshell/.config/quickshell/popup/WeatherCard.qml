@@ -72,7 +72,7 @@ Rectangle {
 
     Text {
       text: root.weatherIcon
-      color: Wallust.base0D
+      color: Wallust.accent
       font.family: "Weather Icons"
       font.pixelSize: 40
       horizontalAlignment: Text.AlignHCenter

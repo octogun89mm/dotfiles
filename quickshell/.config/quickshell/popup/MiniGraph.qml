@@ -5,7 +5,7 @@ Item {
   id: root
 
   property var values: []
-  property color graphColor: Wallust.base0D
+  property color graphColor: Wallust.accent
   property string label: ""
   property real maxValue: 100
   property real minValue: 0

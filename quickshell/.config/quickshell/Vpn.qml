@@ -14,7 +14,7 @@ Rectangle {
     id: indicator
     anchors.centerIn: parent
     text: VpnState.icon
-    color: VpnState.connected ? Wallust.base0D : Wallust.base03
+    color: VpnState.connected ? Wallust.accent : Wallust.base03
     font.family: "Symbols Nerd Font Mono"
     font.pixelSize: 14
   }

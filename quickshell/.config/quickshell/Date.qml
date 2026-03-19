@@ -11,7 +11,7 @@ Rectangle {
 
   signal clicked
 
-  color: pinned ? Wallust.base0E : Wallust.base0D
+  color: pinned ? Wallust.base0E : Wallust.accent
   implicitWidth: dateLabel.implicitWidth + 10
   implicitHeight: 24
 

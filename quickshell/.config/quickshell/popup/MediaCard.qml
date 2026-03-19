@@ -29,7 +29,7 @@ Rectangle {
         height: 96
         color: Wallust.base01
         border.width: 2
-        border.color: Root.MediaState.playing ? Wallust.base0D : Wallust.base03
+        border.color: Root.MediaState.playing ? Wallust.accent : Wallust.base03
 
         Image {
           id: albumArtImage
@@ -87,7 +87,7 @@ Rectangle {
       Text {
         width: parent.width
         text: Root.MediaState.playing ? "PLAYING" : Root.MediaState.available ? "PAUSED" : ""
-        color: Root.MediaState.playing ? Wallust.base0D : Wallust.base04
+        color: Root.MediaState.playing ? Wallust.accent : Wallust.base04
         font.family: "Roboto Mono"
         font.pixelSize: 10
         font.bold: true
