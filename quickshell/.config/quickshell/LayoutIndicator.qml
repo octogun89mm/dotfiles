@@ -10,6 +10,7 @@ Rectangle {
   required property string monitorName
   required property string monitorId
   property bool compact: false
+  property bool borderless: false
   readonly property string home: Quickshell.env("HOME") || ""
   readonly property string cycleScript: home + "/.config/hypr/scripts/cycle-layout.sh"
   readonly property string layoutScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/bar_layout.sh"
@@ -21,12 +22,12 @@ Rectangle {
     statusProcess.exec([root.layoutScript, root.monitorName])
   }
 
-  color: backgroundColor(layout)
+  color: borderless ? "transparent" : backgroundColor(layout)
   implicitWidth: compact ? layoutLabel.implicitWidth + 8 : 28
-  implicitHeight: compact ? 20 : 24
+  implicitHeight: borderless ? 20 : (compact ? 20 : 24)
 
   Rectangle {
-    visible: !root.compact
+    visible: !root.compact && !root.borderless
     anchors.top: parent.top
     anchors.left: parent.left
     anchors.right: parent.right
@@ -35,7 +36,7 @@ Rectangle {
   }
 
   Rectangle {
-    visible: !root.compact
+    visible: !root.compact && !root.borderless
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     anchors.left: parent.left
@@ -44,7 +45,7 @@ Rectangle {
   }
 
   Rectangle {
-    visible: !root.compact
+    visible: !root.compact && !root.borderless
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
@@ -113,7 +114,7 @@ Rectangle {
     anchors.fill: iconImage
     source: iconImage
     colorization: 1.0
-    colorizationColor: Wallust.background
+    colorizationColor: root.borderless ? Wallust.base05 : Wallust.background
   }
 
   MouseArea {

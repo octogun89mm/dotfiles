@@ -42,7 +42,12 @@ Scope {
           LayoutIndicator {
             monitorName: barWindow.modelData.name
             monitorId: String(barWindow.modelData.id)
-            compact: true
+            compact: false
+            borderless: true
+          }
+
+          SimpleWindowCount {
+            monitorName: barWindow.modelData.name
           }
 
           SimpleWorkspace {}
