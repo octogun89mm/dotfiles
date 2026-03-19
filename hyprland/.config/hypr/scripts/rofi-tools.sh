@@ -7,6 +7,7 @@ selection=$(
         "Screenshot" \
         "Screen record" \
         "Clipboard history" \
+        "Emoji/symbol picker" \
         "OCR" \
         "Todo" \
         "Wallpaper picker" \
@@ -25,6 +26,9 @@ case "$selection" in
         ;;
     "Clipboard history")
         exec ~/.config/rofi/scripts/cliphist.sh
+        ;;
+    "Emoji/symbol picker")
+        exec ~/.config/rofi/scripts/emojis.sh
         ;;
     "OCR")
         exec ~/.config/rofi/scripts/ocr.sh
