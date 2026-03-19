@@ -13,6 +13,7 @@ Singleton {
   property int volume: volumeFromSink()
   property bool muted: sinkAudio ? sinkAudio.muted : false
   property string sinkName: sinkLabel(sink)
+  property string lastOsdSinkName: sinkLabel(sink)
   property bool ready: false
 
   function clampVolume(value) {
@@ -60,9 +61,20 @@ Singleton {
   }
 
   function syncFromSink() {
-    root.volume = volumeFromSink()
-    root.muted = sinkAudio ? sinkAudio.muted : false
-    root.sinkName = sinkLabel(sink)
+    const nextVolume = volumeFromSink()
+    const nextMuted = sinkAudio ? sinkAudio.muted : false
+    const nextSinkName = sinkLabel(sink)
+    const sinkChanged = ready && nextSinkName && nextSinkName !== lastOsdSinkName
+
+    root.volume = nextVolume
+    root.muted = nextMuted
+    root.sinkName = nextSinkName
+
+    if (sinkChanged) {
+      OsdState.show("󰓃", nextSinkName)
+    }
+
+    root.lastOsdSinkName = nextSinkName
   }
 
   onSinkChanged: syncFromSink()

@@ -11,6 +11,7 @@ Singleton {
   readonly property string scriptPath: home + "/.dotfiles/eww/.config/eww/shell/bar_language.sh"
 
   property string layout: "EN"
+  property bool ready: false
 
   Process {
     command: [root.scriptPath]
@@ -20,7 +21,17 @@ Singleton {
       splitMarker: "\n"
       onRead: function(data) {
         if (!data || !data.trim()) return
-        root.layout = data.trim()
+
+        const nextLayout = data.trim()
+        const changed = root.ready && nextLayout !== root.layout
+
+        root.layout = nextLayout
+
+        if (changed) {
+          OsdState.show("󰌌", "KB " + root.layout)
+        }
+
+        root.ready = true
       }
     }
   }

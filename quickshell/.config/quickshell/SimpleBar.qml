@@ -46,6 +46,13 @@ Scope {
             borderless: true
           }
 
+          Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
+            width: 1
+            height: 12
+            color: Wallust.base02
+          }
+
           SimpleWindowCount {
             monitorName: barWindow.modelData.name
           }
