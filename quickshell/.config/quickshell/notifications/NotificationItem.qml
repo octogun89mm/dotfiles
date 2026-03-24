@@ -77,127 +77,135 @@ Rectangle {
     }
   }
 
-  Column {
+  Row {
     id: content
     anchors.fill: parent
     anchors.margins: 10
     anchors.leftMargin: 14
     anchors.rightMargin: 28
-    spacing: 8
+    spacing: 10
 
-    Item {
-      width: parent.width
-      height: 24
+    Column {
+      width: hasImage ? parent.width - 58 : parent.width
+      spacing: 8
 
-      Rectangle {
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        width: 24
+      readonly property bool hasImage: root.notification && root.notification.image
+
+      Item {
+        width: parent.width
         height: 24
-        color: "transparent"
 
-        IconImage {
-          anchors.fill: parent
-          source: root.notification && root.notification.appIcon ? root.notification.appIcon : ""
-          asynchronous: true
+        Rectangle {
+          anchors.left: parent.left
+          anchors.verticalCenter: parent.verticalCenter
+          width: 24
+          height: 24
+          color: "transparent"
+
+          IconImage {
+            anchors.fill: parent
+            source: root.notification && root.notification.appIcon ? root.notification.appIcon : ""
+            asynchronous: true
+          }
+
+          Text {
+            anchors.centerIn: parent
+            visible: !root.notification || !root.notification.appIcon
+            text: "󰂚"
+            color: Wallust.base04
+            font.family: "Symbols Nerd Font Mono"
+            font.pixelSize: 16
+          }
         }
 
         Text {
-          anchors.centerIn: parent
-          visible: !root.notification || !root.notification.appIcon
-          text: "󰂚"
-          color: Wallust.base04
-          font.family: "Symbols Nerd Font Mono"
-          font.pixelSize: 16
+          anchors.left: parent.left
+          anchors.leftMargin: 32
+          anchors.right: parent.right
+          anchors.verticalCenter: parent.verticalCenter
+          text: root.notification ? (root.notification.appName || root.notification.desktopEntry || "APP") : "APP"
+          elide: Text.ElideRight
+          color: Wallust.base05
+          font.family: "Roboto Mono"
+          font.pixelSize: 10
+          font.bold: true
         }
       }
 
       Text {
-        anchors.left: parent.left
-        anchors.leftMargin: 32
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        text: root.notification ? (root.notification.appName || root.notification.desktopEntry || "APP") : "APP"
+        width: parent.width
+        text: root.notification ? root.notification.summary : ""
         elide: Text.ElideRight
         color: Wallust.base05
+        font.family: "Roboto Mono"
+        font.pixelSize: compact ? 11 : 12
+        font.bold: true
+      }
+
+      Text {
+        width: parent.width
+        text: root.relativeTime()
+        color: Wallust.base04
         font.family: "Roboto Mono"
         font.pixelSize: 10
         font.bold: true
       }
-    }
 
-    Text {
-      width: parent.width
-      text: root.notification ? root.notification.summary : ""
-      elide: Text.ElideRight
-      color: Wallust.base05
-      font.family: "Roboto Mono"
-      font.pixelSize: compact ? 11 : 12
-      font.bold: true
-    }
+      Text {
+        width: parent.width
+        visible: text !== ""
+        wrapMode: Text.Wrap
+        textFormat: Text.RichText
+        text: root.notification ? (root.notification.body || "") : ""
+        color: Wallust.base04
+        font.family: "Roboto Mono"
+        font.pixelSize: 10
+      }
 
-    Text {
-      width: parent.width
-      text: root.relativeTime()
-      color: Wallust.base04
-      font.family: "Roboto Mono"
-      font.pixelSize: 10
-      font.bold: true
-    }
+      Row {
+        visible: repeater.count > 0
+        spacing: 8
 
-    Text {
-      width: parent.width
-      visible: text !== ""
-      wrapMode: Text.Wrap
-      textFormat: Text.RichText
-      text: root.notification ? (root.notification.body || "") : ""
-      color: Wallust.base04
-      font.family: "Roboto Mono"
-      font.pixelSize: 10
-    }
+        Repeater {
+          id: repeater
+          model: root.actionButtons()
 
-    Image {
-      width: parent.width
-      height: visible ? 110 : 0
-      visible: root.notification && root.notification.image
-      source: root.notification ? root.notification.image : ""
-      fillMode: Image.PreserveAspectCrop
-      asynchronous: true
-    }
+          Rectangle {
+            required property var modelData
 
-    Row {
-      visible: repeater.count > 0
-      spacing: 8
+            width: Math.max(72, actionLabel.implicitWidth + 14)
+            height: 28
+            color: "transparent"
+            border.width: 2
+            border.color: Wallust.base03
 
-      Repeater {
-        id: repeater
-        model: root.actionButtons()
+            Text {
+              id: actionLabel
+              anchors.centerIn: parent
+              text: modelData.text
+              color: Wallust.base05
+              font.family: "Roboto Mono"
+              font.pixelSize: 10
+              font.bold: true
+            }
 
-        Rectangle {
-          required property var modelData
-
-          width: Math.max(72, actionLabel.implicitWidth + 14)
-          height: 28
-          color: "transparent"
-          border.width: 2
-          border.color: Wallust.base03
-
-          Text {
-            id: actionLabel
-            anchors.centerIn: parent
-            text: modelData.text
-            color: Wallust.base05
-            font.family: "Roboto Mono"
-            font.pixelSize: 10
-            font.bold: true
-          }
-
-          MouseArea {
-            anchors.fill: parent
-            onClicked: modelData.invoke()
+            MouseArea {
+              anchors.fill: parent
+              onClicked: modelData.invoke()
+            }
           }
         }
       }
+    }
+
+    Image {
+      width: 48
+      height: 48
+      visible: root.notification && root.notification.image
+      source: root.notification ? root.notification.image : ""
+      fillMode: Image.PreserveAspectFit
+      asynchronous: true
+      anchors.verticalCenter: parent.verticalCenter
     }
   }
 
