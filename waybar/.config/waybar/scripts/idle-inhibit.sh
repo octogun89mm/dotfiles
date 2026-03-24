@@ -6,13 +6,9 @@ toggle() {
     if [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
         kill "$(cat "$PIDFILE")"
         rm -f "$PIDFILE"
-
-        eww update bar_idle_inhibit="false"
     else
-        wayland-idle-inhibitor.py &
+        "$HOME/.local/bin/wayland-idle-inhibitor.py" &
         echo $! > "$PIDFILE"
-
-        eww update bar_idle_inhibit="true"
     fi
 }
 
