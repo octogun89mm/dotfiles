@@ -87,19 +87,24 @@ Scope {
             inactiveColor: Wallust.base05
           }
 
-          IdleInhibitor {
+          Row {
             anchors.verticalCenter: parent.verticalCenter
-            borderless: true
-            onlyWhenActive: true
-            activeColor: Wallust.base05
-            inactiveColor: Wallust.base05
-          }
+            spacing: 6
 
-          Tray {
-            anchors.verticalCenter: parent.verticalCenter
-            showToggle: false
-            expanded: true
-            iconColor: Wallust.base05
+            IdleInhibitor {
+              anchors.verticalCenter: parent.verticalCenter
+              borderless: true
+              onlyWhenActive: true
+              activeColor: Wallust.base05
+              inactiveColor: Wallust.base05
+            }
+
+            Tray {
+              anchors.verticalCenter: parent.verticalCenter
+              showToggle: false
+              expanded: true
+              iconColor: Wallust.base05
+            }
           }
 
           Rectangle {
