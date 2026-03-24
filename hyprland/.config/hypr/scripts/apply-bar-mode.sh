@@ -25,8 +25,8 @@ EOF
         printf '%s\n' "$mode" > "$MODE_FILE"
         cat > "$HYPR_MODE_CONF" <<'EOF'
 # simple mode smart gaps and borders
-workspace = w[tv1]s[false], gapsout:0, gapsin:0, bordersize:0, border:false, rounding:false
-workspace = f[1]s[false], gapsout:0, gapsin:0, bordersize:0, border:false, rounding:false
+workspace = w[tv1]s[false], gapsout:0, gapsin:0, bordersize:0, border:false, rounding:false, shadow:false
+workspace = f[1]s[false], gapsout:0, gapsin:0, bordersize:0, border:false, rounding:false, shadow:false
 EOF
         ;;
 esac
