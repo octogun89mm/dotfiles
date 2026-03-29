@@ -7,6 +7,7 @@ Item {
   id: root
 
   required property var item
+  property color iconColor: "#BBBBBB"
 
   implicitWidth: 16
   implicitHeight: 16
@@ -16,6 +17,16 @@ Item {
     implicitSize: 16
     source: item.icon
     asynchronous: true
+    visible: item.id !== "expressvpn"
+  }
+
+  Text {
+    anchors.centerIn: parent
+    text: VpnState.icon
+    color: root.iconColor
+    font.family: "Symbols Nerd Font Mono"
+    font.pixelSize: 14
+    visible: item.id === "expressvpn"
   }
 
   QsMenuAnchor {

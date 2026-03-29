@@ -3,6 +3,7 @@ import Quickshell.Services.SystemTray
 import "wallust.js" as Wallust
 
 Row {
+  id: trayRoot
   spacing: 6
   property bool expanded: false
   property bool showToggle: true
@@ -15,6 +16,7 @@ Row {
     TrayItem {
       required property var modelData
       item: modelData
+      iconColor: trayRoot.iconColor
       property bool shouldShow: expanded && item.status !== Status.Passive
       width: shouldShow ? 16 : 0
       opacity: shouldShow ? 1 : 0

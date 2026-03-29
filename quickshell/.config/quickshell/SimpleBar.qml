@@ -79,14 +79,6 @@ Scope {
           anchors.verticalCenter: parent.verticalCenter
           spacing: 10
 
-          Vpn {
-            anchors.verticalCenter: parent.verticalCenter
-            borderless: true
-            onlyWhenActive: true
-            activeColor: Wallust.base05
-            inactiveColor: Wallust.base05
-          }
-
           Row {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 6

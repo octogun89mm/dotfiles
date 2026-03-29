@@ -38,9 +38,6 @@ Singleton {
       tooltip = data.tooltip || "ExpressVPN"
       statusText = connected ? "CONNECTED" : "DISCONNECTED"
 
-      if (changed || pendingToggleFeedback) {
-        OsdState.show(icon, "VPN " + statusText)
-      }
     } catch (e) {
       console.warn("VpnState: failed to parse JSON:", e)
     }
