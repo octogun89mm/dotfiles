@@ -2,6 +2,8 @@
 require("settings")
 -- Lazy plugins manager configuration and the list of all the plugins
 require("config.lazy")
+-- Core treesitter bootstrap without the archived nvim-treesitter plugin
+require("config.treesitter")
 -- Import all mappings
 require('mappings')
 -- Theme
