@@ -17,7 +17,7 @@ Row {
       required property var modelData
       item: modelData
       iconColor: trayRoot.iconColor
-      property bool shouldShow: expanded && item.status !== Status.Passive
+      property bool shouldShow: (expanded || (item.id === "expressvpn" && VpnState.connected)) && item.status !== Status.Passive
       width: shouldShow ? 16 : 0
       opacity: shouldShow ? 1 : 0
       visible: width > 0 || traySlide.running
