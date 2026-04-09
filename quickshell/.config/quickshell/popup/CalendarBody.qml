@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import "../wallust.js" as Wallust
+import ".." as Root
 
 Rectangle {
   id: root
@@ -16,13 +17,29 @@ Rectangle {
   readonly property int viewMonth: viewDate.getMonth()
 
   readonly property date today: clock.date
+  property date selectedDate: today
+  property string selectedDateKey: dateKey(selectedDate)
 
-  implicitWidth: 230
+  implicitWidth: 244
   implicitHeight: calColumn.implicitHeight + 20
 
   SystemClock {
     id: clock
     precision: SystemClock.Minutes
+  }
+
+  Component.onCompleted: fetchCalendarEvents()
+
+  function dateKey(d) {
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
+    return y + "-" + m + "-" + day
+  }
+
+  function fetchCalendarEvents() {
+    const start = firstVisibleDate()
+    Root.CalendarState.fetchRange(dateKey(start), 42)
   }
 
   function daysInMonth(year, month) {
@@ -68,20 +85,45 @@ Rectangle {
 
   function goToToday() {
     viewDate = new Date(today.getFullYear(), today.getMonth(), 1)
+    selectedDate = today
+    fetchCalendarEvents()
   }
 
   function firstDayOfWeek(year, month) {
     return new Date(year, month, 1).getDay()
   }
 
+  function rebuildEventList() {
+    eventListModel.clear()
+    const events = Root.CalendarState.getEvents(selectedDateKey)
+    for (let i = 0; i < events.length; i++) {
+      eventListModel.append({
+        title: events[i].title,
+        startTime: events[i].startTime,
+        endTime: events[i].endTime,
+        allDay: events[i].allDay,
+        calendar: events[i].calendar
+      })
+    }
+  }
+
+  onSelectedDateKeyChanged: rebuildEventList()
+
+  Connections {
+    target: Root.CalendarState
+    function onRevisionChanged() { root.rebuildEventList() }
+  }
+
   function prevMonth() {
     var d = new Date(viewYear, viewMonth - 1, 1)
     viewDate = d
+    fetchCalendarEvents()
   }
 
   function nextMonth() {
     var d = new Date(viewYear, viewMonth + 1, 1)
     viewDate = d
+    fetchCalendarEvents()
   }
 
   Column {
@@ -246,10 +288,16 @@ Rectangle {
                 readonly property bool inMonth: dateValue.getMonth() === root.viewMonth
                   && dateValue.getFullYear() === root.viewYear
                 readonly property bool isToday: root.isSameDate(dateValue, root.today)
+                readonly property bool isSelected: root.isSameDate(dateValue, root.selectedDate)
+                readonly property string cellDateKey: root.dateKey(dateValue)
+                readonly property bool cellHasEvents: Root.CalendarState.revision >= 0
+                  && (Root.CalendarState.eventsByDate[cellDateKey] || []).length > 0
 
                 width: 28
                 height: 28
-                color: isToday ? Wallust.accent : "transparent"
+                color: isToday ? Wallust.accent
+                     : isSelected ? Wallust.base02
+                     : "transparent"
 
                 Text {
                   anchors.centerIn: parent
@@ -258,7 +306,80 @@ Rectangle {
                   font.family: "Roboto Mono"
                   font.pixelSize: 11
                 }
+
+                Rectangle {
+                  width: 4
+                  height: 4
+                  anchors.horizontalCenter: parent.horizontalCenter
+                  anchors.bottom: parent.bottom
+                  anchors.bottomMargin: 2
+                  color: parent.isToday ? Wallust.base00 : Wallust.accent
+                  visible: parent.cellHasEvents
+                }
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: root.selectedDate = parent.dateValue
+                }
               }
+            }
+          }
+        }
+      }
+    }
+
+    Rectangle {
+      width: 224
+      height: 1
+      color: Wallust.base02
+      visible: eventListModel.count > 0
+    }
+
+    Column {
+      id: eventSection
+      width: 224
+      spacing: 2
+      visible: eventListModel.count > 0
+
+      Text {
+        text: Qt.formatDate(root.selectedDate, "ddd, MMM d")
+        color: Wallust.base04
+        font.family: "Roboto Mono"
+        font.pixelSize: 10
+        font.bold: true
+      }
+
+      Repeater {
+        model: ListModel { id: eventListModel }
+
+        Rectangle {
+          width: 224
+          height: eventItemCol.implicitHeight + 6
+          color: Wallust.base01
+
+          Column {
+            id: eventItemCol
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 6
+            anchors.rightMargin: 6
+
+            Text {
+              width: parent.width
+              text: model.title
+              color: Wallust.base05
+              font.family: "Roboto Mono"
+              font.pixelSize: 10
+              elide: Text.ElideRight
+            }
+
+            Text {
+              width: parent.width
+              text: model.allDay ? "ALL DAY" : model.startTime + " \u2013 " + model.endTime
+              color: Wallust.base04
+              font.family: "Roboto Mono"
+              font.pixelSize: 9
             }
           }
         }
