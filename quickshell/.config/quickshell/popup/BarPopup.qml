@@ -60,5 +60,12 @@ Rectangle {
         height: bodyRow.height
       }
     }
+
+    NotificationHistoryCard {
+      width: parent.width
+      active: root.active
+      maxVisibleItems: 4
+      maxListHeight: 320
+    }
   }
 }
