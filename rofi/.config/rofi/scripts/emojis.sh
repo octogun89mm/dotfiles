@@ -1,1175 +1,210 @@
 #!/bin/bash
 
-# Unicode character database
-# Format: "character|description"
-# You can customize this list with any unicode characters you want
-unicode_chars=(
-    # Arrows
-    "←|left arrow"
-    "→|right arrow"
-    "↑|up arrow"
-    "↓|down arrow"
-    "↔|left right arrow"
-    "↕|up down arrow"
-    "⇐|left double arrow"
-    "⇒|right double arrow"
-    "⇑|up double arrow"
-    "⇓|down double arrow"
-    "⇔|left right double arrow"
-    "↖|up left arrow"
-    "↗|up right arrow"
-    "↘|down right arrow"
-    "↙|down left arrow"
-    "⟵|long left arrow"
-    "⟶|long right arrow"
-    "⟷|long left right arrow"
-    "⇠|left dashed arrow"
-    "⇢|right dashed arrow"
-    "⇴|right arrow over left arrow"
-    "⤴|right arrow curving up"
-    "⤵|right arrow curving down"
-    "↩|left arrow hook"
-    "↪|right arrow hook"
-    "↺|counter clockwise arrow"
-    "↻|clockwise arrow"
-    "⟲|counter clockwise circle"
-    "⟳|clockwise circle"
-    "⇄|right arrow over left"
-    "⇅|up arrow beside down arrow"
-    "⇆|left arrow over right"
-    
-    # Math symbols
-    "×|multiplication"
-    "÷|division"
-    "±|plus minus"
-    "∓|minus plus"
-    "≠|not equal"
-    "≈|approximately equal"
-    "≡|identical to"
-    "≢|not identical to"
-    "≤|less than or equal"
-    "≥|greater than or equal"
-    "≪|much less than"
-    "≫|much greater than"
-    "∞|infinity"
-    "∑|summation"
-    "∏|product"
-    "√|square root"
-    "∛|cube root"
-    "∜|fourth root"
-    "∫|integral"
-    "∬|double integral"
-    "∮|contour integral"
-    "∂|partial derivative"
-    "∇|nabla gradient"
-    "∆|increment"
-    "∈|element of"
-    "∉|not element of"
-    "∋|contains as member"
-    "⊂|subset"
-    "⊃|superset"
-    "⊄|not subset"
-    "⊅|not superset"
-    "⊆|subset or equal"
-    "⊇|superset or equal"
-    "∩|intersection"
-    "∪|union"
-    "∀|for all"
-    "∃|there exists"
-    "∄|there does not exist"
-    "∅|empty set"
-    "⊕|circled plus"
-    "⊗|circled times"
-    "⊥|perpendicular"
-    "∥|parallel"
-    "∦|not parallel"
-    "∠|angle"
-    "∡|measured angle"
-    "∟|right angle"
-    "∝|proportional to"
-    "∴|therefore"
-    "∵|because"
-    "⊤|down tack"
-    "⊢|right tack"
-    "⊣|left tack"
-    "⊨|true"
-    "⊭|not true"
-    "¬|not sign"
-    "∧|logical and"
-    "∨|logical or"
-    "⊻|xor"
-    
-    # Greek letters lowercase
-    "α|alpha"
-    "β|beta"
-    "γ|gamma"
-    "δ|delta"
-    "ε|epsilon"
-    "ζ|zeta"
-    "η|eta"
-    "θ|theta"
-    "ι|iota"
-    "κ|kappa"
-    "λ|lambda"
-    "μ|mu"
-    "ν|nu"
-    "ξ|xi"
-    "ο|omicron"
-    "π|pi"
-    "ρ|rho"
-    "σ|sigma"
-    "τ|tau"
-    "υ|upsilon"
-    "φ|phi"
-    "χ|chi"
-    "ψ|psi"
-    "ω|omega"
-    
-    # Greek letters uppercase
-    "Α|alpha uppercase"
-    "Β|beta uppercase"
-    "Γ|gamma uppercase"
-    "Δ|delta uppercase"
-    "Ε|epsilon uppercase"
-    "Ζ|zeta uppercase"
-    "Η|eta uppercase"
-    "Θ|theta uppercase"
-    "Ι|iota uppercase"
-    "Κ|kappa uppercase"
-    "Λ|lambda uppercase"
-    "Μ|mu uppercase"
-    "Ν|nu uppercase"
-    "Ξ|xi uppercase"
-    "Ο|omicron uppercase"
-    "Π|pi uppercase"
-    "Ρ|rho uppercase"
-    "Σ|sigma uppercase"
-    "Τ|tau uppercase"
-    "Υ|upsilon uppercase"
-    "Φ|phi uppercase"
-    "Χ|chi uppercase"
-    "Ψ|psi uppercase"
-    "Ω|omega uppercase"
-    
-    # Box drawing
-    "─|horizontal line"
-    "│|vertical line"
-    "┌|down right corner"
-    "┐|down left corner"
-    "└|up right corner"
-    "┘|up left corner"
-    "├|vertical right"
-    "┤|vertical left"
-    "┬|horizontal down"
-    "┴|horizontal up"
-    "┼|cross"
-    "═|double horizontal"
-    "║|double vertical"
-    "╔|double down right"
-    "╗|double down left"
-    "╚|double up right"
-    "╝|double up left"
-    "╠|double vertical right"
-    "╣|double vertical left"
-    "╦|double horizontal down"
-    "╩|double horizontal up"
-    "╬|double cross"
-    "╭|rounded down right"
-    "╮|rounded down left"
-    "╯|rounded up left"
-    "╰|rounded up right"
-    "╱|diagonal up right"
-    "╲|diagonal down right"
-    "╳|diagonal cross"
-    
-    # Block elements
-    "█|full block"
-    "▓|dark shade"
-    "▒|medium shade"
-    "░|light shade"
-    "▀|upper half block"
-    "▄|lower half block"
-    "▌|left half block"
-    "▐|right half block"
-    "■|black square"
-    "□|white square"
-    "▪|black small square"
-    "▫|white small square"
-    "▬|black rectangle"
-    "▭|white rectangle"
-    "▮|vertical rectangle"
-    "▯|vertical rectangle open"
-    
-    # Geometric shapes
-    "●|black circle"
-    "○|white circle"
-    "◉|circle with dot"
-    "◌|dotted circle"
-    "◍|circle dot right"
-    "◎|bullseye"
-    "◐|circle left half black"
-    "◑|circle right half black"
-    "◒|circle lower half black"
-    "◓|circle upper half black"
-    "◔|circle upper right"
-    "◕|circle all but upper left"
-    "◖|circle left half black variant"
-    "◗|circle right half black variant"
-    "◘|inverse white circle"
-    "◙|inverse bullet"
-    "◚|upper half inverse white circle"
-    "◛|lower half inverse white circle"
-    "◢|triangle lower right"
-    "◣|triangle lower left"
-    "◤|triangle upper left"
-    "◥|triangle upper right"
-    "◦|white bullet"
-    "◧|square upper right"
-    "◨|square upper left"
-    "◩|square lower left"
-    "◪|square lower right"
-    "◫|white square center dot"
-    "◬|square open center dot"
-    "◭|square open center circle"
-    "◮|up triangle open center"
-    "◯|large circle"
-    "△|white up triangle"
-    "▲|black up triangle"
-    "▴|small black up triangle"
-    "▵|small white up triangle"
-    "▷|white right triangle"
-    "▸|black right triangle"
-    "▹|small white right triangle"
-    "▻|white right pointing triangle"
-    "▼|black down triangle"
-    "▽|white down triangle"
-    "▾|small black down triangle"
-    "▿|small white down triangle"
-    "◀|black left triangle"
-    "◁|white left triangle"
-    "◂|small black left triangle"
-    "◃|small white left triangle"
-    "◄|left pointing triangle"
-    "◅|right pointing triangle"
-    "◆|black diamond"
-    "◇|white diamond"
-    "◈|diamond with dot"
-    "◊|lozenge"
-    "⬟|hexagon"
-    "⬢|horizontal hexagon"
-    "⬡|horizontal hexagon outline"
-    
-    # Stars and asterisks
-    "★|star filled"
-    "☆|star empty"
-    "⋆|star operator"
-    "✦|star black four pointed"
-    "✧|star white four pointed"
-    "✨|sparkles"
-    "✪|circled star"
-    "✫|star open center"
-    "✬|stressed star"
-    "✭|heavy star"
-    "✮|outlined star"
-    "✯|stress outlined star"
-    "✰|shadowed star"
-    "✱|heavy asterisk"
-    "✲|open center asterisk"
-    "✳|eight spoked asterisk"
-    "✴|eight pointed star"
-    "✵|pinwheel star"
-    "✶|six pointed star"
-    "✷|twelve pointed star"
-    "✸|heavy eight pointed star"
-    "✹|twelve pointed star outline"
-    "✺|sixteen pointed asterisk"
-    "✻|teardrop asterisk"
-    "✼|open center teardrop asterisk"
-    "✽|heavy teardrop asterisk"
-    "✾|six petal flower"
-    "✿|flower outline"
-    "❀|flower white"
-    "❁|flower outlined"
-    "❂|circled open center asterisk"
-    "❃|heavy circled asterisk"
-    "❄|snowflake"
-    "❅|tight snowflake"
-    "❆|heavy chevron snowflake"
-    "❇|sparkle"
-    "❈|heavy sparkle"
-    "❉|balloon asterisk"
-    "❊|eight teardrop asterisk"
-    "❋|heavy eight teardrop asterisk"
-    
-    # Symbols
-    "☐|checkbox empty"
-    "☑|checkbox checked"
-    "☒|checkbox crossed"
-    "♠|spade"
-    "♣|club"
-    "♥|heart"
-    "♦|diamond"
-    "♤|spade outline"
-    "♧|club outline"
-    "♡|heart outline"
-    "♢|diamond outline"
-    "©|copyright"
-    "®|registered"
-    "™|trademark"
-    "℗|sound recording copyright"
-    "℠|service mark"
-    "°|degree"
-    "℃|celsius"
-    "℉|fahrenheit"
-    "№|numero sign"
-    "℮|estimated"
-    "•|bullet"
-    "·|middle dot"
-    "…|ellipsis"
-    "—|em dash"
-    "–|en dash"
-    "‐|hyphen"
-    "‒|figure dash"
-    "―|horizontal bar"
-    "‖|double vertical line"
-    "‗|double low line"
-    "'|left single quote"
-    "'|right single quote"
-    "‚|single low quote"
-    "‛|single high reversed quote"
-    "\"|left double quote"
-    "\"|right double quote"
-    "„|double low quote"
-    "‟|double high reversed quote"
-    "‡|double dagger"
-    "†|dagger"
-    "§|section"
-    "¶|paragraph"
-    "‰|per mille"
-    "‱|per ten thousand"
-    "′|prime"
-    "″|double prime"
-    "‴|triple prime"
-    "‾|overline"
-    "⁀|character tie"
-    
-    # Dingbats
-    "✓|checkmark"
-    "✔|heavy checkmark"
-    "✕|multiplication x"
-    "✖|heavy multiplication x"
-    "✗|cross mark"
-    "✘|heavy cross mark"
-    "☓|cross mark outlined"
-    "☒|ballot box with x"
-    "☑|ballot box with check"
-    "☐|ballot box empty"
-    "⚐|flag white"
-    "⚑|flag black"
-    "⚠|warning"
-    "⚡|lightning"
-    "☀|sun"
-    "☁|cloud"
-    "☂|umbrella"
-    "☃|snowman"
-    "☄|comet"
-    "☮|peace symbol"
-    "☯|yin yang"
-    "☸|wheel of dharma"
-    "♀|female"
-    "♂|male"
-    "⚢|lesbian symbol"
-    "⚣|gay symbol"
-    "⚤|heterosexual symbol"
-    "⚥|transgender symbol"
-    "⚦|medium symbol"
-    "⚧|transgender alt"
-    "⚨|vertical symbol"
-    "⚩|horizontal symbol"
-    
-    # Music
-    "♩|quarter note"
-    "♪|eighth note"
-    "♫|beamed eighth notes"
-    "♬|beamed sixteenth notes"
-    "♭|flat"
-    "♮|natural"
-    "♯|sharp"
-    "𝄞|treble clef"
-    "𝄢|bass clef"
-    
-    # Currency
-    "$|dollar"
-    "¢|cent"
-    "£|pound"
-    "€|euro"
-    "¥|yen"
-    "₹|rupee"
-    "₽|ruble"
-    "₴|hryvnia"
-    "₩|won"
-    "₪|shekel"
-    "₫|dong"
-    "₱|peso"
-    "₦|naira"
-    "₡|colon"
-    "₵|cedi"
-    "₮|tugrik"
-    "₲|guarani"
-    "₭|kip"
-    "₰|pfennig"
-    "฿|baht"
-    "₳|austral"
-    "₸|tenge"
-    "₼|manat"
-    "₺|lira"
-    "₾|lari"
-    
-    # Fractions
-    "½|one half"
-    "⅓|one third"
-    "⅔|two thirds"
-    "¼|one quarter"
-    "¾|three quarters"
-    "⅕|one fifth"
-    "⅖|two fifths"
-    "⅗|three fifths"
-    "⅘|four fifths"
-    "⅙|one sixth"
-    "⅚|five sixths"
-    "⅛|one eighth"
-    "⅜|three eighths"
-    "⅝|five eighths"
-    "⅞|seven eighths"
-    
-    # Superscripts
-    "⁰|superscript zero"
-    "¹|superscript one"
-    "²|superscript two"
-    "³|superscript three"
-    "⁴|superscript four"
-    "⁵|superscript five"
-    "⁶|superscript six"
-    "⁷|superscript seven"
-    "⁸|superscript eight"
-    "⁹|superscript nine"
-    "⁺|superscript plus"
-    "⁻|superscript minus"
-    "⁼|superscript equals"
-    "⁽|superscript left paren"
-    "⁾|superscript right paren"
-    "ⁿ|superscript n"
-    
-    # Subscripts
-    "₀|subscript zero"
-    "₁|subscript one"
-    "₂|subscript two"
-    "₃|subscript three"
-    "₄|subscript four"
-    "₅|subscript five"
-    "₆|subscript six"
-    "₇|subscript seven"
-    "₈|subscript eight"
-    "₉|subscript nine"
-    "₊|subscript plus"
-    "₋|subscript minus"
-    "₌|subscript equals"
-    "₍|subscript left paren"
-    "₎|subscript right paren"
-    
-    # Roman numerals
-    "Ⅰ|roman one"
-    "Ⅱ|roman two"
-    "Ⅲ|roman three"
-    "Ⅳ|roman four"
-    "Ⅴ|roman five"
-    "Ⅵ|roman six"
-    "Ⅶ|roman seven"
-    "Ⅷ|roman eight"
-    "Ⅸ|roman nine"
-    "Ⅹ|roman ten"
-    "Ⅺ|roman eleven"
-    "Ⅻ|roman twelve"
-    "Ⅼ|roman fifty"
-    "Ⅽ|roman hundred"
-    "Ⅾ|roman five hundred"
-    "Ⅿ|roman thousand"
-    "ⅰ|roman one small"
-    "ⅱ|roman two small"
-    "ⅲ|roman three small"
-    "ⅳ|roman four small"
-    "ⅴ|roman five small"
-    "ⅵ|roman six small"
-    "ⅶ|roman seven small"
-    "ⅷ|roman eight small"
-    "ⅸ|roman nine small"
-    "ⅹ|roman ten small"
-    "ⅺ|roman eleven small"
-    "ⅻ|roman twelve small"
-    "ⅼ|roman fifty small"
-    "ⅽ|roman hundred small"
-    "ⅾ|roman five hundred small"
-    "ⅿ|roman thousand small"
-    
-    # Circled numbers
-    "①|circled one"
-    "②|circled two"
-    "③|circled three"
-    "④|circled four"
-    "⑤|circled five"
-    "⑥|circled six"
-    "⑦|circled seven"
-    "⑧|circled eight"
-    "⑨|circled nine"
-    "⑩|circled ten"
-    "⑪|circled eleven"
-    "⑫|circled twelve"
-    "⑬|circled thirteen"
-    "⑭|circled fourteen"
-    "⑮|circled fifteen"
-    "⑯|circled sixteen"
-    "⑰|circled seventeen"
-    "⑱|circled eighteen"
-    "⑲|circled nineteen"
-    "⑳|circled twenty"
-    
-    # Emoji faces
-    "😀|grinning face"
-    "😁|beaming face"
-    "😂|tears of joy"
-    "😃|grinning face big eyes"
-    "😄|grinning face smiling eyes"
-    "😅|grinning face with sweat"
-    "😆|grinning squinting face"
-    "😇|smiling face with halo"
-    "😈|smiling face with horns"
-    "😉|winking face"
-    "😊|smiling face with eyes"
-    "😋|face savoring food"
-    "😌|relieved face"
-    "😍|smiling face with hearts"
-    "😎|smiling face with sunglasses"
-    "😏|smirking face"
-    "😐|neutral face"
-    "😑|expressionless face"
-    "😒|unamused face"
-    "😓|downcast face with sweat"
-    "😔|pensive face"
-    "😕|confused face"
-    "😖|confounded face"
-    "😗|kissing face"
-    "😘|face blowing kiss"
-    "😙|kissing face with eyes"
-    "😚|kissing face closed eyes"
-    "😛|face with tongue"
-    "😜|winking face with tongue"
-    "😝|squinting face with tongue"
-    "😞|disappointed face"
-    "😟|worried face"
-    "😠|angry face"
-    "😡|enraged face"
-    "😢|crying face"
-    "😣|persevering face"
-    "😤|face with steam"
-    "😥|sad but relieved face"
-    "😦|frowning face with open mouth"
-    "😧|anguished face"
-    "😨|fearful face"
-    "😩|weary face"
-    "😪|sleepy face"
-    "😫|tired face"
-    "😬|grimacing face"
-    "😭|loudly crying face"
-    "😮|face with open mouth"
-    "😯|hushed face"
-    "😰|anxious face with sweat"
-    "😱|screaming in fear"
-    "😲|astonished face"
-    "😳|flushed face"
-    "😴|sleeping face"
-    "😵|face with crossed eyes"
-    "😶|face without mouth"
-    "😷|face with medical mask"
-    "🙁|frowning face"
-    "🙂|slightly smiling face"
-    "🙃|upside down face"
-    "🙄|face with rolling eyes"
-    "🤐|zipper mouth face"
-    "🤑|money mouth face"
-    "🤒|face with thermometer"
-    "🤓|nerd face"
-    "🤔|thinking face"
-    "🤕|face with bandage"
-    "🤖|robot"
-    "🤗|smiling face with open hands"
-    "🤘|sign of horns"
-    "🤙|call me hand"
-    "🤚|raised back of hand"
-    "🤛|left facing fist"
-    "🤜|right facing fist"
-    "🤝|handshake"
-    "🤞|crossed fingers"
-    "🤠|cowboy hat face"
-    "🤡|clown face"
-    "🤢|nauseated face"
-    "🤣|rolling on floor laughing"
-    "🤤|drooling face"
-    "🤥|lying face"
-    "🤦|facepalm"
-    "🤧|sneezing face"
-    "🤨|face with raised eyebrow"
-    "🤩|star struck"
-    "🤪|zany face"
-    "🤫|shushing face"
-    "🤬|face with symbols on mouth"
-    "🤭|face with hand over mouth"
-    "🤮|face vomiting"
-    "🤯|exploding head"
-    
-    # Emoji hands
-    "👆|backhand index pointing up"
-    "👇|backhand index pointing down"
-    "👈|backhand index pointing left"
-    "👉|backhand index pointing right"
-    "👊|oncoming fist"
-    "👋|waving hand"
-    "👌|ok hand"
-    "👍|thumbs up"
-    "👎|thumbs down"
-    "👏|clapping hands"
-    "👐|open hands"
-    "👑|crown"
-    "👒|hat"
-    "👓|glasses"
-    "👔|necktie"
-    "👕|shirt"
-    "👖|jeans"
-    "👗|dress"
-    "👘|kimono"
-    "👙|bikini"
-    "👚|blouse"
-    "👛|purse"
-    "👜|handbag"
-    "👝|clutch bag"
-    "👞|shoe"
-    "👟|running shoe"
-    "👠|high heeled shoe"
-    "👡|sandal"
-    "👢|boot"
-    "👣|footprints"
-    "👤|bust in silhouette"
-    "👥|busts in silhouette"
-    "✊|raised fist"
-    "✋|raised hand"
-    "✌|victory hand"
-    "✍|writing hand"
-    
-    # Emoji objects
-    "📁|folder"
-    "📂|open folder"
-    "📃|page with curl"
-    "📄|page facing up"
-    "📅|calendar"
-    "📆|tear off calendar"
-    "📇|card index"
-    "📈|chart increasing"
-    "📉|chart decreasing"
-    "📊|bar chart"
-    "📋|clipboard"
-    "📌|pushpin"
-    "📍|round pushpin"
-    "📎|paperclip"
-    "📏|straight ruler"
-    "📐|triangular ruler"
-    "📑|bookmark tabs"
-    "📒|ledger"
-    "📓|notebook"
-    "📔|notebook decorative"
-    "📕|closed book"
-    "📖|open book"
-    "📗|green book"
-    "📘|blue book"
-    "📙|orange book"
-    "📚|books"
-    "📛|name badge"
-    "📜|scroll"
-    "📝|memo"
-    "📞|telephone receiver"
-    "📟|pager"
-    "📠|fax machine"
-    "📡|satellite antenna"
-    "📢|loudspeaker"
-    "📣|megaphone"
-    "📤|outbox tray"
-    "📥|inbox tray"
-    "📦|package"
-    "📧|email"
-    "📨|incoming envelope"
-    "📩|envelope with arrow"
-    "📪|closed mailbox"
-    "📫|mailbox"
-    "📬|open mailbox"
-    "📭|open mailbox no mail"
-    "📮|postbox"
-    "📯|postal horn"
-    "📰|newspaper"
-    "📱|mobile phone"
-    "📲|mobile phone arrow"
-    "📳|vibration mode"
-    "📴|mobile phone off"
-    "📵|no mobile phones"
-    "📶|signal bars"
-    "📷|camera"
-    "📸|camera with flash"
-    "📹|video camera"
-    "📺|television"
-    "📻|radio"
-    "📼|videocassette"
-    "🔋|battery"
-    "🔌|electric plug"
-    "🔍|magnifying glass left"
-    "🔎|magnifying glass right"
-    "🔏|locked with pen"
-    "🔐|locked with key"
-    "🔑|key"
-    "🔒|locked"
-    "🔓|unlocked"
-    "🔔|bell"
-    "🔕|bell with slash"
-    "🔖|bookmark"
-    "🔗|link"
-    "🔘|radio button"
-    "🔙|back arrow"
-    "🔚|end arrow"
-    "🔛|on arrow"
-    "🔜|soon arrow"
-    "🔝|top arrow"
-    "🔞|no one under eighteen"
-    "🔟|ten"
-    "🔠|input latin uppercase"
-    "🔡|input latin lowercase"
-    "🔢|input numbers"
-    "🔣|input symbols"
-    "🔤|input latin letters"
-    "🔥|fire"
-    "🔦|flashlight"
-    "🔧|wrench"
-    "🔨|hammer"
-    "🔩|nut and bolt"
-    "🔪|kitchen knife"
-    "🔫|water pistol"
-    "🔬|microscope"
-    "🔭|telescope"
-    "🔮|crystal ball"
-    "🔯|dotted six pointed star"
-    "🔰|japanese beginner"
-    "🔱|trident emblem"
-    "🔲|black square button"
-    "🔳|white square button"
-    "🔴|red circle"
-    "🔵|blue circle"
-    "🔶|large orange diamond"
-    "🔷|large blue diamond"
-    "🔸|small orange diamond"
-    "🔹|small blue diamond"
-    "🔺|red triangle up"
-    "🔻|red triangle down"
-    "🔼|up button"
-    "🔽|down button"
-    
-    # Emoji symbols
-    "🕐|one oclock"
-    "🕑|two oclock"
-    "🕒|three oclock"
-    "🕓|four oclock"
-    "🕔|five oclock"
-    "🕕|six oclock"
-    "🕖|seven oclock"
-    "🕗|eight oclock"
-    "🕘|nine oclock"
-    "🕙|ten oclock"
-    "🕚|eleven oclock"
-    "🕛|twelve oclock"
-    "🖥|desktop computer"
-    "🖨|printer"
-    "🖱|mouse"
-    "🖲|trackball"
-    "🖼|framed picture"
-    "🗂|card index dividers"
-    "🗃|card file box"
-    "🗄|file cabinet"
-    "🗑|wastebasket"
-    "🗒|spiral notepad"
-    "🗓|spiral calendar"
-    "🗜|clamp"
-    "🗝|key old"
-    "🗞|rolled up newspaper"
-    "🗡|dagger"
-    "🗣|speaking head"
-    "🗨|left speech bubble"
-    "🗩|left thought bubble"
-    "🗯|anger bubble"
-    "🚀|rocket"
-    "🚁|helicopter"
-    "🚂|locomotive"
-    "🚃|railway car"
-    "🚄|high speed train"
-    "🚅|bullet train"
-    "🚆|train"
-    "🚇|metro"
-    "🚈|light rail"
-    "🚉|station"
-    "🚊|tram"
-    "🚋|tram car"
-    "🚌|bus"
-    "🚍|oncoming bus"
-    "🚎|trolleybus"
-    "🚏|bus stop"
-    "🚐|minibus"
-    "🚑|ambulance"
-    "🚒|fire engine"
-    "🚓|police car"
-    "🚔|oncoming police car"
-    "🚕|taxi"
-    "🚖|oncoming taxi"
-    "🚗|automobile"
-    "🚘|oncoming automobile"
-    "🚙|sport utility vehicle"
-    "🚚|delivery truck"
-    "🚛|articulated lorry"
-    "🚜|tractor"
-    "🚝|monorail"
-    "🚞|mountain railway"
-    "🚟|suspension railway"
-    "🚠|mountain cableway"
-    "🚡|aerial tramway"
-    "🚢|ship"
-    "🚣|rowboat"
-    "🚤|speedboat"
-    "🚥|horizontal traffic light"
-    "🚦|vertical traffic light"
-    "🚧|construction"
-    "🚨|police light"
-    "🚩|triangular flag"
-    "🚪|door"
-    "🚫|prohibited"
-    "🚬|cigarette"
-    "🚭|no smoking"
-    "🚮|litter in bin"
-    "🚯|no littering"
-    "🚰|potable water"
-    "🚱|non potable water"
-    "🚲|bicycle"
-    "🚳|no bicycles"
-    "🚴|person biking"
-    "🚵|person mountain biking"
-    "🚶|person walking"
-    "🚷|no pedestrians"
-    "🚸|children crossing"
-    "🚹|mens room"
-    "🚺|womens room"
-    "🚻|restroom"
-    "🚼|baby symbol"
-    "🚽|toilet"
-    "🚾|water closet"
-    "🚿|shower"
-    "🛀|person taking bath"
-    "🛁|bathtub"
-    "🛂|passport control"
-    "🛃|customs"
-    "🛄|baggage claim"
-    "🛅|left luggage"
-    "🛆|triangle with rounded corners"
-    
-    # Animals and nature
-    "🐀|rat"
-    "🐁|mouse"
-    "🐂|ox"
-    "🐃|water buffalo"
-    "🐄|cow"
-    "🐅|tiger"
-    "🐆|leopard"
-    "🐇|rabbit"
-    "🐈|cat"
-    "🐉|dragon"
-    "🐊|crocodile"
-    "🐋|whale"
-    "🐌|snail"
-    "🐍|snake"
-    "🐎|horse"
-    "🐏|ram"
-    "🐐|goat"
-    "🐑|sheep"
-    "🐒|monkey"
-    "🐓|rooster"
-    "🐔|chicken"
-    "🐕|dog"
-    "🐖|pig"
-    "🐗|boar"
-    "🐘|elephant"
-    "🐙|octopus"
-    "🐚|shell"
-    "🐛|bug"
-    "🐜|ant"
-    "🐝|honeybee"
-    "🐞|lady beetle"
-    "🐟|fish"
-    "🐠|tropical fish"
-    "🐡|blowfish"
-    "🐢|turtle"
-    "🐣|hatching chick"
-    "🐤|baby chick"
-    "🐥|front facing baby chick"
-    "🐦|bird"
-    "🐧|penguin"
-    "🐨|koala"
-    "🐩|poodle"
-    "🐪|camel"
-    "🐫|two hump camel"
-    "🐬|dolphin"
-    "🐭|mouse face"
-    "🐮|cow face"
-    "🐯|tiger face"
-    "🐰|rabbit face"
-    "🐱|cat face"
-    "🐲|dragon face"
-    "🐳|spouting whale"
-    "🐴|horse face"
-    "🐵|monkey face"
-    "🐶|dog face"
-    "🐷|pig face"
-    "🐸|frog"
-    "🐹|hamster"
-    "🐺|wolf"
-    "🐻|bear"
-    "🐼|panda"
-    "🐽|pig nose"
-    "🐾|paw prints"
-    "🌀|cyclone"
-    "🌁|foggy"
-    "🌂|closed umbrella"
-    "🌃|night with stars"
-    "🌄|sunrise over mountains"
-    "🌅|sunrise"
-    "🌆|cityscape at dusk"
-    "🌇|sunset"
-    "🌈|rainbow"
-    "🌉|bridge at night"
-    "🌊|water wave"
-    "🌋|volcano"
-    "🌌|milky way"
-    "🌍|earth africa"
-    "🌎|earth americas"
-    "🌏|earth asia"
-    "🌐|globe with meridians"
-    "🌑|new moon"
-    "🌒|waxing crescent moon"
-    "🌓|first quarter moon"
-    "🌔|waxing gibbous moon"
-    "🌕|full moon"
-    "🌖|waning gibbous moon"
-    "🌗|last quarter moon"
-    "🌘|waning crescent moon"
-    "🌙|crescent moon"
-    "🌚|new moon face"
-    "🌛|first quarter moon face"
-    "🌜|last quarter moon face"
-    "🌝|full moon face"
-    "🌞|sun with face"
-    "🌟|glowing star"
-    "🌠|shooting star"
-    "🌡|thermometer"
-    "🌤|sun behind small cloud"
-    "🌥|sun behind large cloud"
-    "🌦|sun behind rain cloud"
-    "🌧|cloud with rain"
-    "🌨|cloud with snow"
-    "🌩|cloud with lightning"
-    "🌪|tornado"
-    "🌫|fog"
-    "🌬|wind face"
-    "🌭|hot dog"
-    "🌮|taco"
-    "🌯|burrito"
-    "🌰|chestnut"
-    "🌱|seedling"
-    "🌲|evergreen tree"
-    "🌳|deciduous tree"
-    "🌴|palm tree"
-    "🌵|cactus"
-    "🌶|hot pepper"
-    "🌷|tulip"
-    "🌸|cherry blossom"
-    "🌹|rose"
-    "🌺|hibiscus"
-    "🌻|sunflower"
-    "🌼|blossom"
-    "🌽|ear of corn"
-    "🌾|sheaf of rice"
-    "🌿|herb"
-    "🍀|four leaf clover"
-    "🍁|maple leaf"
-    "🍂|fallen leaf"
-    "🍃|leaf fluttering"
-    "🍄|mushroom"
-    
-    # Food and drink
-    "🍅|tomato"
-    "🍆|eggplant"
-    "🍇|grapes"
-    "🍈|melon"
-    "🍉|watermelon"
-    "🍊|tangerine"
-    "🍋|lemon"
-    "🍌|banana"
-    "🍍|pineapple"
-    "🍎|red apple"
-    "🍏|green apple"
-    "🍐|pear"
-    "🍑|peach"
-    "🍒|cherries"
-    "🍓|strawberry"
-    "🍔|hamburger"
-    "🍕|pizza"
-    "🍖|meat on bone"
-    "🍗|poultry leg"
-    "🍘|rice cracker"
-    "🍙|rice ball"
-    "🍚|cooked rice"
-    "🍛|curry rice"
-    "🍜|steaming bowl"
-    "🍝|spaghetti"
-    "🍞|bread"
-    "🍟|french fries"
-    "🍠|roasted sweet potato"
-    "🍡|dango"
-    "🍢|oden"
-    "🍣|sushi"
-    "🍤|fried shrimp"
-    "🍥|fish cake"
-    "🍦|soft ice cream"
-    "🍧|shaved ice"
-    "🍨|ice cream"
-    "🍩|doughnut"
-    "🍪|cookie"
-    "🍫|chocolate bar"
-    "🍬|candy"
-    "🍭|lollipop"
-    "🍮|custard"
-    "🍯|honey pot"
-    "🍰|shortcake"
-    "🍱|bento box"
-    "🍲|pot of food"
-    "🍳|cooking"
-    "🍴|fork and knife"
-    "🍵|teacup without handle"
-    "🍶|sake"
-    "🍷|wine glass"
-    "🍸|cocktail glass"
-    "🍹|tropical drink"
-    "🍺|beer mug"
-    "🍻|clinking beer mugs"
-    "🍼|baby bottle"
-    "🍽|fork knife plate"
-    "🍾|bottle with cork"
-    "🍿|popcorn"
-    
-    # Misc emoji
-    "⚽|soccer ball"
-    "⚾|baseball"
-    "⛄|snowman"
-    "⛅|sun behind cloud"
-    "⛈|cloud with lightning and rain"
-    "⛏|pick"
-    "⛑|rescue helmet"
-    "⛓|chains"
-    "⛔|no entry"
-    "⛩|shinto shrine"
-    "⛪|church"
-    "⛰|mountain"
-    "⛱|umbrella on ground"
-    "⛲|fountain"
-    "⛳|flag in hole"
-    "⛴|ferry"
-    "⛵|sailboat"
-    "⛷|skier"
-    "⛸|ice skate"
-    "⛹|person bouncing ball"
-    "⛺|tent"
-    "⛽|fuel pump"
-    "✈|airplane"
-    "✉|envelope"
-    "✏|pencil"
-    "✒|black nib"
-    "⚓|anchor"
-    "⚔|crossed swords"
-    "⚕|medical symbol"
-    "⚖|balance scale"
-    "⚗|alembic"
-    "⚙|gear"
-    "⚛|atom symbol"
-    "⚜|fleur de lis"
-    "⚝|outlined star"
-    "⚞|three lines converging left"
-    "⚟|three lines converging right"
-    "⚠|warning sign"
-    "⚡|high voltage"
-    "⚢|doubled female sign"
-    "⚣|doubled male sign"
-    "⚤|interlocked female male"
-    "⚥|male with stroke female"
-    "⚦|male with stroke"
-    "⚧|transgender symbol"
-    "⚨|vertical male with stroke"
-    "⚩|horizontal male with stroke"
-    "⚪|white circle"
-    "⚫|black circle"
-    "⚬|medium small white circle"
-    "⚭|marriage symbol"
-    "⚮|divorce symbol"
-    "⚯|unmarried partnership"
-    "♨|hot springs"
-    "♻|recycling symbol"
-    "♼|recycled paper"
-    "♽|partially recycled paper"
-    "⚰|coffin"
-    "⚱|funeral urn"
-)
+set -euo pipefail
 
-# Format for rofi display: "character description"
-# The description comes after the character for easy searching
-formatted_list=""
-for item in "${unicode_chars[@]}"; do
-    # Split by pipe character
-    char="${item%%|*}"      # Everything before the |
-    desc="${item##*|}"      # Everything after the |
-    formatted_list+="$char $desc"$'\n'
-done
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
+cache_file="$cache_dir/rofi-unicode-picker.txt"
 
-# Show rofi and get selection
-# -i: case insensitive
-# -p: prompt text
-# -dmenu: use dmenu mode
-# -no-custom: don't allow custom input
-selected=$(echo -n "$formatted_list" | rofi -i -dmenu -p "Unicode" -no-custom)
+fallback_list=$'😀 grinning face emoji smileys\n😂 face with tears of joy emoji smileys\n❤️ red heart emoji heart\n👍 thumbs up emoji hand\n🔥 fire emoji nature\n✨ sparkles emoji symbols\n🎉 party popper emoji celebration\n🚀 rocket emoji travel\n← left arrow unicode symbol\n→ right arrow unicode symbol\n∞ infinity unicode math symbol\n★ black star unicode symbol\n♥ black heart suit unicode symbol\n☀ black sun with rays unicode symbol\n⚡ high voltage sign unicode symbol\n'
 
-# Exit if nothing selected (user pressed Escape)
+generate_emoji_list() {
+    python3 - <<'PY'
+import os
+import re
+import sys
+import unicodedata
+from pathlib import Path
+
+
+def find_emoji_labels():
+    candidates = sorted(Path("/usr/share/emacs").glob("*/lisp/international/emoji-labels.el"))
+    return candidates[0] if candidates else None
+
+
+def tokenize(source):
+    tokens = []
+    i = 0
+    length = len(source)
+    while i < length:
+        char = source[i]
+        if char.isspace():
+            i += 1
+            continue
+        if char == ";":
+            while i < length and source[i] != "\n":
+                i += 1
+            continue
+        if char in "()":
+            tokens.append(char)
+            i += 1
+            continue
+        if char in ("'", "`"):
+            i += 1
+            continue
+        if char == '"':
+            i += 1
+            chunk = []
+            while i < length:
+                char = source[i]
+                if char == "\\" and i + 1 < length:
+                    chunk.append(source[i + 1])
+                    i += 2
+                    continue
+                if char == '"':
+                    i += 1
+                    break
+                chunk.append(char)
+                i += 1
+            tokens.append("".join(chunk))
+            continue
+
+        start = i
+        while i < length and not source[i].isspace() and source[i] not in "()'`\";":
+            i += 1
+        tokens.append(source[start:i])
+    return tokens
+
+
+def parse_expr(tokens, index=0):
+    token = tokens[index]
+    if token == "(":
+        index += 1
+        items = []
+        while tokens[index] != ")":
+            value, index = parse_expr(tokens, index)
+            items.append(value)
+        return items, index + 1
+    return token, index + 1
+
+
+def looks_like_emoji(text):
+    return any(ord(char) > 127 for char in text) or text in set("#*0123456789")
+
+
+def normalize_tag(text):
+    return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+
+
+def emoji_description(emoji, path):
+    stripped = [char for char in emoji if ord(char) not in (0x200D, 0xFE0F, 0x20E3)]
+    pieces = []
+
+    for char in stripped:
+        try:
+            name = unicodedata.name(char).lower()
+        except ValueError:
+            continue
+        pieces.append(name)
+
+    description = " ".join(pieces)
+    if not description:
+        description = " ".join(path) if path else "emoji"
+
+    tags = " ".join(normalize_tag(part) for part in path if part)
+    if tags and tags not in description:
+        description = f"{description} {tags}".strip()
+    return re.sub(r"\s+", " ", description).strip()
+
+
+def flatten(node, path, results, seen):
+    if isinstance(node, str):
+        if looks_like_emoji(node) and node not in seen:
+            seen.add(node)
+            results.append((node, emoji_description(node, path)))
+        return
+
+    if not isinstance(node, list) or not node:
+        return
+
+    head = node[0]
+    next_path = path
+    if isinstance(head, str) and not looks_like_emoji(head):
+        next_path = path + [normalize_tag(head)]
+        children = node[1:]
+    else:
+        children = node
+
+    for child in children:
+        flatten(child, next_path, results, seen)
+
+
+def add_unicode_symbols(results, seen):
+    category_labels = {
+        "Sm": "math symbol",
+        "Sc": "currency symbol",
+        "Sk": "modifier symbol",
+        "So": "other symbol",
+    }
+
+    for codepoint in range(0x20, sys.maxunicode + 1):
+        char = chr(codepoint)
+        if char in seen or not char.isprintable():
+            continue
+
+        category = unicodedata.category(char)
+        if not category.startswith("S"):
+            continue
+
+        try:
+            name = unicodedata.name(char).lower()
+        except ValueError:
+            continue
+
+        seen.add(char)
+        label = category_labels.get(category, "symbol")
+        results.append((char, f"{name} unicode {label}"))
+
+
+emoji_labels = find_emoji_labels()
+if emoji_labels is None:
+    sys.exit(1)
+
+source = emoji_labels.read_text(encoding="utf-8")
+match = re.search(r"\(defconst\s+emoji--labels\s+'", source)
+if match is None:
+    sys.exit(1)
+
+start = source.find("(", match.end())
+if start == -1:
+    sys.exit(1)
+
+tree, _ = parse_expr(tokenize(source[start:]))
+items = []
+seen = set()
+flatten(tree, [], items, seen)
+add_unicode_symbols(items, seen)
+
+for emoji, description in items:
+    print(f"{emoji} {description}")
+PY
+}
+
+get_formatted_list() {
+    mkdir -p "$cache_dir"
+
+    if [ -s "$cache_file" ]; then
+        cat "$cache_file"
+        return
+    fi
+
+    if generate_emoji_list >"$cache_file".tmp 2>/dev/null; then
+        mv "$cache_file".tmp "$cache_file"
+        cat "$cache_file"
+        return
+    fi
+
+    rm -f "$cache_file".tmp
+    printf '%s' "$fallback_list"
+}
+
+formatted_list="$(get_formatted_list)"
+
+selected=$(printf '%s' "$formatted_list" | rofi -i -dmenu -p "Unicode" -no-custom)
+
 if [ -z "$selected" ]; then
     exit 0
 fi
 
-# Extract just the character (first field)
 char="${selected%% *}"
-
-# Copy to clipboard using wl-clipboard (Wayland)
-# wl-copy is the Wayland equivalent of xclip
-echo -n "$char" | wl-copy
-
-# Optional: Show notification that character was copied
-# Requires a notification daemon like mako or dunst
+printf '%s' "$char" | wl-copy
 notify-send -a "Emoji Picker" "Unicode Picker" "Copied: $char" -t 2000
-
-# Optional: Also type the character at cursor position
-# This uses wtype (Wayland equivalent of xdotool)
-# Uncomment the line below if you want this behavior
-# wtype "$char"
