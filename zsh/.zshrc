@@ -6,10 +6,25 @@
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export VISUAL="nvim"
-export SSH_AUTH_SOCK="/run/user/$UID/gcr/ssh"
+[[ -S "/run/user/$UID/gcr/ssh" ]] && export SSH_AUTH_SOCK="/run/user/$UID/gcr/ssh"
 # export SUDO_ASKPASS="/usr/bin/ksshaskpass"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
+
+# --- PATH ---
+# Prepend to PATH without duplicates (safe against re-sourcing)
+path_prepend() {
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) export PATH="$1:$PATH" ;;
+  esac
+}
+
+export PNPM_HOME="$HOME/.local/share/pnpm"
+
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/.cargo/bin"
+path_prepend "$HOME/.npm-global/bin"
+path_prepend "$PNPM_HOME"
+path_prepend "$HOME/repos/llama.cpp/build/bin"
 
 # --- Oh My Zsh Plugins ---
 plugins=(git colorize colored-man-pages command-not-found man thefuck wallust zsh-autosuggestions zsh-syntax-highlighting)
@@ -21,7 +36,7 @@ bindkey '^F' autosuggest-accept
 fpath=("$HOME/.zfunc" $fpath)
 
 # --- Source Oh My Zsh ---
-source $ZSH/oh-my-zsh.sh
+[[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
 # --- Aliases ---
 alias zshconfig="$EDITOR ~/.zshrc"
@@ -32,6 +47,7 @@ alias clr="clear"
 alias nb="newsboat -x open"
 alias cdnt="cd ~/Notes"
 alias newmatrix='neo-matrix -C ~/.config/neo/colors -m "Fuck Off"'
+alias sysinfo='macchina'
 
 # --- Vi Mode ---
 bindkey -v
@@ -94,7 +110,7 @@ precmd() {
 
   # Python venv indicator
   if [[ -n $VIRTUAL_ENV ]]; then
-    VENV_INFO="%F{yellow}($(basename $VIRTUAL_ENV))%f "
+    VENV_INFO="%F{yellow}($(basename -- "$VIRTUAL_ENV"))%f "
   else
     VENV_INFO=""
   fi
@@ -161,7 +177,6 @@ if [[ -f ~/.cache/wallust/colors.sh ]]; then
     source ~/.cache/wallust/colors.sh
     # Add color options only for commands that support hex values
     # Note: fzf 0.68 requires separate --color flags (no comma-separated values)
-    # Uncomment the lines below if your fzf supports hex colors
     export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS
     --color=bg:$background
     --color=fg:$foreground
@@ -173,7 +188,7 @@ if [[ -f ~/.cache/wallust/colors.sh ]]; then
 fi
 
 # Source fzf keybindings and fuzzy completion
-source <(fzf --zsh)
+command -v fzf >/dev/null 2>&1 && source <(fzf --zsh)
 
 # FZF function for editing files
 fe() { fzf -m --preview='bat --color=always {}' --bind 'enter:become(nvim {+})'; }
@@ -183,9 +198,7 @@ ex7z() {
     7z x "$1" -o"${1%.7z}"
 }
 
-# ----------------------------
-# AIChat shell integration
-# ----------------------------
+# --- AIChat shell integration ---
 SCRIPTS_DIR="$HOME/.config/aichat/shell-integrations-scripts"
 
 # Optional: bind hotkey for AI-assisted commands
@@ -196,15 +209,8 @@ export AICHAT_HOTKEY='^[e'   # Alt+e
 
 # Source interactive AI hotkey integration
 [[ -f "$SCRIPTS_DIR/completions.sh" ]] && source "$SCRIPTS_DIR/completions.sh"
-export PATH="$HOME/.npm-global/bin:$PATH"
 
-# pnpm
-export PNPM_HOME="/home/juju/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
+# Override any 'journal' alias defined by aichat scripts above
 unalias journal 2>/dev/null
 alias journal='aichat --agent journal'
 
@@ -219,12 +225,8 @@ function llm-approve() {
   fi
 }
 
-# llama.cpp
-export PATH="$HOME/repos/llama.cpp/build/bin:$PATH"
+# --- OpenClaw Completion ---
+[[ -f "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"
 
-# Optional system info
-alias sysinfo='macchina'
-macchina
-
-# OpenClaw Completion
-source "/home/juju/.openclaw/completions/openclaw.zsh"
+# --- System info greeting ---
+command -v macchina >/dev/null 2>&1 && macchina
