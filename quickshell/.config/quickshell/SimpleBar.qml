@@ -60,16 +60,32 @@ Scope {
           SimpleWorkspace {}
         }
 
-        SimpleClock {
-          id: centerClock
+        Row {
           anchors.horizontalCenter: parent.horizontalCenter
           anchors.verticalCenter: parent.verticalCenter
-          pinned: barWindow.localPinned
-          onClicked: {
-            if (barWindow.localPinned)
-              scope.pinnedScreen = null
-            else
-              scope.pinnedScreen = barWindow.modelData
+          spacing: 8
+
+          CavaBars {
+            anchors.verticalCenter: parent.verticalCenter
+            mirrored: true
+            channel: "left"
+          }
+
+          SimpleClock {
+            id: centerClock
+            anchors.verticalCenter: parent.verticalCenter
+            pinned: barWindow.localPinned
+            onClicked: {
+              if (barWindow.localPinned)
+                scope.pinnedScreen = null
+              else
+                scope.pinnedScreen = barWindow.modelData
+            }
+          }
+
+          CavaBars {
+            anchors.verticalCenter: parent.verticalCenter
+            channel: "right"
           }
         }
 
