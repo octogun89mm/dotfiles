@@ -22,8 +22,9 @@ The main bar work has moved to `quickshell`, and `eww` is now retained mostly as
 The Quickshell config is modular and currently includes:
 
 - multi-monitor bar windows
-- Hyprland workspace chips, including special workspaces
+- Hyprland workspace chips, including special workspaces and a custom animated focused-workspace indicator
 - centered clock popup with quick actions, weather, and system metrics
+- compact stereo spectrogram widgets flanking the centered clock
 - date-triggered calendar popup with pin support
 - clipboard history panel with image/text preview, filtering, and keyboard navigation
 - keybind overlay showing all Hyprland bindings on a visual keyboard layout
