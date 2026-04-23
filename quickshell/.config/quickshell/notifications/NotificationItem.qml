@@ -126,7 +126,7 @@ Rectangle {
           text: root.notification ? (root.notification.appName || root.notification.desktopEntry || "APP") : "APP"
           elide: Text.ElideRight
           color: Wallust.base05
-          font.family: "Roboto Mono"
+          font.family: "Iosevka"
           font.pixelSize: 10
           font.bold: true
         }
@@ -137,7 +137,7 @@ Rectangle {
         text: root.notification ? root.notification.summary : ""
         elide: Text.ElideRight
         color: Wallust.base05
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: compact ? 11 : 12
         font.bold: true
       }
@@ -146,7 +146,7 @@ Rectangle {
         width: parent.width
         text: root.relativeTime()
         color: Wallust.base04
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
       }
@@ -158,7 +158,7 @@ Rectangle {
         textFormat: Text.RichText
         text: root.notification ? (root.notification.body || "") : ""
         color: Wallust.base04
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
       }
 
@@ -184,7 +184,7 @@ Rectangle {
               anchors.centerIn: parent
               text: modelData.text
               color: Wallust.base05
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 10
               font.bold: true
             }

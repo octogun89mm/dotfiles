@@ -12,7 +12,7 @@
     show_indicators = false
     frame_width = 2
     separator_color = auto
-    font = "RobotoMono 10"
+    font = "Iosevka 10"
     corner_radius = 0
     history_length = 100
     markup = full

@@ -93,29 +93,57 @@ Rectangle {
     visible: root.compact
     text: root.normalizedLayout(root.layout).slice(0, 3)
     color: Wallust.base00
-    font.family: "Roboto Mono"
+    font.family: "Iosevka"
     font.pixelSize: 11
     font.bold: true
   }
 
-  Image {
-    id: iconImage
+  Item {
+    id: iconWrap
     anchors.centerIn: parent
     width: 16
     height: 16
-    source: root.iconSource(root.layout)
-    fillMode: Image.PreserveAspectFit
-    smooth: true
     visible: !root.compact
+
+    property real swirl: 0
+
+    transform: Rotation {
+      origin.x: iconWrap.width / 2
+      origin.y: iconWrap.height / 2
+      angle: iconWrap.swirl
+    }
+
+    Image {
+      id: iconImage
+      anchors.fill: parent
+      source: root.iconSource(root.layout)
+      fillMode: Image.PreserveAspectFit
+      smooth: true
+    }
+
+    MultiEffect {
+      anchors.fill: iconImage
+      source: iconImage
+      colorization: 1.0
+      colorizationColor: root.borderless ? Wallust.base05 : Wallust.background
+    }
+
+    SequentialAnimation {
+      id: swirlAnim
+      NumberAnimation {
+        target: iconWrap
+        property: "swirl"
+        from: 0
+        to: 360
+        duration: 520
+        easing.type: Easing.OutBack
+        easing.overshoot: 2.2
+      }
+      ScriptAction { script: iconWrap.swirl = 0 }
+    }
   }
 
-  MultiEffect {
-    visible: !root.compact
-    anchors.fill: iconImage
-    source: iconImage
-    colorization: 1.0
-    colorizationColor: root.borderless ? Wallust.base05 : Wallust.background
-  }
+  onLayoutChanged: swirlAnim.restart()
 
   MouseArea {
     anchors.fill: parent

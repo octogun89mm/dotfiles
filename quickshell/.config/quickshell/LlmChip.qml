@@ -14,7 +14,7 @@ Rectangle {
     anchors.centerIn: parent
     text: LlmState.modelAlias + " :" + LlmState.port
     color: Wallust.base05
-    font.family: "Roboto Mono"
+    font.family: "Iosevka"
     font.pixelSize: 11
     font.bold: true
   }

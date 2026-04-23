@@ -10,17 +10,38 @@ Item {
 
   signal clicked
 
-  implicitWidth: clockLabel.implicitWidth
+  implicitWidth: clockLabel.implicitWidth + 16
   implicitHeight: 20
+
+  Rectangle {
+    id: pinBox
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
+    height: parent.height
+    width: root.pinned ? parent.width : 0
+    color: Wallust.base08
+
+    Behavior on width {
+      NumberAnimation {
+        duration: 520
+        easing.type: Easing.OutBack
+        easing.overshoot: 3.5
+      }
+    }
+  }
 
   Text {
     id: clockLabel
     anchors.centerIn: parent
     text: Qt.formatTime(clock.date, "hh:mm AP")
-    color: root.pinned ? Wallust.accent : Wallust.base05
-    font.family: "Roboto Mono"
-    font.pixelSize: 13
+    color: root.pinned ? Wallust.background : Wallust.base05
+    font.family: "Iosevka"
+    font.pixelSize: 14
     font.bold: true
+
+    Behavior on color {
+      ColorAnimation { duration: 320; easing.type: Easing.InOutSine }
+    }
   }
 
   SystemClock {

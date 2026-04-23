@@ -78,7 +78,7 @@ Scope {
               anchors.verticalCenter: parent.verticalCenter
               text: "NOTIFICATIONS"
               color: Wallust.base04
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 10
               font.bold: true
             }
@@ -99,7 +99,7 @@ Scope {
                 anchors.centerIn: parent
                 text: Notif.NotificationServer.unreadCount
                 color: Wallust.base05
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 10
                 font.bold: true
               }
@@ -145,7 +145,7 @@ Scope {
                 anchors.centerIn: parent
                 text: "CLEAR ALL"
                 color: Wallust.base05
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 10
                 font.bold: true
               }
@@ -206,7 +206,7 @@ Scope {
               Text {
                 text: "NO NOTIFICATIONS"
                 color: Wallust.base03
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 11
                 font.bold: true
               }

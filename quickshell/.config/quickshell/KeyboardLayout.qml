@@ -15,7 +15,7 @@ Rectangle {
     anchors.centerIn: parent
     text: LanguageState.layout
     color: Wallust.accent
-    font.family: "Roboto Mono"
+    font.family: "Iosevka"
     font.pixelSize: 12
     font.bold: true
   }

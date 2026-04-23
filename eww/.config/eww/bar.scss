@@ -5,7 +5,7 @@
 // Bar container
 .bar {
   background-color: $bg;
-  font-family: "Roboto Mono", monospace;
+  font-family: "Iosevka", monospace;
   font-size: 9pt;
   margin: 5px 10px 0px 10px;
 }
@@ -135,7 +135,7 @@
 .calendar-widget {
   color: $fg;
   background-color: transparent;
-  font-family: "Roboto Mono", monospace;
+  font-family: "Iosevka", monospace;
   font-size: 10pt;
   min-width: 260px;
   padding: 4px 6px 2px 6px;
@@ -206,7 +206,7 @@
 
 .popup-value {
   color: $c8;
-  font-family: "Roboto Mono", monospace;
+  font-family: "Iosevka", monospace;
 }
 
 // Popup columns (side by side)
@@ -279,7 +279,7 @@
   color: $fg;
   font-weight: bold;
   font-size: 9pt;
-  font-family: "Roboto Mono", monospace;
+  font-family: "Iosevka", monospace;
 }
 
 .popup-weather-detail-label {

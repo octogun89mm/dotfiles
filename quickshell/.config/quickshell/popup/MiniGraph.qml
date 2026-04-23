@@ -18,7 +18,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     text: root.label
     color: Wallust.base04
-    font.family: "Roboto Mono"
+    font.family: "Iosevka"
     font.pixelSize: 8
     font.bold: true
   }

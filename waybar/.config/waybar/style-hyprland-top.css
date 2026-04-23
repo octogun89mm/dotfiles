@@ -4,7 +4,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: Roboto Mono;
+    font-family: Iosevka;
     font-size: 9pt;
     color: @fg;
     padding: 0px;
@@ -90,7 +90,7 @@ tooltip {
 }
 
 #workspaces button label {
-  font-family: "Roboto Mono";
+  font-family: "Iosevka";
   font-size: 12pt;
   font-weight: bold;
 }

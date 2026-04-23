@@ -18,7 +18,7 @@ Rectangle {
     text: MediaState.displayText
     elide: Text.ElideRight
     color: MediaState.playing ? Wallust.base05 : Wallust.base03
-    font.family: "Roboto Mono"
+    font.family: "Iosevka"
     font.pixelSize: 11
     font.bold: true
   }

@@ -127,7 +127,7 @@ Scope {
               anchors.verticalCenter: parent.verticalCenter
               text: "CLIPBOARD"
               color: Wallust.base04
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 10
               font.bold: true
             }
@@ -147,7 +147,7 @@ Scope {
                 anchors.centerIn: parent
                 text: Clipboard.ClipboardState.entries.count
                 color: Wallust.base05
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 10
                 font.bold: true
               }
@@ -167,7 +167,7 @@ Scope {
                 anchors.centerIn: parent
                 text: "WIPE"
                 color: Wallust.base05
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 10
                 font.bold: true
               }
@@ -192,7 +192,7 @@ Scope {
               anchors.fill: parent
               anchors.margins: 8
               color: Wallust.base05
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 11
               clip: true
               selectByMouse: true
@@ -208,7 +208,7 @@ Scope {
               visible: filterInput.text === "" && !filterInput.activeFocus
               text: "FILTER"
               color: Wallust.base03
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 11
             }
           }
@@ -249,7 +249,7 @@ Scope {
               Text {
                 text: "CLIPBOARD EMPTY"
                 color: Wallust.base03
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 11
                 font.bold: true
               }

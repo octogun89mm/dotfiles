@@ -4,6 +4,7 @@
 if [ -z "$1" ]; then
     echo "Shutdown"
     echo "Reboot"
+    echo "Suspend"
     echo "Logout"
     exit 0
 fi
@@ -16,8 +17,11 @@ case "$1" in
     "Reboot")
         systemctl reboot
         ;;
+    "Suspend")
+        systemctl suspend
+        ;;
     "Logout")
-        swaymsg exit
+        hyprctl dispatch exit
         ;;
     *)
         exit 1

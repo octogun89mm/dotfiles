@@ -160,7 +160,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         text: Qt.locale().monthName(root.viewMonth, Locale.LongFormat) + " " + root.viewYear
         color: Wallust.base05
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 12
         font.bold: true
       }
@@ -176,7 +176,7 @@ Rectangle {
           anchors.centerIn: parent
           text: "TODAY"
           color: Wallust.base05
-          font.family: "Roboto Mono"
+          font.family: "Iosevka"
           font.pixelSize: 9
           font.bold: true
         }
@@ -220,7 +220,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         text: "Wk"
         color: Wallust.base03
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
       }
@@ -236,7 +236,7 @@ Rectangle {
           verticalAlignment: Text.AlignVCenter
           text: modelData
           color: Wallust.base03
-          font.family: "Roboto Mono"
+          font.family: "Iosevka"
           font.pixelSize: 10
           font.bold: true
         }
@@ -273,7 +273,7 @@ Rectangle {
               verticalAlignment: Text.AlignVCenter
               text: root.isoWeekNumber(parent.parent.rowDate)
               color: Wallust.base03
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 10
               font.bold: true
             }
@@ -303,7 +303,7 @@ Rectangle {
                   anchors.centerIn: parent
                   text: parent.dateValue.getDate().toString()
                   color: parent.isToday ? Wallust.base00 : parent.inMonth ? Wallust.base05 : Wallust.base03
-                  font.family: "Roboto Mono"
+                  font.family: "Iosevka"
                   font.pixelSize: 11
                 }
 
@@ -344,7 +344,7 @@ Rectangle {
       Text {
         text: Qt.formatDate(root.selectedDate, "ddd, MMM d")
         color: Wallust.base04
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
       }
@@ -369,7 +369,7 @@ Rectangle {
               width: parent.width
               text: model.title
               color: Wallust.base05
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 10
               elide: Text.ElideRight
             }
@@ -378,7 +378,7 @@ Rectangle {
               width: parent.width
               text: model.allDay ? "ALL DAY" : model.startTime + " \u2013 " + model.endTime
               color: Wallust.base04
-              font.family: "Roboto Mono"
+              font.family: "Iosevka"
               font.pixelSize: 9
             }
           }

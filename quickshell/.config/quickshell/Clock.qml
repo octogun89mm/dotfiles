@@ -19,7 +19,7 @@ Rectangle {
     anchors.centerIn: parent
     text: Qt.formatTime(clock.date, "hh:mm AP")
     color: Wallust.base00
-    font.family: "Roboto Mono"
+    font.family: "Iosevka"
     font.pixelSize: 14
     font.bold: true
   }

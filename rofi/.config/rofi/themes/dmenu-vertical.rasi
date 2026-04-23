@@ -3,9 +3,9 @@
 * {
   background-color: @bg;
   text-color: @fg;
-  font: "Roboto Mono 10";
-  bold-font: "Roboto Mono Bold 10";
-  big-font: "Roboto Mono 12";
+  font: "Iosevka 10";
+  bold-font: "Iosevka Bold 10";
+  big-font: "Iosevka 12";
   padding: 0px;
   margin: 0px;
 }

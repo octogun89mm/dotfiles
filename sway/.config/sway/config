@@ -182,7 +182,7 @@ bar {
 }
 
 ### Look and feel & Default behavior ###
-font pango:Roboto Mono 8
+font pango:Iosevka 8
 workspace_layout default
 default_border pixel 2
 default_floating_border normal 2

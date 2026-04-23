@@ -24,7 +24,7 @@ Scope {
       anchors.centerIn: parent
       text: parent.label
       color: Wallust.base00
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 10
       font.bold: true
     }
@@ -57,7 +57,7 @@ Scope {
       visible: !!parent.bindData
       text: parent.bindData ? parent.bindData.desc : ""
       color: Wallust.base00
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 7
       wrapMode: Text.Wrap
       maximumLineCount: 3
@@ -74,7 +74,7 @@ Scope {
       width: parent.width - 16
       text: parent.title.replace("BUTTON", "BUTTON\n")
       color: parent.bindData ? Wallust.base00 : Wallust.base05
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 8
       font.bold: true
       horizontalAlignment: Text.AlignHCenter
@@ -196,7 +196,7 @@ Scope {
                 anchors.top: parent.top
                 text: "HYPRLAND KEYBINDS"
                 color: Wallust.base05
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 16
                 font.bold: true
               }
@@ -209,7 +209,7 @@ Scope {
                   ? "NONE"
                   : Keybinds.KeybindState.selectedModifierMode.toLowerCase().split("+").join(", "))
                 color: Wallust.base04
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 11
               }
 
@@ -220,7 +220,7 @@ Scope {
                 anchors.topMargin: 26
                 text: "SUBMAP: " + Keybinds.KeybindState.selectedSubmap.toUpperCase()
                 color: Wallust.base03
-                font.family: "Roboto Mono"
+                font.family: "Iosevka"
                 font.pixelSize: 11
                 font.bold: true
               }
@@ -239,7 +239,7 @@ Scope {
                   anchors.centerIn: parent
                   text: "ESC"
                   color: Wallust.base05
-                  font.family: "Roboto Mono"
+                  font.family: "Iosevka"
                   font.pixelSize: 10
                   font.bold: true
                 }
@@ -279,7 +279,7 @@ Scope {
                       anchors.centerIn: parent
                       text: modelData
                       color: parent.selected ? Wallust.base00 : Wallust.base05
-                      font.family: "Roboto Mono"
+                      font.family: "Iosevka"
                       font.pixelSize: 10
                       font.bold: true
                     }
@@ -321,7 +321,7 @@ Scope {
                       anchors.centerIn: parent
                       text: modelData.toUpperCase()
                       color: selected ? Wallust.accent : Wallust.base04
-                      font.family: "Roboto Mono"
+                      font.family: "Iosevka"
                       font.pixelSize: 9
                       font.bold: true
                     }
@@ -360,7 +360,7 @@ Scope {
                   anchors.topMargin: 12
                   text: "KEYBOARD"
                   color: Wallust.base04
-                  font.family: "Roboto Mono"
+                  font.family: "Iosevka"
                   font.pixelSize: 10
                   font.bold: true
                 }
@@ -432,7 +432,7 @@ Scope {
                       Text {
                         text: "ACTIVE KEYS"
                         color: Wallust.base04
-                        font.family: "Roboto Mono"
+                        font.family: "Iosevka"
                         font.pixelSize: 10
                         font.bold: true
                       }
@@ -446,7 +446,7 @@ Scope {
                           width: parent.width
                           text: modelData.combo + "  " + modelData.desc
                           color: Wallust.base05
-                          font.family: "Roboto Mono"
+                          font.family: "Iosevka"
                           font.pixelSize: 9
                           wrapMode: Text.WordWrap
                           maximumLineCount: 2
@@ -472,7 +472,7 @@ Scope {
                       Text {
                         text: "MOUSE"
                         color: Wallust.base04
-                        font.family: "Roboto Mono"
+                        font.family: "Iosevka"
                         font.pixelSize: 10
                         font.bold: true
                       }
@@ -506,7 +506,7 @@ Scope {
                       Text {
                         text: "UNPLACED"
                         color: Wallust.base04
-                        font.family: "Roboto Mono"
+                        font.family: "Iosevka"
                         font.pixelSize: 10
                         font.bold: true
                       }
@@ -520,7 +520,7 @@ Scope {
                           width: parent.width
                           text: modelData.combo + "  " + modelData.desc
                           color: Wallust.base05
-                          font.family: "Roboto Mono"
+                          font.family: "Iosevka"
                           font.pixelSize: 9
                           wrapMode: Text.WordWrap
                           maximumLineCount: 2

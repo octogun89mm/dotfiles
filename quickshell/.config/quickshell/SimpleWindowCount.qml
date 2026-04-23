@@ -31,7 +31,7 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       text: String(root.windowCount).padStart(2, "0")
       color: Wallust.base04
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 11
       font.bold: true
     }

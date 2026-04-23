@@ -45,7 +45,7 @@ Rectangle {
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignHCenter
         color: highlighted ? Wallust.base00 : Wallust.base04
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
       }
@@ -56,7 +56,7 @@ Rectangle {
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignHCenter
         color: highlighted ? Wallust.base00 : Wallust.base05
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 11
         font.bold: true
       }

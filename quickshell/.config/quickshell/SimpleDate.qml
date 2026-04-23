@@ -18,7 +18,7 @@ Item {
     anchors.centerIn: parent
     text: Qt.formatDate(clock.date, "ddd-dd-MM-yy")
     color: root.pinned ? Wallust.accent : Wallust.base05
-    font.family: "Roboto Mono"
+    font.family: "Iosevka"
     font.pixelSize: 12
     font.bold: true
   }

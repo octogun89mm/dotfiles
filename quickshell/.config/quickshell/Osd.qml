@@ -88,7 +88,7 @@ Scope {
           Text {
             text: OsdState.text
             color: Wallust.base05
-            font.family: "Roboto Mono"
+            font.family: "Iosevka"
             font.pixelSize: 13
             font.bold: true
           }

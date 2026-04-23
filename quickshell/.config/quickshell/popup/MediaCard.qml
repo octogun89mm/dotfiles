@@ -60,7 +60,7 @@ Rectangle {
       Text {
         text: "MEDIA"
         color: Wallust.base04
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
       }
@@ -70,7 +70,7 @@ Rectangle {
         text: Root.MediaState.available ? (Root.MediaState.title || "NO TITLE") : "NO MEDIA"
         elide: Text.ElideRight
         color: Wallust.base05
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 13
         font.bold: true
       }
@@ -80,7 +80,7 @@ Rectangle {
         text: Root.MediaState.available ? (Root.MediaState.artist || Root.MediaState.playerName || "UNKNOWN") : "OPEN A PLAYER"
         elide: Text.ElideRight
         color: Wallust.base04
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
       }
 
@@ -88,7 +88,7 @@ Rectangle {
         width: parent.width
         text: Root.MediaState.playing ? "PLAYING" : Root.MediaState.available ? "PAUSED" : ""
         color: Root.MediaState.playing ? Wallust.accent : Wallust.base04
-        font.family: "Roboto Mono"
+        font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
         visible: text !== ""

@@ -70,7 +70,7 @@ Rectangle {
     Text {
       text: "DISK"
       color: Wallust.base04
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 10
       font.bold: true
     }
@@ -91,7 +91,7 @@ Rectangle {
           text: modelData.label
           elide: Text.ElideRight
           color: Wallust.base05
-          font.family: "Roboto Mono"
+          font.family: "Iosevka"
           font.pixelSize: 10
         }
 
@@ -100,7 +100,7 @@ Rectangle {
           text: modelData.used.toString().padStart(3, "0") + " / " + modelData.total + "G"
           elide: Text.ElideRight
           color: Wallust.base05
-          font.family: "Roboto Mono"
+          font.family: "Iosevka"
           font.pixelSize: 10
         }
 

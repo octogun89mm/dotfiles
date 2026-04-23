@@ -1,9 +1,9 @@
 @import "wallust.rasi"
 
 * {
-    font: "Roboto Mono 12";
-    font-bold: "Roboto Mono Bold 12";
-    font-alt: "RobotoMono Nerd Font Mono 14";
+    font: "Iosevka 12";
+    font-bold: "Iosevka Bold 12";
+    font-alt: "Iosevka 14";
     border: 0px;
     padding: 0px;
     margin: 0px;
@@ -13,7 +13,7 @@ window {
     fullscreen: true;
     background-color: transparent;
     transparency: "real";
-    font: "Roboto Mono 12";
+    font: "Iosevka 12";
     border: 0px;
 }
 

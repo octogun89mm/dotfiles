@@ -23,8 +23,7 @@
 ;; POLL VARIABLES
 ;; =============================================================================
 
-(defpoll bar_time :interval "1s" "date '+%I:%M %p'")
-(defpoll bar_date :interval "60s" "date '+%a-%d-%m-%y'")
+
 (defpoll bar_weather :interval "1800s" :initial '{"text":"...","icon":"","class":""}' "scripts/eww-bar weather")
 (defpoll bar_vpn :interval "10s" :initial '{"status":"disconnected","icon":"󰒙","location":""}' "scripts/eww-bar vpn")
 
@@ -120,17 +119,10 @@
                        ws.occupied ? 'ws-occupied' : 'ws-empty'}"
                :text {ws.label})))))
 
-;; Right section: date, clock
+;; Right section: date only
 (defwidget bar-right []
   (box :class "bar-right" :orientation "h" :space-evenly false :halign "end" :valign "center"
-    (systray :class "bar-tray" :icon-size 16 :spacing 6)
-    (eventbox :onclick "sh -c 'if [ \"$(eww get calendar_pinned)\" = \"true\" ] && [ \"$(eww get calendar_monitor)\" = \"0\" ]; then eww update calendar_pinned=false calendar_visible=false; else eww update calendar_pinned=true calendar_visible=true calendar_monitor=0; fi'"
-              :onhover "eww update calendar_visible=true calendar_monitor=0"
-              :onhoverlost "sh -c '[ \"$(eww get calendar_pinned)\" = \"true\" ] || eww update calendar_visible=false'"
-      (box :class "bar-datetime" :orientation "h" :space-evenly false :valign "center"
-        (label :class "bar-date" :text bar_date :valign "center")
-        (label :class "bar-datetime-sep" :text "│")
-        (label :class "bar-clock" :text bar_time :valign "center")))))
+    (systray :class "bar-tray" :icon-size 16 :spacing 6)))
 
 ;; Right section for secondary monitor
 (defwidget bar-right-secondary []

@@ -53,7 +53,7 @@ Rectangle {
           width: parent.width
           elide: Text.ElideRight
           color: Wallust.base04
-          font.family: "Roboto Mono"
+          font.family: "Iosevka"
           font.pixelSize: 10
           font.bold: true
         }
@@ -63,7 +63,7 @@ Rectangle {
           width: parent.width
           elide: Text.ElideRight
           color: Root.VolumeState.muted ? Wallust.base03 : Wallust.base05
-          font.family: "Roboto Mono"
+          font.family: "Iosevka"
           font.pixelSize: 11
           font.bold: true
         }

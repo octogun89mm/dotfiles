@@ -6,6 +6,7 @@ return {
   config = function()
     require("minuet").setup({
       provider = "openai_fim_compatible",
+      notify = false,
       n_completions = 1,
       context_window = 512,
       debounce = 300,

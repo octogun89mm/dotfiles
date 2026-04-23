@@ -47,7 +47,7 @@ Rectangle {
       width: parent.width
       text: root.preview
       color: root.isImage ? Wallust.base04 : Wallust.base05
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 11
       wrapMode: Text.Wrap
       maximumLineCount: root.isImage ? 1 : 3

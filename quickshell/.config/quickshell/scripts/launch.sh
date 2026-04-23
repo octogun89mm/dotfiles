@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-exec quickshell -d
+exec quickshell --no-duplicate -d

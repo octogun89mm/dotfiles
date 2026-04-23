@@ -65,7 +65,7 @@ Rectangle {
     Text {
       text: "WEATHER"
       color: Wallust.base04
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 10
       font.bold: true
     }
@@ -82,7 +82,7 @@ Rectangle {
     Text {
       text: root.weatherText
       color: Wallust.base05
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 20
       font.bold: true
       horizontalAlignment: Text.AlignHCenter
@@ -92,7 +92,7 @@ Rectangle {
     Text {
       text: root.weatherDesc
       color: Wallust.base04
-      font.family: "Roboto Mono"
+      font.family: "Iosevka"
       font.pixelSize: 11
       horizontalAlignment: Text.AlignHCenter
       width: parent.width
@@ -111,22 +111,22 @@ Rectangle {
       Column {
         width: (parent.width - parent.spacing * 2) / 3
         spacing: 2
-        Text { text: "FEELS"; color: Wallust.base04; font.family: "Roboto Mono"; font.pixelSize: 9; font.bold: true }
-        Text { width: parent.width; text: root.feelsLike + "°C"; color: Wallust.base05; font.family: "Roboto Mono"; font.pixelSize: 11; font.bold: true }
+        Text { text: "FEELS"; color: Wallust.base04; font.family: "Iosevka"; font.pixelSize: 9; font.bold: true }
+        Text { width: parent.width; text: root.feelsLike + "°C"; color: Wallust.base05; font.family: "Iosevka"; font.pixelSize: 11; font.bold: true }
       }
 
       Column {
         width: (parent.width - parent.spacing * 2) / 3
         spacing: 2
-        Text { text: "HUMID"; color: Wallust.base04; font.family: "Roboto Mono"; font.pixelSize: 9; font.bold: true }
-        Text { width: parent.width; text: root.humidity + "%"; color: Wallust.base05; font.family: "Roboto Mono"; font.pixelSize: 11; font.bold: true }
+        Text { text: "HUMID"; color: Wallust.base04; font.family: "Iosevka"; font.pixelSize: 9; font.bold: true }
+        Text { width: parent.width; text: root.humidity + "%"; color: Wallust.base05; font.family: "Iosevka"; font.pixelSize: 11; font.bold: true }
       }
 
       Column {
         width: (parent.width - parent.spacing * 2) / 3
         spacing: 2
-        Text { text: "WIND"; color: Wallust.base04; font.family: "Roboto Mono"; font.pixelSize: 9; font.bold: true }
-        Text { width: parent.width; text: root.wind + " km/h"; color: Wallust.base05; font.family: "Roboto Mono"; font.pixelSize: 11; font.bold: true }
+        Text { text: "WIND"; color: Wallust.base04; font.family: "Iosevka"; font.pixelSize: 9; font.bold: true }
+        Text { width: parent.width; text: root.wind + " km/h"; color: Wallust.base05; font.family: "Iosevka"; font.pixelSize: 11; font.bold: true }
       }
     }
   }

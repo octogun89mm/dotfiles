@@ -10,14 +10,20 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **quickshell** | Top bar, popup shell, clipboard history panel, keybind overlay, notification center, and OSD for Hyprland |
 | **eww** | Legacy bar config and helper scripts still kept in-repo for migration reuse |
 | **rofi** | App launcher, clipboard history fallback, screenshot/screenrecord/OCR/wallpaper/emoji picker scripts |
+| **foot** | Foot terminal config and shared Wallust color include |
 | **waybar** | Secondary bar config and utility scripts reused by other packages |
 | **sway** | Sway compositor config (legacy) |
 | **tmux** | Terminal multiplexer config |
 | **nvim** | Lazy.nvim-based Neovim config with built-in treesitter, LSP, completion, Telescope, git tooling, AI helpers, and focused editing UX |
+| **scripts** | Repo-local helper scripts such as `set-font.sh` for swapping the monospace family across configs |
 
 ## Current State
 
 The main bar work has moved to `quickshell`, and `eww` is now retained mostly as a source of scripts and reference modules during the migration.
+
+The current desktop stack is centered on Hyprland + Quickshell, with `Iosevka` as the shared monospace font across the launcher, bars, notifications, and terminal configs. The font family can be swapped repo-wide with `scripts/set-font.sh`.
+
+`hyprland/.config/hypr/scripts/wake-gate.py` is used as the post-suspend wake gate and expects the Python `evdev` module to be available on the host.
 
 The Quickshell config is modular and currently includes:
 
