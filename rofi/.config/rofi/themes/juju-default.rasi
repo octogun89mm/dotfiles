@@ -19,10 +19,11 @@ window {
 
 mainbox {
     margin: 300px 600px;
-    background-color: @background-color;
+    background-color: @color0;
     border: 2px;
+    border-color: @color14;
     font: @font;
-    padding: 5px;
+    padding: 8px;
 }
 
 prompt {
@@ -30,23 +31,25 @@ prompt {
 }
 
 box {
-    background: @background-color;
+    background: @color0;
     font: @font;
 }
 
 inputbar {
-    background: @background-color;
+    background: @bg;
     font: @font;
     border: 0px 0px 2px 0px;
-    padding: 3px;
+    border-color: @color8;
+    padding: 6px;
     children: [prompt, textbox-colon, entry];
 }
 
 textbox-colon {
-    content: "";
+    content: ">";
     expand: false;
-    padding: 0px 3px;
+    padding: 0px 6px;
     font: @font-alt;
+    text-color: @color13;
 }
 
 entry {
@@ -64,16 +67,22 @@ inputbar {
 
 listview {
     font: @font;
-    padding: 0px;
+    padding: 6px 0px 0px 0px;
+}
+
+element {
+    padding: 3px 6px;
 }
 
 element-text {
     padding: 3px 3px;
 }
 
-element-text selected.normal {
-    background-color: @accent-color;
-    text-color: @background-color;
+element selected.normal {
+    background-color: @bg;
 }
 
-
+element-text selected.normal {
+    text-color: @color14;
+    font: @font-bold;
+}

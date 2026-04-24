@@ -2,14 +2,14 @@ configuration {
   modes: "drun,run,window,power,filebrowser";
   no-default-theme: true;
   window-format: "{t}";
-  terminal: "foot";
+  terminal: "kitty";
   me-select-entry: "";
   me-accept-entry: "!MousePrimary";
   hover-select: true;
   drun-display-format: "{name}";
   drun {
     display-name: "App";
-    show-icons: false;
+    show-icons: true;
   }
   run {
     display-name: "Run";
@@ -17,7 +17,7 @@ configuration {
   }
   window {
     display-name: "Windows";
-    show-icons: false;
+    show-icons: true;
   }
   power {
     display-name: "Power";
@@ -26,6 +26,7 @@ configuration {
   filebrowser {
     display-name: "Files";
     icon-theme: "breeze-dark";
+    show-icons: true;
     theme: "~/.config/rofi/themes/wallpaper.rasi";
   }
 }

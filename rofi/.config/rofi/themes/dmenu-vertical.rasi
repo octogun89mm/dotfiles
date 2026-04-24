@@ -1,7 +1,7 @@
 @import "wallust.rasi"
 
 * {
-  background-color: @bg;
+  background-color: transparent;
   text-color: @fg;
   font: "Iosevka 10";
   bold-font: "Iosevka Bold 10";
@@ -16,40 +16,44 @@ window {
   width: 100%;
   margin: 0px 10px 10px 10px;
   border: 2px;
-  border-color: @color2;
+  border-color: @color14;
+  background-color: @color0;
 }
 
 mainbox {
-  padding: 0px 0px 3px 0px;
+  background-color: @color0;
+  padding: 0px 0px 6px 0px;
 }
 
 inputbar {
   border: 0px 0px 2px 0px;
-  border-color: @color2;
-  padding: 2px 10px;
+  border-color: @color8;
+  background-color: @bg;
+  padding: 6px 10px;
   children: [ prompt, textbox-colon, entry ];
 }
 
 prompt {
-  text-color: @color4;
+  text-color: @color14;
   vertical-align: 0.5;
   font: @bold-font;
 }
 
 textbox-colon {
-  str: "⇒";
+  str: ">";
   expand: false;
-  padding: 0px 2px;
-  vertical-align: 0.8;
+  padding: 0px 6px;
+  vertical-align: 0.5;
   font: @big-font;
-  text-color: @color5;
+  text-color: @color13;
 }
 
 listview {
   layout: vertical;
   lines: 10;
   columns: 4;
-  padding: 0px 10px;
+  padding: 6px 10px 0px 10px;
+  spacing: 2px;
 }
 
 entry {
@@ -60,11 +64,24 @@ entry {
   text-color: @fg;
 }
 
+element {
+  padding: 3px 6px;
+  background-color: transparent;
+}
+
+element selected.normal {
+  background-color: @bg;
+}
+
+element-text {
+  text-color: @fg;
+}
+
 element-text selected {
   font: @bold-font;
 }
 
 element-text selected.normal {
-  text-color: @color4;
+  text-color: @color14;
   font: @bold-font;
 }

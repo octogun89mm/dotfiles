@@ -1,7 +1,7 @@
 @import "wallust.rasi"
 
 * {
-  background-color: @bg;
+  background-color: transparent;
   text-color: @fg;
   font: "Iosevka 8";
   bold-font: "Iosevka Bold 8";
@@ -14,24 +14,29 @@ window {
   location: south;
   width: 100%;
   padding: 4px 5px;
+  border: 2px 0px 0px 0px;
+  border-color: @color14;
+  background-color: @color0;
   children: [ horibox ];
 }
 
 horibox {
   orientation: horizontal;
+  background-color: @color0;
   children: [ prompt, entry, listview ];
 }
 
 prompt {
-  text-color: @color4;
+  text-color: @color14;
   vertical-align: 0.5;
   font: @bold-font;
+  padding: 0px 8px 0px 4px;
 }
 
 listview {
   layout: horizontal;
   lines: 100;
-  spacing: 10px;
+  spacing: 6px;
 }
 
 entry {
@@ -43,7 +48,15 @@ entry {
   margin: 0px 0px 0px 5px;
 }
 
-element-text selected.normal {
-  text-color: @color4;
+element {
+  padding: 1px 6px;
 }
 
+element selected.normal {
+  background-color: @bg;
+}
+
+element-text selected.normal {
+  text-color: @color14;
+  font: @bold-font;
+}

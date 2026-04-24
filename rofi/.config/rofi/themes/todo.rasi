@@ -1,7 +1,7 @@
 @import "wallust-todo.rasi"
 
 * {
-  background-color: @bg;
+  background-color: transparent;
   text-color: @fg;
   font: "Iosevka 11";
   bold-font: "Iosevka Bold 11";
@@ -15,33 +15,36 @@ window {
   width: 60%;
   height: 50%;
   border: 2px;
-  border-color: @color2;
+  border-color: @color14;
   border-radius: 0;
+  background-color: @color0;
 }
 
 mainbox {
+  background-color: @color0;
   padding: 10px;
 }
 
 inputbar {
   border: 0px 0px 2px 0px;
-  border-color: @color2;
+  border-color: @color8;
+  background-color: @bg;
   padding: 6px 4px;
   children: [ prompt, textbox-colon, entry ];
 }
 
 prompt {
-  text-color: @color4;
+  text-color: @color14;
   vertical-align: 0.5;
   font: @bold-font;
 }
 
 textbox-colon {
-  str: "⇒";
+  str: ">";
   expand: false;
   padding: 0px 4px;
   vertical-align: 0.8;
-  text-color: @color5;
+  text-color: @color13;
 }
 
 listview {
@@ -61,10 +64,14 @@ entry {
 }
 
 element {
-  padding: 4px 6px;
+  padding: 5px 8px;
+}
+
+element selected.normal {
+  background-color: @bg;
 }
 
 element-text selected.normal {
-  text-color: @color4;
+  text-color: @color14;
   font: @bold-font;
 }
