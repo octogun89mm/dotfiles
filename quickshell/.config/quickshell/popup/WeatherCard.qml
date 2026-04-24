@@ -16,7 +16,7 @@ Rectangle {
   property string humidity: "--"
   property string wind: "--"
 
-  color: Wallust.base03
+  color: Wallust.base00
   implicitHeight: 210
 
   function refreshWeather() {
@@ -72,7 +72,7 @@ Rectangle {
 
     Text {
       text: root.weatherIcon
-      color: Wallust.accent
+      color: Wallust.base0C
       font.family: "Weather Icons"
       font.pixelSize: 40
       horizontalAlignment: Text.AlignHCenter

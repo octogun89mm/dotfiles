@@ -1,28 +1,37 @@
 import QtQuick
-import "wallust.js" as Wallust
 
 Rectangle {
   id: root
 
-  property bool borderless: false
   property bool onlyWhenActive: false
-  property color activeColor: Wallust.accent
-  property color inactiveColor: Wallust.base03
+  property color activeColor: Theme.success
+  property color inactiveColor: Theme.textDim
 
   visible: !onlyWhenActive || VpnState.connected
   color: "transparent"
-  border.width: borderless ? 0 : 2
-  border.color: Wallust.base03
-  implicitWidth: indicator.implicitWidth + (borderless ? 0 : 10)
-  implicitHeight: 24
+  implicitWidth: indicator.implicitWidth + Theme.padMd + Theme.stripe
+  implicitHeight: Theme.chipHeight
+
+  Rectangle {
+    visible: VpnState.connected
+    anchors {
+      left: parent.left
+      top: parent.top
+      bottom: parent.bottom
+    }
+    width: Theme.stripe
+    color: root.activeColor
+  }
 
   Text {
     id: indicator
-    anchors.centerIn: parent
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: Theme.stripe + Theme.padSm
     text: VpnState.icon
     color: VpnState.connected ? root.activeColor : root.inactiveColor
-    font.family: "Symbols Nerd Font Mono"
-    font.pixelSize: 14
+    font.family: Theme.iconFamily
+    font.pixelSize: Theme.fontSmall + 3
   }
 
   MouseArea {

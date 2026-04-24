@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import "wallust.js" as Wallust
 
 Scope {
   id: root
@@ -9,7 +8,7 @@ Scope {
 
   Timer {
     id: hideTimer
-    interval: 1500
+    interval: 1200
     repeat: false
     onTriggered: OsdState.hide()
   }
@@ -40,7 +39,7 @@ Scope {
       }
 
       margins {
-        bottom: 10
+        bottom: 24
       }
 
       implicitHeight: osdCard.implicitHeight
@@ -51,11 +50,11 @@ Scope {
         anchors.horizontalCenter: parent.horizontalCenter
         y: root.visible ? 0 : 18
         opacity: root.visible ? 1 : 0
-        color: Wallust.base00
-        border.width: 2
-        border.color: Wallust.accent
-        implicitWidth: content.implicitWidth + 20
-        implicitHeight: content.implicitHeight + 14
+        color: Theme.surface
+        border.width: Theme.hairline
+        border.color: Theme.border
+        implicitWidth: content.implicitWidth + Theme.padLg * 2 + Theme.stripe
+        implicitHeight: 28
 
         Behavior on y {
           NumberAnimation {
@@ -73,24 +72,40 @@ Scope {
           }
         }
 
+        // Left accent stripe
+        Rectangle {
+          anchors {
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+          }
+          width: Theme.stripe
+          color: Theme.accent
+        }
+
         Row {
           id: content
-          anchors.centerIn: parent
-          spacing: 10
+          anchors.verticalCenter: parent.verticalCenter
+          anchors.left: parent.left
+          anchors.leftMargin: Theme.stripe + Theme.padLg
+          spacing: Theme.padMd
 
           Text {
+            anchors.verticalCenter: parent.verticalCenter
             text: OsdState.icon
-            color: Wallust.accent
-            font.family: "Symbols Nerd Font Mono"
-            font.pixelSize: 18
+            color: Theme.accent
+            font.family: Theme.iconFamily
+            font.pixelSize: Theme.fontTitle + 2
           }
 
           Text {
+            anchors.verticalCenter: parent.verticalCenter
             text: OsdState.text
-            color: Wallust.base05
-            font.family: "Iosevka"
-            font.pixelSize: 13
+            color: Theme.text
+            font.family: Theme.fontFamily
+            font.pixelSize: Theme.fontBody
             font.bold: true
+            font.letterSpacing: 0.4
           }
         }
       }

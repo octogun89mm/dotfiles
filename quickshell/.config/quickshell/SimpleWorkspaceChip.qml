@@ -1,7 +1,6 @@
 import QtQuick
 import Quickshell.Hyprland
 import Quickshell.Io
-import "wallust.js" as Wallust
 
 Rectangle {
   id: root
@@ -21,7 +20,6 @@ Rectangle {
   }
 
   readonly property bool isFocused: workspaceData ? workspaceData.focused : false
-  readonly property color focusedColor: Wallust.base0A
   readonly property bool isVisible: {
     const monitors = Hyprland.monitors.values
 
@@ -36,83 +34,46 @@ Rectangle {
   readonly property bool isOccupied: workspaceData ? workspaceData.toplevels.values.length > 0 : false
 
   color: "transparent"
-  implicitWidth: Math.max(label.implicitWidth, focusedIndicator.implicitWidth) + 10
-  implicitHeight: 20
+  implicitWidth: 14
+  implicitHeight: Theme.chipHeight
 
-  Item {
-    id: focusedIndicator
+  // Focused: solid 10x10 cyan square
+  Rectangle {
     anchors.centerIn: parent
     visible: root.isFocused
-    implicitWidth: 14
-    implicitHeight: 14
-
-    Rectangle {
-      id: focusedDiamond
-      anchors.centerIn: parent
-      width: 10
-      height: 10
-      color: root.focusedColor
-      rotation: 45
-    }
-
-    Rectangle {
-      id: focusedSpinner
-      anchors.centerIn: parent
-      width: 6
-      height: 6
-      color: Wallust.background
-      radius: 0
-      transformOrigin: Item.Center
-
-      SequentialAnimation on rotation {
-        running: root.isFocused
-        loops: Animation.Infinite
-
-        NumberAnimation { to: 45; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-        NumberAnimation { to: 90; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-        NumberAnimation { to: 135; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-        NumberAnimation { to: 180; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-        NumberAnimation { to: 225; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-        NumberAnimation { to: 270; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-        NumberAnimation { to: 315; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-        NumberAnimation { to: 360; duration: 420; easing.type: Easing.InOutSine }
-        PauseAnimation { duration: 2200 }
-      }
-    }
+    width: 10
+    height: 10
+    color: Theme.accent
   }
 
-  Text {
-    id: label
+  // Visible on another monitor: 10x10 hollow cyan square (2px stroke)
+  Rectangle {
     anchors.centerIn: parent
-    visible: !root.isFocused
-    text: root.isOccupied ? "◆" : "■"
-    color: {
-      if (root.isVisible) return Wallust.accent
-      if (root.isOccupied) return Wallust.base05
-      return Wallust.base03
-    }
-    font.family: "Iosevka"
-    font.pixelSize: 12
-    font.bold: true
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
-    transformOrigin: Item.Center
-    scale: root.isOccupied ? 1.5 : 1.0
-    opacity: 1.0
-    Behavior on scale {
-      NumberAnimation { duration: 320; easing.type: Easing.OutBack }
-    }
+    visible: root.isVisible && !root.isFocused
+    width: 10
+    height: 10
+    color: "transparent"
+    border.width: Theme.stripe
+    border.color: Theme.accent
+  }
 
-    Behavior on color {
-      ColorAnimation { duration: 320; easing.type: Easing.InOutSine }
-    }
+  // Occupied but not visible: dim diamond
+  Text {
+    anchors.centerIn: parent
+    visible: !root.isVisible && root.isOccupied
+    text: "◆"
+    color: Theme.text
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontBody
+  }
+
+  // Empty: tiny dot
+  Rectangle {
+    anchors.centerIn: parent
+    visible: !root.isVisible && !root.isOccupied
+    width: 3
+    height: 3
+    color: Theme.textDim
   }
 
   MouseArea {

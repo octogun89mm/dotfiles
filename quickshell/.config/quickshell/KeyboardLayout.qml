@@ -1,22 +1,32 @@
 import QtQuick
-import "wallust.js" as Wallust
 
 Rectangle {
   id: root
 
   color: "transparent"
-  border.width: 2
-  border.color: Wallust.base03
-  implicitWidth: indicator.implicitWidth + 10
-  implicitHeight: 24
+  implicitWidth: indicator.implicitWidth + Theme.padMd + Theme.stripe
+  implicitHeight: Theme.chipHeight
+
+  Rectangle {
+    anchors {
+      left: parent.left
+      top: parent.top
+      bottom: parent.bottom
+    }
+    width: Theme.stripe
+    color: Theme.accentAlt
+  }
 
   Text {
     id: indicator
-    anchors.centerIn: parent
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: Theme.stripe + Theme.padSm
     text: LanguageState.layout
-    color: Wallust.accent
-    font.family: "Iosevka"
-    font.pixelSize: 12
+    color: Theme.text
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontCaption
     font.bold: true
+    font.letterSpacing: 0.5
   }
 }

@@ -8,7 +8,7 @@ Rectangle {
   property bool active: false
   readonly property int contentPadding: 12
 
-  color: Wallust.base03
+  color: Wallust.base00
   implicitHeight: Math.max(albumArtFrame.height, detailsColumn.implicitHeight) + (contentPadding * 2)
 
   Row {
@@ -29,7 +29,7 @@ Rectangle {
         height: 96
         color: Wallust.base01
         border.width: 2
-        border.color: Root.MediaState.playing ? Wallust.accent : Wallust.base03
+        border.color: Root.MediaState.playing ? Wallust.base0C : Wallust.base02
 
         Image {
           id: albumArtImage
@@ -87,7 +87,7 @@ Rectangle {
       Text {
         width: parent.width
         text: Root.MediaState.playing ? "PLAYING" : Root.MediaState.available ? "PAUSED" : ""
-        color: Root.MediaState.playing ? Wallust.accent : Wallust.base04
+        color: Root.MediaState.playing ? Wallust.base0C : Wallust.base04
         font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
@@ -113,7 +113,7 @@ Rectangle {
             height: 32
             color: "transparent"
             border.width: 2
-            border.color: Wallust.base01
+            border.color: Wallust.base02
 
             Text {
               anchors.centerIn: parent

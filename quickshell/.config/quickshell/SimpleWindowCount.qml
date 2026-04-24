@@ -2,7 +2,6 @@ import QtQuick
 import Quickshell.Hyprland
 import Quickshell
 import Quickshell.Io
-import "wallust.js" as Wallust
 
 Item {
   id: root
@@ -17,30 +16,33 @@ Item {
     countProcess.exec([countScript, monitorName])
   }
 
-  implicitWidth: cluster.implicitWidth
-  implicitHeight: 20
+  implicitWidth: cluster.implicitWidth + Theme.padMd
+  implicitHeight: Theme.chipHeight
   visible: true
 
   Row {
     id: cluster
     anchors.verticalCenter: parent.verticalCenter
-    spacing: 8
+    anchors.left: parent.left
+    anchors.leftMargin: Theme.padSm
+    spacing: Theme.padSm
 
     Text {
-      id: countLabel
       anchors.verticalCenter: parent.verticalCenter
       text: String(root.windowCount).padStart(2, "0")
-      color: Wallust.base04
-      font.family: "Iosevka"
-      font.pixelSize: 11
+      color: root.windowCount > 0 ? Theme.text : Theme.textDim
+      font.family: Theme.fontFamily
+      font.pixelSize: Theme.fontSmall
       font.bold: true
     }
 
-    Rectangle {
+    Text {
       anchors.verticalCenter: parent.verticalCenter
-      width: 1
-      height: 12
-      color: Wallust.base02
+      text: "WIN"
+      color: Theme.textMuted
+      font.family: Theme.fontFamily
+      font.pixelSize: Theme.fontCaption
+      font.letterSpacing: 0.5
     }
   }
 

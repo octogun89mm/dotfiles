@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import "." as Notif
-import "../wallust.js" as Wallust
+import ".." as Root
 
 Scope {
   Variants {
@@ -44,10 +44,10 @@ Scope {
         height: Math.min(maxPanelHeight, Math.max(minPanelHeight, desiredPanelHeight))
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: 10
-        color: Wallust.base00
-        border.width: 2
-        border.color: Wallust.accent
+        anchors.topMargin: 46
+        color: Root.Theme.surface
+        border.width: Root.Theme.hairline
+        border.color: Root.Theme.border
 
         transform: Translate {
           y: Notif.NotificationServer.centerVisible && centerWindow.activeScreen ? 0 : -(panel.height + 12)
@@ -77,7 +77,7 @@ Scope {
               anchors.left: parent.left
               anchors.verticalCenter: parent.verticalCenter
               text: "NOTIFICATIONS"
-              color: Wallust.base04
+              color: Root.Theme.textMuted
               font.family: "Iosevka"
               font.pixelSize: 10
               font.bold: true
@@ -90,15 +90,15 @@ Scope {
               anchors.verticalCenter: parent.verticalCenter
               width: Math.max(24, unreadLabel.implicitWidth + 10)
               height: 20
-              color: "transparent"
-              border.width: 2
-              border.color: Wallust.accent
+              color: Notif.NotificationServer.unreadCount > 0 ? Root.Theme.accent : "transparent"
+              border.width: Root.Theme.hairline
+              border.color: Root.Theme.accent
 
               Text {
                 id: unreadLabel
                 anchors.centerIn: parent
                 text: Notif.NotificationServer.unreadCount
-                color: Wallust.base05
+                color: Root.Theme.text
                 font.family: "Iosevka"
                 font.pixelSize: 10
                 font.bold: true
@@ -113,13 +113,13 @@ Scope {
               width: 28
               height: 24
               color: "transparent"
-              border.width: 2
-              border.color: Notif.NotificationServer.dnd ? Wallust.base08 : Wallust.base01
+              border.width: Root.Theme.hairline
+              border.color: Notif.NotificationServer.dnd ? Root.Theme.critical : Root.Theme.border
 
               Text {
                 anchors.centerIn: parent
                 text: Notif.NotificationServer.dnd ? "󰂛" : "󰂚"
-                color: Notif.NotificationServer.dnd ? Wallust.base08 : Wallust.base05
+                color: Notif.NotificationServer.dnd ? Root.Theme.critical : Root.Theme.text
                 font.family: "Symbols Nerd Font Mono"
                 font.pixelSize: 14
               }
@@ -137,14 +137,14 @@ Scope {
               width: clearAllLabel.implicitWidth + 14
               height: 24
               color: "transparent"
-              border.width: 2
-              border.color: Wallust.base01
+              border.width: Root.Theme.hairline
+              border.color: Root.Theme.border
 
               Text {
                 id: clearAllLabel
                 anchors.centerIn: parent
                 text: "CLEAR ALL"
-                color: Wallust.base05
+                color: Root.Theme.text
                 font.family: "Iosevka"
                 font.pixelSize: 10
                 font.bold: true
@@ -198,14 +198,14 @@ Scope {
               Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "󰂚"
-                color: Wallust.base03
+                color: Root.Theme.textDim
                 font.family: "Symbols Nerd Font Mono"
                 font.pixelSize: 24
               }
 
               Text {
                 text: "NO NOTIFICATIONS"
-                color: Wallust.base03
+                color: Root.Theme.textDim
                 font.family: "Iosevka"
                 font.pixelSize: 11
                 font.bold: true

@@ -16,7 +16,7 @@ Rectangle {
     Math.min(historyList.contentHeight, maxVisibleItems * rowHeightEstimate)
   )
 
-  color: Wallust.base03
+  color: Wallust.base00
   implicitHeight: content.implicitHeight + 24
 
   Column {
@@ -49,7 +49,7 @@ Rectangle {
         height: 20
         color: "transparent"
         border.width: 2
-        border.color: Wallust.accent
+        border.color: Wallust.base0C
 
         Text {
           id: countLabel
@@ -69,7 +69,7 @@ Rectangle {
         height: 24
         color: "transparent"
         border.width: 2
-        border.color: root.count > 0 ? Wallust.base01 : Wallust.base02
+        border.color: Wallust.base02
 
         Text {
           id: clearLabel

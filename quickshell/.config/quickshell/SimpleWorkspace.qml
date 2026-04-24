@@ -1,11 +1,10 @@
 import QtQuick
 import Quickshell.Hyprland
-import "wallust.js" as Wallust
 
 Item {
   id: root
   implicitWidth: workspaceRow.implicitWidth
-  implicitHeight: 20
+  implicitHeight: Theme.chipHeight
 
   function monitorKeyFor(id) {
     const workspaces = Hyprland.workspaces.values
@@ -55,7 +54,7 @@ Item {
   Row {
     id: workspaceRow
     anchors.verticalCenter: parent.verticalCenter
-    spacing: 6
+    spacing: Theme.padSm
 
     Repeater {
       model: root.entries
@@ -67,25 +66,21 @@ Item {
         Component {
           id: wsComponent
           SimpleWorkspaceChip {
-            readonly property var glyphs: ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]
             workspaceId: modelData.id
-            displayName: glyphs[modelData.id - 1] || String(modelData.id)
+            displayName: String(modelData.id)
           }
         }
 
         Component {
           id: sepComponent
           Item {
-            implicitWidth: sepLabel.implicitWidth
-            implicitHeight: 20
-            Text {
-              id: sepLabel
+            implicitWidth: 1
+            implicitHeight: Theme.chipHeight
+            Rectangle {
               anchors.centerIn: parent
-              text: "·"
-              color: Wallust.base03
-              font.family: "Iosevka"
-              font.pixelSize: 14
-              font.bold: true
+              width: 1
+              height: 10
+              color: Theme.border
             }
           }
         }

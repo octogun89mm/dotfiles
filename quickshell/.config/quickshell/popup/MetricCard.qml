@@ -10,7 +10,7 @@ Rectangle {
   property string detail2: ""
   property var graphs: []
 
-  color: Wallust.base03
+  color: Wallust.base00
   implicitWidth: 240
 
   Column {
@@ -83,7 +83,7 @@ Rectangle {
         width: graphCol.width
         height: Math.max(10, (graphCol.height - (root.graphs.length - 1) * graphCol.spacing) / root.graphs.length)
         values: root.graphs[index].values || []
-        graphColor: root.graphs[index].color || Wallust.accent
+        graphColor: root.graphs[index].color || Wallust.base0C
         label: root.graphs[index].label || ""
         maxValue: root.graphs[index].maxValue !== undefined ? root.graphs[index].maxValue : 100
       }

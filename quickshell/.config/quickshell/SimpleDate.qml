@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import "wallust.js" as Wallust
 
 Item {
   id: root
@@ -10,17 +9,30 @@ Item {
 
   signal clicked
 
-  implicitWidth: dateLabel.implicitWidth
-  implicitHeight: 20
+  implicitWidth: dateLabel.implicitWidth + Theme.padMd * 2
+  implicitHeight: Theme.chipHeight
 
   Text {
     id: dateLabel
     anchors.centerIn: parent
-    text: Qt.formatDate(clock.date, "ddd-dd-MM-yy")
-    color: root.pinned ? Wallust.accent : Wallust.base05
-    font.family: "Iosevka"
-    font.pixelSize: 12
+    text: Qt.formatDate(clock.date, "ddd dd MMM").toUpperCase()
+    color: root.pinned ? Theme.accent : (root.hovered ? Theme.accent : Theme.text)
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontSmall
     font.bold: true
+
+    Behavior on color {
+      ColorAnimation { duration: 200; easing.type: Easing.InOutSine }
+    }
+  }
+
+  Rectangle {
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    height: Theme.stripe
+    visible: root.hovered || root.pinned
+    color: Theme.accent
   }
 
   SystemClock {

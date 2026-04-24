@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import "wallust.js" as Wallust
@@ -10,140 +9,77 @@ Rectangle {
   required property string monitorName
   required property string monitorId
   property bool compact: false
-  property bool borderless: false
+  property bool borderless: true
   readonly property string home: Quickshell.env("HOME") || ""
   readonly property string cycleScript: home + "/.config/hypr/scripts/cycle-layout.sh"
   readonly property string layoutScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/bar_layout.sh"
   readonly property string refreshStamp: "/tmp/quickshell-layout-refresh.state"
   property string layout: "MASTER"
-  readonly property int edgeWidth: 2
 
   function refreshLayout() {
     statusProcess.exec([root.layoutScript, root.monitorName])
   }
 
-  color: borderless ? "transparent" : backgroundColor(layout)
-  implicitWidth: compact ? layoutLabel.implicitWidth + 8 : 28
-  implicitHeight: borderless ? 20 : (compact ? 20 : 24)
-
-  Rectangle {
-    visible: !root.compact && !root.borderless
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: root.edgeWidth
-    color: Wallust.base03
-  }
-
-  Rectangle {
-    visible: !root.compact && !root.borderless
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.left: parent.left
-    width: root.edgeWidth
-    color: Wallust.base03
-  }
-
-  Rectangle {
-    visible: !root.compact && !root.borderless
-    anchors.bottom: parent.bottom
-    anchors.left: parent.left
-    anchors.right: parent.right
-    height: root.edgeWidth
-    color: Wallust.base03
-  }
+  color: "transparent"
+  implicitWidth: row.implicitWidth + Theme.padMd + Theme.stripe
+  implicitHeight: Theme.chipHeight
 
   function normalizedLayout(value) {
     return (value || "").trim().toUpperCase()
   }
 
-  function backgroundColor(value) {
+  function stripeColor(value) {
     switch (normalizedLayout(value)) {
-    case "MASTER":
-      return Wallust.accent
-    case "DWINDLE":
-      return Wallust.base0B
-    case "SCROLLING":
-      return Wallust.base0E
-    case "MONOCLE":
-      return Wallust.base0A
-    default:
-      return Wallust.base03
+    case "MASTER":   return Theme.accent
+    case "DWINDLE":  return Theme.success
+    case "SCROLLING": return Wallust.base0E
+    case "MONOCLE":  return Theme.warning
+    default:         return Theme.border
     }
   }
 
-  function iconSource(value) {
+  function shortLabel(value) {
     switch (normalizedLayout(value)) {
-    case "MASTER":
-      return "ressources/layout-icons/layout-master.svg"
-    case "DWINDLE":
-      return "ressources/layout-icons/layout-dwindle.svg"
-    case "SCROLLING":
-      return "ressources/layout-icons/layout-scrolling.svg"
-    case "MONOCLE":
-      return "ressources/layout-icons/layout-monocle.svg"
-    default:
-      return ""
+    case "MASTER":   return "MAS"
+    case "DWINDLE":  return "DWI"
+    case "SCROLLING": return "SCR"
+    case "MONOCLE":  return "MON"
+    default:         return normalizedLayout(value).slice(0, 3)
     }
   }
 
-  Text {
-    id: layoutLabel
-    anchors.centerIn: parent
-    visible: root.compact
-    text: root.normalizedLayout(root.layout).slice(0, 3)
-    color: Wallust.base00
-    font.family: "Iosevka"
-    font.pixelSize: 11
-    font.bold: true
-  }
-
-  Item {
-    id: iconWrap
-    anchors.centerIn: parent
-    width: 16
-    height: 16
-    visible: !root.compact
-
-    property real swirl: 0
-
-    transform: Rotation {
-      origin.x: iconWrap.width / 2
-      origin.y: iconWrap.height / 2
-      angle: iconWrap.swirl
+  // Left accent stripe, colored per layout
+  Rectangle {
+    anchors {
+      left: parent.left
+      top: parent.top
+      bottom: parent.bottom
     }
+    width: Theme.stripe
+    color: root.stripeColor(root.layout)
 
-    Image {
-      id: iconImage
-      anchors.fill: parent
-      source: root.iconSource(root.layout)
-      fillMode: Image.PreserveAspectFit
-      smooth: true
-    }
-
-    MultiEffect {
-      anchors.fill: iconImage
-      source: iconImage
-      colorization: 1.0
-      colorizationColor: root.borderless ? Wallust.base05 : Wallust.background
-    }
-
-    SequentialAnimation {
-      id: swirlAnim
-      NumberAnimation {
-        target: iconWrap
-        property: "swirl"
-        from: 0
-        to: 360
-        duration: 520
-        easing.type: Easing.OutBack
-        easing.overshoot: 2.2
-      }
-      ScriptAction { script: iconWrap.swirl = 0 }
+    Behavior on color {
+      ColorAnimation { duration: 220; easing.type: Easing.InOutSine }
     }
   }
 
-  onLayoutChanged: swirlAnim.restart()
+  Row {
+    id: row
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+    anchors.leftMargin: Theme.stripe + Theme.padSm
+    spacing: 0
+
+    Text {
+      anchors.verticalCenter: parent.verticalCenter
+      text: root.shortLabel(root.layout)
+      color: Theme.text
+      font.family: Theme.fontFamily
+      font.pixelSize: Theme.fontCaption
+      font.bold: true
+      font.letterSpacing: 0.6
+    }
+  }
 
   MouseArea {
     anchors.fill: parent

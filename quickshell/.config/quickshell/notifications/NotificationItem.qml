@@ -3,7 +3,7 @@ import Quickshell
 import Quickshell.Widgets
 import Quickshell.Services.Notifications as Notifications
 import "." as Notif
-import "../wallust.js" as Wallust
+import ".." as Root
 
 Rectangle {
   id: root
@@ -16,14 +16,14 @@ Rectangle {
 
   readonly property bool critical: notification && notification.urgency === Notifications.NotificationUrgency.Critical
   readonly property color accentColor: {
-    if (!notification) return Wallust.base03
+    if (!notification) return Root.Theme.textDim
     switch (notification.urgency) {
     case Notifications.NotificationUrgency.Low:
-      return Wallust.base03
+      return Root.Theme.textDim
     case Notifications.NotificationUrgency.Critical:
-      return Wallust.base08
+      return Root.Theme.critical
     default:
-      return Wallust.accent
+      return Root.Theme.accent
     }
   }
 
@@ -50,18 +50,19 @@ Rectangle {
     return actions
   }
 
-  color: critical ? Wallust.base01 : (compact ? Wallust.base03 : Wallust.base01)
-  border.width: 2
-  border.color: accentColor
+  color: critical ? Root.Theme.bg : Root.Theme.surface
+  border.width: Root.Theme.hairline
+  border.color: Root.Theme.border
   implicitWidth: compact ? 392 : 360
-  implicitHeight: content.implicitHeight + 20
+  implicitHeight: content.implicitHeight + Root.Theme.padLg * 2
   height: implicitHeight
 
+  // Urgency stripe (left, thick)
   Rectangle {
     anchors.left: parent.left
     anchors.top: parent.top
     anchors.bottom: parent.bottom
-    width: 2
+    width: Root.Theme.stripeThick
     color: root.accentColor
   }
 
@@ -80,14 +81,14 @@ Rectangle {
   Row {
     id: content
     anchors.fill: parent
-    anchors.margins: 10
-    anchors.leftMargin: 14
+    anchors.margins: Root.Theme.padLg
+    anchors.leftMargin: Root.Theme.stripeThick + Root.Theme.padLg
     anchors.rightMargin: 28
-    spacing: 10
+    spacing: Root.Theme.padMd
 
     Column {
       width: hasImage ? parent.width - 58 : parent.width
-      spacing: 8
+      spacing: Root.Theme.padMd
 
       readonly property bool hasImage: root.notification && root.notification.image
 
@@ -112,23 +113,35 @@ Rectangle {
             anchors.centerIn: parent
             visible: !root.notification || !root.notification.appIcon
             text: "󰂚"
-            color: Wallust.base04
-            font.family: "Symbols Nerd Font Mono"
-            font.pixelSize: 16
+            color: Root.Theme.textMuted
+            font.family: Root.Theme.iconFamily
+            font.pixelSize: Root.Theme.fontTitle + 2
           }
         }
 
         Text {
           anchors.left: parent.left
           anchors.leftMargin: 32
-          anchors.right: parent.right
+          anchors.right: timeLabel.left
+          anchors.rightMargin: Root.Theme.padMd
           anchors.verticalCenter: parent.verticalCenter
           text: root.notification ? (root.notification.appName || root.notification.desktopEntry || "APP") : "APP"
           elide: Text.ElideRight
-          color: Wallust.base05
-          font.family: "Iosevka"
-          font.pixelSize: 10
+          color: Root.Theme.textMuted
+          font.family: Root.Theme.fontFamily
+          font.pixelSize: Root.Theme.fontCaption
           font.bold: true
+          font.letterSpacing: 0.6
+        }
+
+        Text {
+          id: timeLabel
+          anchors.right: parent.right
+          anchors.verticalCenter: parent.verticalCenter
+          text: root.relativeTime()
+          color: Root.Theme.textDim
+          font.family: Root.Theme.fontFamily
+          font.pixelSize: Root.Theme.fontCaption
         }
       }
 
@@ -136,18 +149,9 @@ Rectangle {
         width: parent.width
         text: root.notification ? root.notification.summary : ""
         elide: Text.ElideRight
-        color: Wallust.base05
-        font.family: "Iosevka"
-        font.pixelSize: compact ? 11 : 12
-        font.bold: true
-      }
-
-      Text {
-        width: parent.width
-        text: root.relativeTime()
-        color: Wallust.base04
-        font.family: "Iosevka"
-        font.pixelSize: 10
+        color: Root.Theme.text
+        font.family: Root.Theme.fontFamily
+        font.pixelSize: root.compact ? Root.Theme.fontSmall : Root.Theme.fontBody
         font.bold: true
       }
 
@@ -157,14 +161,14 @@ Rectangle {
         wrapMode: Text.Wrap
         textFormat: Text.RichText
         text: root.notification ? (root.notification.body || "") : ""
-        color: Wallust.base04
-        font.family: "Iosevka"
-        font.pixelSize: 10
+        color: Root.Theme.textMuted
+        font.family: Root.Theme.fontFamily
+        font.pixelSize: Root.Theme.fontCaption
       }
 
       Row {
         visible: repeater.count > 0
-        spacing: 8
+        spacing: Root.Theme.padMd
 
         Repeater {
           id: repeater
@@ -174,24 +178,27 @@ Rectangle {
             required property var modelData
 
             width: Math.max(72, actionLabel.implicitWidth + 14)
-            height: 28
+            height: 24
             color: "transparent"
-            border.width: 2
-            border.color: Wallust.base03
+            border.width: Root.Theme.hairline
+            border.color: Root.Theme.border
 
             Text {
               id: actionLabel
               anchors.centerIn: parent
               text: modelData.text
-              color: Wallust.base05
-              font.family: "Iosevka"
-              font.pixelSize: 10
+              color: Root.Theme.text
+              font.family: Root.Theme.fontFamily
+              font.pixelSize: Root.Theme.fontCaption
               font.bold: true
+              font.letterSpacing: 0.5
             }
 
             MouseArea {
               anchors.fill: parent
+              hoverEnabled: true
               onClicked: modelData.invoke()
+              onContainsMouseChanged: parent.border.color = containsMouse ? Root.Theme.accent : Root.Theme.border
             }
           }
         }
@@ -213,21 +220,21 @@ Rectangle {
     id: closeButton
     anchors.top: parent.top
     anchors.right: parent.right
-    anchors.topMargin: 8
-    anchors.rightMargin: 8
+    anchors.topMargin: Root.Theme.padMd
+    anchors.rightMargin: Root.Theme.padMd
     width: 18
     height: 18
     visible: root.closeVisible
     color: "transparent"
-    border.width: 2
-    border.color: Wallust.base03
+    border.width: Root.Theme.hairline
+    border.color: Root.Theme.border
 
     Text {
       anchors.centerIn: parent
       text: "󰅖"
-      color: Wallust.base05
-      font.family: "Symbols Nerd Font Mono"
-      font.pixelSize: 10
+      color: Root.Theme.text
+      font.family: Root.Theme.iconFamily
+      font.pixelSize: Root.Theme.fontCaption
     }
 
     MouseArea {

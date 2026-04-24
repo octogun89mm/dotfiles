@@ -11,7 +11,7 @@ Rectangle {
   property bool active: false
   property var disks: []
 
-  color: Wallust.base03
+  color: Wallust.base00
   implicitHeight: diskColumn.implicitHeight + 24
 
   function parseDiskValue(value) {

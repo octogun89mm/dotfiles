@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import "../wallust.js" as Wallust
+import ".." as Root
 
 PopupWindow {
   id: root
@@ -15,7 +15,7 @@ PopupWindow {
 
   readonly property bool popupHovered: popupHover.containsMouse
   readonly property bool showPopup: pinned || triggerHovered || popupHovered || closeDelay.running
-  readonly property color popupBorderColor: pinned ? Wallust.accent : Wallust.base03
+  readonly property color popupBorderColor: pinned ? Wallust.base0C : Wallust.base02
 
   function syncLoadedItem() {
     if (!contentLoader.item) return

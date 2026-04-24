@@ -1,5 +1,4 @@
 import QtQuick
-import "wallust.js" as Wallust
 
 Item {
   id: root
@@ -7,8 +6,9 @@ Item {
   property bool mirrored: false
   property string channel: "left"
   property int columnWidth: 2
-  property int rowHeight: 2
-  property int rowSpacing: 1
+  property int rowHeight: 1
+  property int rowSpacing: 0
+  property int maxHeight: 16
   property var history: []
 
   readonly property var channelBars: channel === "right" ? CavaState.rightBars : CavaState.leftBars
@@ -16,8 +16,8 @@ Item {
   readonly property int maxColumns: Math.max(1, Math.floor(implicitWidth / columnWidth))
 
   visible: CavaState.enabled && CavaState.available
-  implicitWidth: 40
-  implicitHeight: bandCount > 0 ? (bandCount * rowHeight) + ((bandCount - 1) * rowSpacing) : 0
+  implicitWidth: 60
+  implicitHeight: bandCount > 0 ? Math.min(maxHeight, (bandCount * rowHeight) + ((bandCount - 1) * rowSpacing)) : 0
 
   function trimHistory() {
     if (history.length > maxColumns) {
@@ -36,9 +36,9 @@ Item {
   }
 
   function colorForLevel(level) {
-    if (level >= 0.75) return Wallust.accent
-    if (level >= 0.4) return Wallust.base05
-    return Wallust.base03
+    if (level >= 0.75) return Theme.accent
+    if (level >= 0.4) return Theme.text
+    return Theme.textDim
   }
 
   onMaxColumnsChanged: {

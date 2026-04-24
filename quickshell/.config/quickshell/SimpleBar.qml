@@ -1,7 +1,6 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import "wallust.js" as Wallust
 import "popup" as Popup
 
 Scope {
@@ -27,53 +26,61 @@ Scope {
         right: true
       }
 
-      implicitHeight: 24
+      implicitHeight: Theme.barHeight
 
       Rectangle {
+        id: barBg
         anchors.fill: parent
-        color: Wallust.base00
+        color: Theme.bg
 
-        Row {
-          anchors.left: parent.left
-          anchors.leftMargin: 8
-          anchors.verticalCenter: parent.verticalCenter
-          spacing: 10
-
-          LayoutIndicator {
-            monitorName: barWindow.modelData.name
-            monitorId: String(barWindow.modelData.id)
-            compact: false
-            borderless: true
+        // ───────── ROW 1 — IDENTITY + NOW ─────────
+        Item {
+          id: row1
+          anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
           }
+          height: Theme.rowHeight
 
-          Rectangle {
+          // LEFT cluster
+          Row {
+            anchors.left: parent.left
+            anchors.leftMargin: Theme.padMd
             anchors.verticalCenter: parent.verticalCenter
-            width: 1
-            height: 12
-            color: Wallust.base02
+            spacing: Theme.padMd
+
+            LayoutIndicator {
+              monitorName: barWindow.modelData.name
+              monitorId: String(barWindow.modelData.id)
+            }
+
+            Rectangle {
+              anchors.verticalCenter: parent.verticalCenter
+              width: 1
+              height: 10
+              color: Theme.border
+            }
+
+            SimpleWorkspace {}
+
+            Rectangle {
+              anchors.verticalCenter: parent.verticalCenter
+              width: 1
+              height: 10
+              color: Theme.border
+            }
+
+            ActiveWindowTitle {
+              anchors.verticalCenter: parent.verticalCenter
+              maxWidth: 260
+            }
           }
 
-          SimpleWindowCount {
-            monitorName: barWindow.modelData.name
-          }
-
-          SimpleWorkspace {}
-        }
-
-        Row {
-          anchors.horizontalCenter: parent.horizontalCenter
-          anchors.verticalCenter: parent.verticalCenter
-          spacing: 8
-
-          CavaBars {
-            anchors.verticalCenter: parent.verticalCenter
-            mirrored: true
-            channel: "left"
-          }
-
+          // CENTER cluster
           SimpleClock {
             id: centerClock
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.centerIn: parent
             pinned: barWindow.localPinned
             onClicked: {
               if (barWindow.localPinned)
@@ -83,55 +90,138 @@ Scope {
             }
           }
 
-          CavaBars {
-            anchors.verticalCenter: parent.verticalCenter
-            channel: "right"
-          }
-        }
-
-        Row {
-          anchors.right: parent.right
-          anchors.rightMargin: 8
-          anchors.verticalCenter: parent.verticalCenter
-          spacing: 10
-
+          // RIGHT cluster
           Row {
+            anchors.right: parent.right
+            anchors.rightMargin: Theme.padMd
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 6
+            spacing: Theme.padMd
 
-            IdleInhibitor {
-              anchors.verticalCenter: parent.verticalCenter
-              borderless: true
-              onlyWhenActive: true
-              activeColor: Wallust.base05
-              inactiveColor: Wallust.base05
-            }
+            MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
 
             Tray {
               anchors.verticalCenter: parent.verticalCenter
               showToggle: false
               expanded: true
-              iconColor: Wallust.base05
+              iconColor: Theme.text
+            }
+
+            Rectangle {
+              anchors.verticalCenter: parent.verticalCenter
+              width: 1
+              height: 10
+              color: Theme.border
+            }
+
+            SimpleDate {
+              id: dateWidget
+              anchors.verticalCenter: parent.verticalCenter
+              pinned: barWindow.localCalendarPinned
+              onClicked: {
+                if (barWindow.localCalendarPinned)
+                  scope.calendarPinnedScreen = null
+                else
+                  scope.calendarPinnedScreen = barWindow.modelData
+              }
+            }
+          }
+        }
+
+        // ───────── ROW 2 — AMBIENT + LIVE ─────────
+        Item {
+          id: row2
+          anchors {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+          }
+          height: Theme.rowHeight
+
+          // LEFT cluster — system metrics
+          Row {
+            anchors.left: parent.left
+            anchors.leftMargin: Theme.padMd
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: Theme.padSm
+
+            SimpleWindowCount {
+              monitorName: barWindow.modelData.name
+            }
+
+            Rectangle {
+              anchors.verticalCenter: parent.verticalCenter
+              width: 1; height: 10; color: Theme.border
+            }
+
+            InlineMetric {
+              anchors.verticalCenter: parent.verticalCenter
+              label: "CPU"
+              value: MetricsState.cpuUsage >= 0
+                ? String(Math.round(MetricsState.cpuUsage)).padStart(2, "0") + "%"
+                : "--"
+              history: MetricsState.cpuHistory
+              accentColor: Theme.accent
+            }
+
+            InlineMetric {
+              anchors.verticalCenter: parent.verticalCenter
+              label: "MEM"
+              value: MetricsState.memPercent >= 0
+                ? String(Math.round(MetricsState.memPercent)).padStart(2, "0") + "%"
+                : "--"
+              history: MetricsState.memHistory
+              accentColor: Theme.accentAlt
+            }
+
+            InlineMetric {
+              anchors.verticalCenter: parent.verticalCenter
+              label: "GPU"
+              value: MetricsState.gpuUsage >= 0
+                ? String(Math.round(MetricsState.gpuUsage)).padStart(2, "0") + "%"
+                : "--"
+              history: MetricsState.gpuHistory
+              accentColor: Theme.success
             }
           }
 
-          Rectangle {
+          // CENTER cluster — cava visualizer
+          Row {
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            width: 1
-            height: 12
-            color: Wallust.base02
+            spacing: Theme.padMd
+
+            CavaBars {
+              anchors.verticalCenter: parent.verticalCenter
+              mirrored: true
+              channel: "left"
+              implicitWidth: 80
+            }
+
+            Rectangle {
+              anchors.verticalCenter: parent.verticalCenter
+              width: 1
+              height: 10
+              color: Theme.border
+            }
+
+            CavaBars {
+              anchors.verticalCenter: parent.verticalCenter
+              channel: "right"
+              implicitWidth: 80
+            }
           }
 
-          SimpleDate {
-            id: dateWidget
+          // RIGHT cluster — media + language
+          Row {
+            anchors.right: parent.right
+            anchors.rightMargin: Theme.padMd
             anchors.verticalCenter: parent.verticalCenter
-            pinned: barWindow.localCalendarPinned
-            onClicked: {
-              if (barWindow.localCalendarPinned)
-                scope.calendarPinnedScreen = null
-              else
-                scope.calendarPinnedScreen = barWindow.modelData
-            }
+            spacing: Theme.padMd
+
+            MediaChip { anchors.verticalCenter: parent.verticalCenter }
+            KeyboardLayout { anchors.verticalCenter: parent.verticalCenter }
           }
         }
       }

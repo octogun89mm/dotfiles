@@ -15,7 +15,7 @@ Scope {
       exclusiveZone: 0
       visible: !Notif.NotificationServer.dnd && Notif.NotificationServer.popupQueue.count > 0
       implicitWidth: modelData.width
-      implicitHeight: popupColumn.implicitHeight + 35
+      implicitHeight: popupColumn.implicitHeight + 50
       mask: Region { item: popupColumn }
 
       anchors {
@@ -25,7 +25,7 @@ Scope {
       }
 
       margins {
-        top: 10
+        top: 46
       }
 
       Column {

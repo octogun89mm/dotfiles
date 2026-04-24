@@ -1,6 +1,5 @@
 import QtQuick
 import Quickshell
-import "wallust.js" as Wallust
 
 Item {
   id: root
@@ -10,38 +9,41 @@ Item {
 
   signal clicked
 
-  implicitWidth: clockLabel.implicitWidth + 16
-  implicitHeight: 20
+  implicitWidth: clockLabel.implicitWidth + Theme.padMd * 2
+  implicitHeight: Theme.chipHeight
 
   Rectangle {
-    id: pinBox
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.horizontalCenter: parent.horizontalCenter
-    height: parent.height
-    width: root.pinned ? parent.width : 0
-    color: Wallust.base08
-
-    Behavior on width {
-      NumberAnimation {
-        duration: 520
-        easing.type: Easing.OutBack
-        easing.overshoot: 1.6
-      }
+    visible: root.pinned
+    anchors {
+      top: parent.top
+      left: parent.left
+      right: parent.right
     }
+    height: Theme.stripe
+    color: Theme.accent
   }
 
   Text {
     id: clockLabel
     anchors.centerIn: parent
     text: Qt.formatTime(clock.date, "hh:mm AP")
-    color: root.pinned ? Wallust.background : Wallust.base05
-    font.family: "Iosevka"
-    font.pixelSize: 14
+    color: root.pinned ? Theme.accent : (root.hovered ? Theme.accent : Theme.text)
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontTitle
     font.bold: true
 
     Behavior on color {
-      ColorAnimation { duration: 320; easing.type: Easing.InOutSine }
+      ColorAnimation { duration: 200; easing.type: Easing.InOutSine }
     }
+  }
+
+  Rectangle {
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    height: Theme.stripe
+    visible: root.hovered || root.pinned
+    color: Theme.accent
   }
 
   SystemClock {

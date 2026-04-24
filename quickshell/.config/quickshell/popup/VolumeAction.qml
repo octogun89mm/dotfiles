@@ -7,7 +7,7 @@ Rectangle {
 
   property bool active: false
 
-  color: Wallust.base03
+  color: Wallust.base00
   implicitWidth: 132
   implicitHeight: 54
 
@@ -27,7 +27,7 @@ Rectangle {
       Text {
         anchors.centerIn: parent
         text: Root.VolumeState.muted ? "󰖁" : Root.VolumeState.volume >= 66 ? "󰕾" : Root.VolumeState.volume >= 33 ? "󰖀" : "󰕿"
-        color: Root.VolumeState.muted ? Wallust.base03 : Wallust.accent
+        color: Root.VolumeState.muted ? Wallust.base03 : Wallust.base0C
         font.family: "Symbols Nerd Font Mono"
         font.pixelSize: 16
       }

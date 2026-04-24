@@ -7,9 +7,9 @@ Rectangle {
   property bool active: false
   property bool pinned: false
 
-  color: Wallust.base00
+  color: Wallust.base01
   border.width: 2
-  border.color: pinned ? Wallust.base0E : Wallust.base03
+  border.color: pinned ? Wallust.base0C : Wallust.base02
   implicitWidth: 590
   implicitHeight: content.implicitHeight + 24
 
