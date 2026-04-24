@@ -17,29 +17,30 @@
 /* BAR WINDOW */
 window#waybar {
   background-color: @bg;
+  border-bottom: 2px solid @c8;
 }
 
 /* TOOLTIP */
 tooltip {
   background: @bg;
-  border: 1px solid @c2;
+  border: 2px solid @c14;
 }
 
 /* MAIN MENU ICON */
 #custom-archicon {
   font-family: "Symbols Nerd Font Mono";
   font-size: 12pt;
-  color: @c2;
+  color: @c14;
 }
 
 /* IDLE INHIBITOR */
 #custom-idle-inhibit.activated {
-  color: @c3;
+  color: @c14;
 }
 
 /* EXPRESSVPN WIDGET */
 #custom-expressvpn.vpn-connected {
-  color: @c3;
+  color: @c14;
 }
 
 #custom-expressvpn.vpn-disconnected {
@@ -49,18 +50,18 @@ tooltip {
 /* STATUS NOTIFIER (SYSTRAY) */
 #tray menu {
   background-color: @bg;
-  border: solid 2px @c2;
+  border: solid 2px @c14;
   padding: 5px;
   outline: none;
   box-shadow: none;
 }
 
 #tray menuitem:hover {
-  background-color: @c2;
+  background-color: @bg-light;
 }
 
 #tray menuitem:hover label {
-  color: @bg;
+  color: @c14;
   font-weight: bold;
 }
 
@@ -100,12 +101,12 @@ tooltip {
 }
 
 #workspaces button:not(.empty):not(.active):not(.visible) label {
-  color: @c2;
+  color: @fg;
 }
 
 
 #workspaces button.visible label {
-  color: @c5;
+  color: @c13;
 }
 
 #workspaces button.active {
@@ -113,6 +114,5 @@ tooltip {
 }
 
 #workspaces button.active label {
-  color: @c3;
+  color: @c14;
 }
-

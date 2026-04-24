@@ -17,13 +17,14 @@
 /* BAR WINDOW */
 window#waybar {
   background-color: @bg;
+  border-bottom: 2px solid @c8;
 }
 
 /* MAIN MENU ICON */
 #custom-archicon {
   font-family: "Symbols Nerd Font Mono";
   font-size: 12pt;
-  color: @c2;
+  color: @c14;
 }
 
 /* SEPARATOR */
@@ -57,11 +58,11 @@ window#waybar {
 }
 
 #workspaces button:not(.empty):not(.active):not(.visible) label {
-  color: @c2;
+  color: @fg;
 }
 
 #workspaces button.visible label {
-  color: @c5;
+  color: @c13;
 }
 
 #workspaces button.active {
@@ -69,5 +70,5 @@ window#waybar {
 }
 
 #workspaces button.active label {
-  color: @c3;
+  color: @c14;
 }
