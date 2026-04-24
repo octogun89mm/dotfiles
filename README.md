@@ -12,6 +12,7 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **rofi** | App launcher, clipboard history fallback, screenshot/screenrecord/OCR/wallpaper/emoji picker scripts |
 | **foot** | Foot terminal config and shared Wallust color include |
 | **waybar** | Secondary bar config and utility scripts reused by other packages |
+| **wallust** | Curated static colorschemes for applying generated colors across the desktop stack |
 | **sway** | Sway compositor config (legacy) |
 | **tmux** | Terminal multiplexer config |
 | **nvim** | Lazy.nvim-based Neovim config with built-in treesitter, LSP, completion, Telescope, git tooling, AI helpers, and focused editing UX |
