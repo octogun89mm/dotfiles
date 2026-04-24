@@ -11,6 +11,7 @@ Item {
   property int maxWidth: 260
 
   function refresh() {
+    if (queryProcess.running) return
     queryProcess.exec(["hyprctl", "activewindow", "-j"])
   }
 
@@ -33,7 +34,16 @@ Item {
 
   Connections {
     target: Hyprland
-    function onRawEvent() { root.refresh() }
+    function onRawEvent(event) {
+      const name = event.name
+      if (name === "activewindow"
+          || name === "activewindowv2"
+          || name === "closewindow"
+          || name === "windowtitle"
+          || name === "windowtitlev2") {
+        root.refresh()
+      }
+    }
   }
 
   Component.onCompleted: refresh()
