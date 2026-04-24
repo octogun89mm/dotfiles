@@ -8,6 +8,7 @@
   font-family: "Iosevka", monospace;
   font-size: 9pt;
   margin: 5px 10px 0px 10px;
+  border-bottom: 2px solid $c8;
 }
 
 // Left section
@@ -19,7 +20,7 @@
   font-family: "Symbols Nerd Font Mono";
   font-size: 12pt;
   color: $bg;
-  background-color: $c2;
+  background-color: $c14;
   margin-right: 10px;
   padding: 0 6px;
   min-width: 20px;
@@ -52,16 +53,16 @@
 }
 
 .ws-occupied {
-  color: $c2;
+  color: $fg;
 }
 
 .ws-visible {
-  color: $c5;
+  color: $c13;
 }
 
 .ws-active {
   background-color: $bg-light;
-  color: $c3;
+  color: $c14;
 }
 
 // Right section
@@ -87,8 +88,8 @@
   transition: background-color 200ms ease;
 
   &.layout-MASTER    { background-color: $c4; }
-  &.layout-DWINDLE   { background-color: $c2; }
-  &.layout-SCROLLING { background-color: $c5; }
+  &.layout-DWINDLE   { background-color: $c14; }
+  &.layout-SCROLLING { background-color: $c13; }
   &.layout-MONOCLE   { background-color: $c3; }
 }
 
@@ -128,7 +129,7 @@
 
 .calendar-popup {
   background-color: $bg;
-  border: 2px solid $c4;
+  border: 2px solid $c14;
   padding: 10px 12px 8px 12px;
 }
 
@@ -150,14 +151,14 @@
   }
 
   button {
-    color: $c2;
+    color: $c14;
     min-width: 22px;
     min-height: 22px;
     padding: 2px;
   }
 
   .highlight {
-    color: $c2;
+    color: $c14;
     font-weight: bold;
   }
 
@@ -183,7 +184,7 @@
 
 .popup-panel {
   background-color: $bg;
-  border: 2px solid $c2;
+  border: 2px solid $c14;
 }
 
 .popup-row {
@@ -193,7 +194,7 @@
 .popup-icon {
   font-family: "Symbols Nerd Font Mono";
   font-size: 12pt;
-  color: $c2;
+  color: $c14;
   margin-right: 10px;
   min-width: 18px;
 }
@@ -231,7 +232,7 @@
 .popup-subheader-icon {
   font-family: "Symbols Nerd Font Mono";
   font-size: 9pt;
-  color: $c2;
+  color: $c14;
   margin-right: 6px;
 }
 
@@ -254,7 +255,7 @@
 .popup-weather-icon {
   font-family: "Weather Icons";
   font-size: 40pt;
-  color: $c2;
+  color: $c14;
   margin-bottom: 8px;
 }
 
