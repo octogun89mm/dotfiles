@@ -1,19 +1,22 @@
 [global]
     monitor = 1
     follow = none
-    width = (300,450)
-    height = (50,200)
+    width = (340,460)
+    height = (60,220)
     notification_limit = 20
     sort = update
     origin = top-center
-    offset = (0,10)
-    gap_size = 5
+    offset = (0,12)
+    gap_size = 8
     indicate_hidden = true
     show_indicators = false
     frame_width = 2
-    separator_color = auto
+    separator_color = "#5D6070"
     font = "Iosevka 10"
     corner_radius = 0
+    padding = 10
+    horizontal_padding = 12
+    text_icon_padding = 8
     history_length = 100
     markup = full
     dmenu = /usr/bin/rofi -dmenu
@@ -23,10 +26,29 @@
     mouse_right_click = close_current
 
     progress_bar = true
-    progress_bar_height = 10
-    progress_bar_frame_width = 1
+    progress_bar_height = 8
+    progress_bar_frame_width = 2
     progress_bar_min_width = 150
     progress_bar_max_width = 300
 
 
-    format = "<b>%a</b>\n<i>%s</i>\n%b"
+    format = "<b>%a</b>\n<span foreground='#8BE9FD'><b>%s</b></span>\n%b"
+
+[urgency_low]
+    background = "#1F202A"
+    foreground = "#A6A6B2"
+    frame_color = "#5D6070"
+    highlight = "#5D6070"
+
+[urgency_normal]
+    background = "#1F202A"
+    foreground = "#F8F8F2"
+    frame_color = "#8BE9FD"
+    highlight = "#8BE9FD"
+
+[urgency_critical]
+    background = "#303241"
+    foreground = "#F8F8F2"
+    frame_color = "#FF5555"
+    highlight = "#FF5555"
+    timeout = 0
