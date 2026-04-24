@@ -21,6 +21,7 @@ Rectangle {
   }
 
   readonly property bool isFocused: workspaceData ? workspaceData.focused : false
+  readonly property color focusedColor: Wallust.base0A
   readonly property bool isVisible: {
     const monitors = Hyprland.monitors.values
 
@@ -50,7 +51,7 @@ Rectangle {
       anchors.centerIn: parent
       width: 10
       height: 10
-      color: Wallust.accent
+      color: root.focusedColor
       rotation: 45
     }
 

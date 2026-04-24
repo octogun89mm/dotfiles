@@ -25,7 +25,7 @@ Item {
       NumberAnimation {
         duration: 520
         easing.type: Easing.OutBack
-        easing.overshoot: 3.5
+        easing.overshoot: 1.6
       }
     }
   }

@@ -18,6 +18,7 @@ Rectangle {
     && monitorState.specialWorkspace.id === workspace.id
   )
 
+  property color focusedColor: Wallust.base0A
   property color markerColor: isHighlighted ? Wallust.base00 : Wallust.base03
 
   Connections {
@@ -29,7 +30,7 @@ Rectangle {
     }
   }
 
-  color: isHighlighted ? Wallust.accent : "transparent"
+  color: isHighlighted ? focusedColor : "transparent"
   border.width: 2
   border.color: Wallust.base03
   implicitHeight: 24

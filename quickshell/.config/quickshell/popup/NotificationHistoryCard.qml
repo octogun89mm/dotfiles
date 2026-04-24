@@ -17,8 +17,6 @@ Rectangle {
   )
 
   color: Wallust.base03
-  border.width: 2
-  border.color: Wallust.base01
   implicitHeight: content.implicitHeight + 24
 
   Column {
