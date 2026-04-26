@@ -1,5 +1,6 @@
 -- All the basic settings
 require("settings")
+require("config.wallust")
 -- Lazy plugins manager configuration and the list of all the plugins
 require("config.lazy")
 -- Core treesitter bootstrap without the archived nvim-treesitter plugin

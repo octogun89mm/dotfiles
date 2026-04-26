@@ -12,6 +12,7 @@ Singleton {
   property string albumArt: ""
   property bool playing: false
   property string playerName: ""
+  property string playerId: ""
   property bool available: false
 
   readonly property string displayText: {
@@ -25,29 +26,30 @@ Singleton {
       "/bin/sh",
       "-c",
       "command -v playerctl >/dev/null 2>&1 || exit 0; " +
-      "player=$(playerctl -l 2>/dev/null | awk 'BEGIN{first=\"\"; playing=\"\"; chosen=\"\"} " +
-      "$0 == \"mpd\" { chosen=$0; print chosen; exit } " +
+      "player=$(playerctl -l 2>/dev/null | awk 'BEGIN{first=\"\"; playing=\"\"; mpd=\"\"} " +
+      "$0 == \"mpd\" { mpd=$0 } " +
       "first == \"\" { first=$0 } " +
       "{ cmd = \"playerctl --player=\" $0 \" status 2>/dev/null\"; cmd | getline status; close(cmd); " +
       "if (tolower(status) == \"playing\" && playing == \"\") playing=$0 } " +
-      "END { if (chosen != \"\") exit; if (playing != \"\") print playing; else if (first != \"\") print first }'); " +
+      "END { if (playing != \"\") print playing; else if (mpd != \"\") print mpd; else if (first != \"\") print first }'); " +
       "[ -n \"$player\" ] || exit 0; " +
+      "printf '%s|' \"$player\"; " +
       "playerctl --player=\"$player\" metadata --format '{{status}}|{{playerName}}|{{artist}}|{{title}}|{{mpris:artUrl}}' 2>/dev/null || true"
     ])
   }
 
   function playPause() {
-    controlProcess.exec(["/bin/sh", "-c", "command -v playerctl >/dev/null 2>&1 || exit 0; playerctl --player=mpd,%any play-pause 2>/dev/null || true"])
+    controlProcess.exec(playerId ? ["playerctl", "--player=" + playerId, "play-pause"] : ["playerctl", "--player=%any", "play-pause"])
     refreshDelay.restart()
   }
 
   function next() {
-    controlProcess.exec(["/bin/sh", "-c", "command -v playerctl >/dev/null 2>&1 || exit 0; playerctl --player=mpd,%any next 2>/dev/null || true"])
+    controlProcess.exec(playerId ? ["playerctl", "--player=" + playerId, "next"] : ["playerctl", "--player=%any", "next"])
     refreshDelay.restart()
   }
 
   function previous() {
-    controlProcess.exec(["/bin/sh", "-c", "command -v playerctl >/dev/null 2>&1 || exit 0; playerctl --player=mpd,%any previous 2>/dev/null || true"])
+    controlProcess.exec(playerId ? ["playerctl", "--player=" + playerId, "previous"] : ["playerctl", "--player=%any", "previous"])
     refreshDelay.restart()
   }
 
@@ -60,17 +62,19 @@ Singleton {
       artist = ""
       albumArt = ""
       playerName = ""
+      playerId = ""
       return
     }
 
     const parts = line.split("|")
-    const status = (parts[0] || "").toLowerCase()
+    playerId = parts[0] || ""
+    const status = (parts[1] || "").toLowerCase()
     playing = status === "playing"
-    available = status !== "stopped"
-    playerName = parts[1] || ""
-    artist = parts[2] || ""
-    title = parts[3] || ""
-    albumArt = parts[4] || ""
+    available = status !== "" && status !== "stopped"
+    playerName = parts[2] || ""
+    artist = parts[3] || ""
+    title = parts[4] || ""
+    albumArt = parts[5] || ""
   }
 
   Component.onCompleted: refresh()

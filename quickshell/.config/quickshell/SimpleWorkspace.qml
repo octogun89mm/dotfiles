@@ -30,14 +30,8 @@ Item {
   property var entries: {
     refreshTick
     const result = []
-    let lastMonitor = null
     for (let i = 1; i <= 6; i++) {
-      const mk = monitorKeyFor(i)
-      if (lastMonitor !== null && mk && lastMonitor && mk !== lastMonitor) {
-        result.push({ kind: "sep" })
-      }
       result.push({ kind: "ws", id: i })
-      if (mk) lastMonitor = mk
     }
     return result
   }
@@ -59,31 +53,10 @@ Item {
     Repeater {
       model: root.entries
 
-      Loader {
+      SimpleWorkspaceChip {
         required property var modelData
-        sourceComponent: modelData.kind === "sep" ? sepComponent : wsComponent
-
-        Component {
-          id: wsComponent
-          SimpleWorkspaceChip {
-            workspaceId: modelData.id
-            displayName: String(modelData.id)
-          }
-        }
-
-        Component {
-          id: sepComponent
-          Item {
-            implicitWidth: 1
-            implicitHeight: Theme.chipHeight
-            Rectangle {
-              anchors.centerIn: parent
-              width: 1
-              height: 10
-              color: Theme.border
-            }
-          }
-        }
+        workspaceId: modelData.id
+        displayName: String(modelData.id)
       }
     }
   }

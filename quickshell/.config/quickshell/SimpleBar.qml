@@ -45,6 +45,7 @@ Scope {
 
           // LEFT cluster
           Row {
+            id: leftCluster
             anchors.left: parent.left
             anchors.leftMargin: Theme.padMd
             anchors.verticalCenter: parent.verticalCenter
@@ -63,30 +64,96 @@ Scope {
             }
 
             SimpleWorkspace {}
-
-            Rectangle {
-              anchors.verticalCenter: parent.verticalCenter
-              width: 1
-              height: 10
-              color: Theme.border
-            }
-
-            ActiveWindowTitle {
-              anchors.verticalCenter: parent.verticalCenter
-              maxWidth: 260
-            }
           }
 
-          // CENTER cluster
-          SimpleClock {
-            id: centerClock
+          Item {
+            id: leftGap
+            anchors.left: leftCluster.right
+            anchors.right: centerCluster.left
+            anchors.verticalCenter: parent.verticalCenter
+            height: 1
+          }
+
+          // CENTER cluster — cava + clock + cava
+          Row {
+            id: centerCluster
             anchors.centerIn: parent
-            pinned: barWindow.localPinned
-            onClicked: {
-              if (barWindow.localPinned)
-                scope.pinnedScreen = null
-              else
-                scope.pinnedScreen = barWindow.modelData
+            spacing: Theme.padMd
+
+            CavaBars {
+              anchors.verticalCenter: parent.verticalCenter
+              state: CavaMicState
+              mirrored: true
+              channel: "left"
+              implicitWidth: 50
+            }
+
+            CavaBars {
+              anchors.verticalCenter: parent.verticalCenter
+              mirrored: true
+              channel: "left"
+              implicitWidth: 70
+              accentColor: Theme.accentAlt
+            }
+
+            Text {
+              anchors.verticalCenter: parent.verticalCenter
+              text: "‹"
+              color: cavaPrev.containsMouse ? Theme.text : Theme.textDim
+              font.family: Theme.fontFamily
+              font.pixelSize: Theme.fontSmall
+              Behavior on color { ColorAnimation { duration: 120 } }
+              MouseArea {
+                id: cavaPrev
+                anchors.fill: parent
+                anchors.margins: -4
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: CavaStyleState.prev()
+              }
+            }
+
+            SimpleClock {
+              id: centerClock
+              anchors.verticalCenter: parent.verticalCenter
+              pinned: barWindow.localPinned
+              onClicked: {
+                if (barWindow.localPinned)
+                  scope.pinnedScreen = null
+                else
+                  scope.pinnedScreen = barWindow.modelData
+              }
+            }
+
+            Text {
+              anchors.verticalCenter: parent.verticalCenter
+              text: "›"
+              color: cavaNext.containsMouse ? Theme.text : Theme.textDim
+              font.family: Theme.fontFamily
+              font.pixelSize: Theme.fontSmall
+              Behavior on color { ColorAnimation { duration: 120 } }
+              MouseArea {
+                id: cavaNext
+                anchors.fill: parent
+                anchors.margins: -4
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: CavaStyleState.next()
+              }
+            }
+
+            CavaBars {
+              anchors.verticalCenter: parent.verticalCenter
+              channel: "right"
+              implicitWidth: 70
+              accentColor: Theme.accentAlt
+            }
+
+            CavaBars {
+              anchors.verticalCenter: parent.verticalCenter
+              state: CavaMicState
+              channel: "right"
+              implicitWidth: 50
             }
           }
 
@@ -106,6 +173,122 @@ Scope {
               showToggle: false
               expanded: true
               iconColor: Theme.text
+            }
+
+            Text {
+              anchors.verticalCenter: parent.verticalCenter
+              visible: BarDetailState.level < BarDetailState.maxLevel
+              text: "‹"
+              color: lessArea.containsMouse ? Theme.text : Theme.textDim
+              font.family: Theme.fontFamily
+              font.pixelSize: Theme.fontSmall + 2
+              Behavior on color { ColorAnimation { duration: 120 } }
+
+              MouseArea {
+                id: lessArea
+                anchors.fill: parent
+                anchors.margins: -4
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: BarDetailState.more()
+              }
+            }
+
+            Text {
+              anchors.verticalCenter: parent.verticalCenter
+              visible: BarDetailState.level > BarDetailState.minLevel
+              text: "›"
+              color: moreArea.containsMouse ? Theme.text : Theme.textDim
+              font.family: Theme.fontFamily
+              font.pixelSize: Theme.fontSmall + 2
+              Behavior on color { ColorAnimation { duration: 120 } }
+
+              MouseArea {
+                id: moreArea
+                anchors.fill: parent
+                anchors.margins: -4
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: BarDetailState.less()
+              }
+            }
+
+            Item {
+              id: metricsBox
+              anchors.verticalCenter: parent.verticalCenter
+              readonly property bool collapsed: BarDetailState.level === 0
+              clip: true
+              implicitHeight: Theme.chipHeight
+              implicitWidth: collapsed ? 0 : metricsRow.implicitWidth
+              opacity: collapsed ? 0 : 1
+              scale: collapsed ? 0.4 : 1
+              transformOrigin: Item.Right
+
+              Behavior on implicitWidth {
+                NumberAnimation { duration: 480; easing.type: Easing.OutBack; easing.overshoot: 1.6 }
+              }
+              Behavior on opacity {
+                NumberAnimation { duration: 280; easing.type: Easing.OutCubic }
+              }
+              Behavior on scale {
+                NumberAnimation { duration: 480; easing.type: Easing.OutBack; easing.overshoot: 2.4 }
+              }
+
+              Row {
+                id: metricsRow
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                spacing: Theme.padMd
+
+                InlineMetric {
+                  anchors.verticalCenter: parent.verticalCenter
+                  label: "CPU"
+                  value: MetricsState.cpuUsage >= 0
+                    ? String(Math.round(MetricsState.cpuUsage)).padStart(2, "0") + "%"
+                    : "--"
+                  history: MetricsState.cpuHistory
+                  accentColor: Theme.accent
+                  detail: (MetricsState.cpuTemp >= 0 ? Math.round(MetricsState.cpuTemp) + "C" : "")
+                    + (MetricsState.load1 >= 0 ? " L" + MetricsState.load1.toFixed(2) : "")
+                  showDetail: BarDetailState.level >= 2
+                  showGraph: BarDetailState.level >= 3
+                  graphWidth: 80
+                  Behavior on graphWidth { NumberAnimation { duration: 320; easing.type: Easing.OutBack; easing.overshoot: 1.4 } }
+                }
+
+                InlineMetric {
+                  anchors.verticalCenter: parent.verticalCenter
+                  label: "MEM"
+                  value: MetricsState.memPercent >= 0
+                    ? String(Math.round(MetricsState.memPercent)).padStart(2, "0") + "%"
+                    : "--"
+                  history: MetricsState.memHistory
+                  accentColor: Theme.accentAlt
+                  detail: MetricsState.memUsed >= 0 && MetricsState.memTotal > 0
+                    ? MetricsState.memUsed.toFixed(1) + "/" + MetricsState.memTotal.toFixed(1) + "G"
+                    : ""
+                  showDetail: BarDetailState.level >= 2
+                  showGraph: BarDetailState.level >= 3
+                  graphWidth: 80
+                  Behavior on graphWidth { NumberAnimation { duration: 320; easing.type: Easing.OutBack; easing.overshoot: 1.4 } }
+                }
+
+                InlineMetric {
+                  anchors.verticalCenter: parent.verticalCenter
+                  label: "GPU"
+                  value: MetricsState.gpuUsage >= 0
+                    ? String(Math.round(MetricsState.gpuUsage)).padStart(2, "0") + "%"
+                    : "--"
+                  history: MetricsState.gpuHistory
+                  accentColor: Theme.success
+                  detail: (MetricsState.gpuTemp >= 0 ? Math.round(MetricsState.gpuTemp) + "C" : "")
+                    + (MetricsState.gpuVramTotal > 0 ? " V" + MetricsState.gpuVramUsed.toFixed(1) + "/" + MetricsState.gpuVramTotal.toFixed(1) + "G" : "")
+                  showDetail: BarDetailState.level >= 2
+                  showGraph: BarDetailState.level >= 3
+                  graphWidth: 80
+                  Behavior on graphWidth { NumberAnimation { duration: 320; easing.type: Easing.OutBack; easing.overshoot: 1.4 } }
+                }
+              }
             }
 
             Rectangle {
@@ -149,68 +332,15 @@ Scope {
             SimpleWindowCount {
               monitorName: barWindow.modelData.name
             }
-
-            Rectangle {
-              anchors.verticalCenter: parent.verticalCenter
-              width: 1; height: 10; color: Theme.border
-            }
-
-            InlineMetric {
-              anchors.verticalCenter: parent.verticalCenter
-              label: "CPU"
-              value: MetricsState.cpuUsage >= 0
-                ? String(Math.round(MetricsState.cpuUsage)).padStart(2, "0") + "%"
-                : "--"
-              history: MetricsState.cpuHistory
-              accentColor: Theme.accent
-            }
-
-            InlineMetric {
-              anchors.verticalCenter: parent.verticalCenter
-              label: "MEM"
-              value: MetricsState.memPercent >= 0
-                ? String(Math.round(MetricsState.memPercent)).padStart(2, "0") + "%"
-                : "--"
-              history: MetricsState.memHistory
-              accentColor: Theme.accentAlt
-            }
-
-            InlineMetric {
-              anchors.verticalCenter: parent.verticalCenter
-              label: "GPU"
-              value: MetricsState.gpuUsage >= 0
-                ? String(Math.round(MetricsState.gpuUsage)).padStart(2, "0") + "%"
-                : "--"
-              history: MetricsState.gpuHistory
-              accentColor: Theme.success
-            }
           }
 
-          // CENTER cluster — cava visualizer
-          Row {
+          // CENTER cluster — clickable window picker
+          OpenWindowsList {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            spacing: Theme.padMd
-
-            CavaBars {
-              anchors.verticalCenter: parent.verticalCenter
-              mirrored: true
-              channel: "left"
-              implicitWidth: 80
-            }
-
-            Rectangle {
-              anchors.verticalCenter: parent.verticalCenter
-              width: 1
-              height: 10
-              color: Theme.border
-            }
-
-            CavaBars {
-              anchors.verticalCenter: parent.verticalCenter
-              channel: "right"
-              implicitWidth: 80
-            }
+            maxWidth: parent.width - Theme.padXl * 4
+            chipWidth: 110 + BarDetailState.level * 60
+            Behavior on chipWidth { NumberAnimation { duration: 320; easing.type: Easing.OutBack; easing.overshoot: 1.4 } }
           }
 
           // RIGHT cluster — media + language
@@ -220,7 +350,16 @@ Scope {
             anchors.verticalCenter: parent.verticalCenter
             spacing: Theme.padMd
 
-            MediaChip { anchors.verticalCenter: parent.verticalCenter }
+            Text {
+              anchors.verticalCenter: parent.verticalCenter
+              visible: ThemeNameState.name !== ""
+              text: ThemeNameState.name
+              color: Theme.textDim
+              font.family: Theme.fontFamily
+              font.pixelSize: Theme.fontSmall
+              font.italic: true
+            }
+
             KeyboardLayout { anchors.verticalCenter: parent.verticalCenter }
           }
         }
@@ -228,7 +367,7 @@ Scope {
 
       Popup.PopupShell {
         shellParentWindow: barWindow
-        triggerItem: centerClock
+        triggerItem: row1
         pinned: barWindow.localPinned
         triggerHovered: false
       }

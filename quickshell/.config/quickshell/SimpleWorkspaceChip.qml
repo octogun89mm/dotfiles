@@ -34,46 +34,38 @@ Rectangle {
   readonly property bool isOccupied: workspaceData ? workspaceData.toplevels.values.length > 0 : false
 
   color: "transparent"
-  implicitWidth: 14
+  implicitWidth: 16
   implicitHeight: Theme.chipHeight
 
-  // Focused: solid 10x10 cyan square
   Rectangle {
-    anchors.centerIn: parent
+    anchors.fill: parent
     visible: root.isFocused
-    width: 10
-    height: 10
-    color: Theme.accent
+    gradient: Gradient {
+      GradientStop { position: 0.0; color: "transparent" }
+      GradientStop { position: 1.0; color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.35) }
+    }
   }
 
-  // Visible on another monitor: 10x10 hollow cyan square (2px stroke)
-  Rectangle {
-    anchors.centerIn: parent
-    visible: root.isVisible && !root.isFocused
-    width: 10
-    height: 10
-    color: "transparent"
-    border.width: Theme.stripe
-    border.color: Theme.accent
-  }
-
-  // Occupied but not visible: dim diamond
   Text {
     anchors.centerIn: parent
-    visible: !root.isVisible && root.isOccupied
-    text: "◆"
-    color: Theme.text
+    text: root.displayName
+    color: root.isFocused
+      ? Theme.text
+      : root.isVisible
+        ? Theme.textMuted
+        : root.isOccupied ? Theme.text : Theme.textDim
     font.family: Theme.fontFamily
-    font.pixelSize: Theme.fontBody
+    font.pixelSize: Theme.fontTitle
+    font.bold: root.isFocused
   }
 
-  // Empty: tiny dot
   Rectangle {
-    anchors.centerIn: parent
-    visible: !root.isVisible && !root.isOccupied
-    width: 3
-    height: 3
-    color: Theme.textDim
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    visible: root.isFocused || root.isVisible
+    width: parent.width - 4
+    height: root.isFocused ? Theme.stripe : Theme.hairline
+    color: root.isFocused ? Theme.accent : Theme.border
   }
 
   MouseArea {

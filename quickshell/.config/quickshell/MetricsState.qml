@@ -12,8 +12,11 @@ Singleton {
 
   property real cpuUsage: -1
   property real cpuTemp: -1
+  property real load1: -1
   property real gpuUsage: -1
   property real gpuTemp: -1
+  property real gpuVramUsed: -1
+  property real gpuVramTotal: -1
   property real memUsed: -1
   property real memTotal: -1
   property real memPercent: -1
@@ -58,8 +61,11 @@ Singleton {
           }
           root.cpuUsage = num(d.cpu)
           root.cpuTemp = num(d.cpu_temp)
+          root.load1 = num(d.load1)
           root.gpuUsage = num(d.gpu)
           root.gpuTemp = num(d.gpu_temp)
+          root.gpuVramUsed = num(d.gpu_vram_used)
+          root.gpuVramTotal = num(d.gpu_vram_total)
           root.memUsed = num(d.mem_used)
           root.memTotal = num(d.mem_total)
           root.memPercent = (root.memTotal > 0 && root.memUsed >= 0)

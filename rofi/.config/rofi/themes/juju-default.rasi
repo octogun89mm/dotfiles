@@ -36,7 +36,7 @@ box {
 }
 
 inputbar {
-    background: @bg;
+    background: @color0;
     font: @font;
     border: 0px 0px 2px 0px;
     border-color: @color8;
@@ -79,10 +79,10 @@ element-text {
 }
 
 element selected.normal {
-    background-color: @bg;
+    background-color: @color4;
 }
 
 element-text selected.normal {
-    text-color: @color14;
+    text-color: @color15;
     font: @font-bold;
 }

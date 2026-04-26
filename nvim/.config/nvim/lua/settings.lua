@@ -19,6 +19,8 @@ vim.opt.shortmess:append('I')
 vim.opt.showmode = false
 -- Highlight the current line
 vim.opt.cursorline = true
+-- Block cursor in every mode (including insert)
+vim.opt.guicursor = "n-v-c-sm-i-ci-ve:block,r-cr-o:hor20"
 -- Workaround for nvimcmp
 vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 -- Theme

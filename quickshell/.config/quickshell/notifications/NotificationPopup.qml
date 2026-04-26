@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Wayland
 import "." as Notif
 
 Scope {
@@ -11,9 +12,11 @@ Scope {
       required property var modelData
 
       screen: modelData
+      WlrLayershell.namespace: "quickshell-notif-" + (modelData ? modelData.name : "default")
       color: "transparent"
       exclusiveZone: 0
       visible: !Notif.NotificationServer.dnd && Notif.NotificationServer.popupQueue.count > 0
+      Component.onCompleted: console.log("NotificationPopup spawned on screen:", modelData ? modelData.name : "?")
       implicitWidth: modelData.width
       implicitHeight: popupColumn.implicitHeight + 50
       mask: Region { item: popupColumn }

@@ -4,26 +4,14 @@ Rectangle {
   id: root
 
   color: "transparent"
-  implicitWidth: indicator.implicitWidth + Theme.padMd + Theme.stripe
+  implicitWidth: indicator.implicitWidth + Theme.padMd * 2
   implicitHeight: Theme.chipHeight
-
-  Rectangle {
-    anchors {
-      left: parent.left
-      top: parent.top
-      bottom: parent.bottom
-    }
-    width: Theme.stripe
-    color: Theme.accentAlt
-  }
 
   Text {
     id: indicator
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-    anchors.leftMargin: Theme.stripe + Theme.padSm
+    anchors.centerIn: parent
     text: LanguageState.layout
-    color: Theme.text
+    color: Theme.accentAlt
     font.family: Theme.fontFamily
     font.pixelSize: Theme.fontCaption
     font.bold: true

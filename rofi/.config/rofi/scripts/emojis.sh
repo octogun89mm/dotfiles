@@ -3,9 +3,9 @@
 set -euo pipefail
 
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
-cache_file="$cache_dir/rofi-unicode-picker.txt"
+cache_file="$cache_dir/rofi-unicode-picker-v2.txt"
 
-fallback_list=$'😀 grinning face emoji smileys\n😂 face with tears of joy emoji smileys\n❤️ red heart emoji heart\n👍 thumbs up emoji hand\n🔥 fire emoji nature\n✨ sparkles emoji symbols\n🎉 party popper emoji celebration\n🚀 rocket emoji travel\n← left arrow unicode symbol\n→ right arrow unicode symbol\n∞ infinity unicode math symbol\n★ black star unicode symbol\n♥ black heart suit unicode symbol\n☀ black sun with rays unicode symbol\n⚡ high voltage sign unicode symbol\n'
+fallback_list=$'😀 grinning face emoji smileys\n😂 face with tears of joy emoji smileys\n❤️ red heart emoji heart\n👍 thumbs up emoji hand\n🔥 fire emoji nature\n✨ sparkles emoji symbols\n🎉 party popper emoji celebration\n🚀 rocket emoji travel\n— em dash unicode dash punctuation\n– en dash unicode dash punctuation\n← left arrow unicode symbol\n→ right arrow unicode symbol\n∞ infinity unicode math symbol\n★ black star unicode symbol\n♥ black heart suit unicode symbol\n☀ black sun with rays unicode symbol\n⚡ high voltage sign unicode symbol\n'
 
 generate_emoji_list() {
     python3 - <<'PY'
@@ -134,6 +134,7 @@ def add_unicode_symbols(results, seen):
         "Sc": "currency symbol",
         "Sk": "modifier symbol",
         "So": "other symbol",
+        "Pd": "dash punctuation",
     }
 
     for codepoint in range(0x20, sys.maxunicode + 1):
@@ -142,7 +143,7 @@ def add_unicode_symbols(results, seen):
             continue
 
         category = unicodedata.category(char)
-        if not category.startswith("S"):
+        if not (category.startswith("S") or category == "Pd"):
             continue
 
         try:

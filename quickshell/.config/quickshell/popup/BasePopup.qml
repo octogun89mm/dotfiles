@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import ".." as Root
+import "../wallust.js" as Wallust
 
 PopupWindow {
   id: root

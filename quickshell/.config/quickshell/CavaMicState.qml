@@ -8,21 +8,20 @@ Singleton {
   id: root
 
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string configPath: home + "/.dotfiles/quickshell/.config/quickshell/ressources/cava-bar.conf"
+  readonly property string scriptPath: home + "/.dotfiles/quickshell/.config/quickshell/scripts/cava-mic.sh"
   readonly property int barCount: 6
   readonly property int rawBarCount: barCount * 2
 
-  property bool enabled: true
+  readonly property bool enabled: MicState.active
   property bool available: false
   property var leftBars: []
   property var rightBars: []
 
-  // Rolling auto-gain: track recent peak with slow decay, normalise bars to it.
   property bool autoGain: true
   property real peak: 0.15
-  readonly property real peakFloor: 0.08    // never amplify above ~12x
-  readonly property real peakDecay: 0.985   // per-frame decay toward floor
-  readonly property real attackBlend: 0.4   // how fast peak rises on louder frame
+  readonly property real peakFloor: 0.08
+  readonly property real peakDecay: 0.985
+  readonly property real attackBlend: 0.4
 
   function zeroBars() {
     return Array(barCount).fill(0)
@@ -48,10 +47,8 @@ Singleton {
     }
 
     if (autoGain) {
-      // Decay peak toward the floor; let louder frames pull peak up quickly.
       const decayed = Math.max(peakFloor, peak * peakDecay)
       peak = frameMax > decayed ? (decayed * (1 - attackBlend) + frameMax * attackBlend) : decayed
-
       const gain = 1 / peak
       for (let j = 0; j < barCount; j++) {
         left[j] = Math.max(0, Math.min(1, left[j] * gain))
@@ -79,7 +76,7 @@ Singleton {
 
   Process {
     id: cavaProcess
-    command: ["/usr/bin/cava", "-p", root.configPath]
+    command: [root.scriptPath]
     running: root.enabled
 
     stdout: SplitParser {

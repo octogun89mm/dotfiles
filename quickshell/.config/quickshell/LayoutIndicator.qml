@@ -21,7 +21,7 @@ Rectangle {
   }
 
   color: "transparent"
-  implicitWidth: row.implicitWidth + Theme.padMd + Theme.stripe
+  implicitWidth: row.implicitWidth + Theme.padSm
   implicitHeight: Theme.chipHeight
 
   function normalizedLayout(value) {
@@ -48,36 +48,25 @@ Rectangle {
     }
   }
 
-  // Left accent stripe, colored per layout
-  Rectangle {
-    anchors {
-      left: parent.left
-      top: parent.top
-      bottom: parent.bottom
-    }
-    width: Theme.stripe
-    color: root.stripeColor(root.layout)
-
-    Behavior on color {
-      ColorAnimation { duration: 220; easing.type: Easing.InOutSine }
-    }
-  }
-
   Row {
     id: row
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
-    anchors.leftMargin: Theme.stripe + Theme.padSm
+    anchors.leftMargin: Theme.padSm
     spacing: 0
 
     Text {
       anchors.verticalCenter: parent.verticalCenter
       text: root.shortLabel(root.layout)
-      color: Theme.text
+      color: root.stripeColor(root.layout)
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontCaption
       font.bold: true
       font.letterSpacing: 0.6
+
+      Behavior on color {
+        ColorAnimation { duration: 220; easing.type: Easing.InOutSine }
+      }
     }
   }
 
