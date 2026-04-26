@@ -4,6 +4,7 @@ import Quickshell
 import "clipboard" as Clipboard
 import "keybinds" as Keybinds
 import "notifications" as Notif
+import "popup" as Popup
 
 Scope {
   Osd {}
@@ -11,5 +12,6 @@ Scope {
   Clipboard.ClipboardHistory {}
   Notif.NotificationPopup {}
   Notif.NotificationCenter {}
+  Popup.ThemePicker {}
   Bar {}
 }

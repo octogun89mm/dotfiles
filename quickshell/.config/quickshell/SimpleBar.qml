@@ -350,14 +350,32 @@ Scope {
             anchors.verticalCenter: parent.verticalCenter
             spacing: Theme.padMd
 
-            Text {
+            Item {
               anchors.verticalCenter: parent.verticalCenter
               visible: ThemeNameState.name !== ""
-              text: ThemeNameState.name
-              color: Theme.textDim
-              font.family: Theme.fontFamily
-              font.pixelSize: Theme.fontSmall
-              font.italic: true
+              implicitWidth: themeNameText.implicitWidth
+              implicitHeight: themeNameText.implicitHeight
+
+              Text {
+                id: themeNameText
+                anchors.fill: parent
+                text: ThemeNameState.name
+                color: themeNameMouse.containsMouse ? Theme.text : Theme.textDim
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSmall
+                font.italic: true
+                verticalAlignment: Text.AlignVCenter
+                Behavior on color { ColorAnimation { duration: 120 } }
+              }
+
+              MouseArea {
+                id: themeNameMouse
+                anchors.fill: parent
+                anchors.margins: -4
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: ThemePickerState.show(barWindow.modelData.name)
+              }
             }
 
             KeyboardLayout { anchors.verticalCenter: parent.verticalCenter }
