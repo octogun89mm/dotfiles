@@ -50,9 +50,9 @@ Rectangle {
     anchors.centerIn: parent
     text: root.displayName
     color: root.isFocused
-      ? Theme.text
+      ? Theme.foreground
       : root.isVisible
-        ? Theme.textMuted
+        ? Theme.foreground
         : root.isOccupied ? Theme.text : Theme.textDim
     font.family: Theme.fontFamily
     font.pixelSize: Theme.fontTitle

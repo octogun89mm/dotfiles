@@ -11,6 +11,7 @@ selection=$(
         "OCR" \
         "Todo" \
         "Wallpaper picker" \
+        "Speak (TTS)" \
         "Power menu" |
     rofi -dmenu -i -p "Tools" -no-custom
 )
@@ -38,6 +39,9 @@ case "$selection" in
         ;;
     "Wallpaper picker")
         exec ~/.config/rofi/scripts/wallpaper.sh
+        ;;
+    "Speak (TTS)")
+        exec ~/.config/rofi/scripts/speak.sh
         ;;
     "Power menu")
         exec rofi -show power

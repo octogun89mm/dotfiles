@@ -11,6 +11,7 @@ QtObject {
   readonly property color surface: Wallust.surfaceElevated
   readonly property color border: Wallust.border
   readonly property color borderActive: Wallust.borderActive
+  readonly property color foreground: Wallust.foreground
   readonly property color text: Wallust.text
   readonly property color textMuted: Wallust.textMuted
   readonly property color textDim: Wallust.textDim
