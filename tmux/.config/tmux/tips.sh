@@ -33,4 +33,11 @@ tips=(
   "C-a q — show pane numbers"
 )
 
-printf '%s\n' "${tips[RANDOM % ${#tips[@]}]}"
+cache=/tmp/tmux-tip-$USER
+rotate=30
+
+if [[ ! -f $cache ]] || (( $(date +%s) - $(stat -c %Y "$cache") >= rotate )); then
+  printf '%s' "${tips[RANDOM % ${#tips[@]}]}" > "$cache"
+fi
+
+cat "$cache"
