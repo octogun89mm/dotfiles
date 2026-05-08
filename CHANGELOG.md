@@ -8,6 +8,13 @@ honours [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`):
 - **MINOR** — new packages or user-visible features.
 - **PATCH** — fixes, small tweaks, lockfile bumps.
 
+## [0.1.1] - 2026-05-08
+
+### Changed
+- **quickshell** Browsers in `WindowIcons` are split per-vendor: Helium now
+  gets an atom glyph, Brave a shield, Edge/Opera/Safari/Vivaldi/qutebrowser
+  their own marks, and only literal `chromium`/`chrome` keep the chrome glyph.
+
 ## [0.1.0] - 2026-05-08
 
 First tagged release. Captures the move to a Quickshell-driven desktop and a

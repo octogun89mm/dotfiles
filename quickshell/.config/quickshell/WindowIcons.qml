@@ -66,8 +66,14 @@ Singleton {
     [["torrent", "transmission", "qbittorrent", "deluge"], "󰆚"],
     [["telegram-desktop"], ""],
     [["scrcpy", "android-studio"], ""],
-    [["chrom", "brave", "helium", "vivaldi", "edge", "opera", "qutebrowser"], ""],
-    [["ranger"], ""]
+    [["edge"], ""],
+    [["opera"], ""],
+    [["safari"], ""],
+    [["brave"], "󰕥"],
+    [["helium"], "󰣣"],
+    [["vivaldi"], "󰣩"],
+    [["qutebrowser"], ""],
+    [["chromium", "chrome"], ""]
   ]
 
   function iconFor(text) {
