@@ -1,5 +1,26 @@
 .pragma library
 
+function hexToRgb(hex) {
+  var clean = String(hex).replace("#", "")
+  if (clean.length !== 6) return { r: 0, g: 0, b: 0 }
+  return {
+    r: parseInt(clean.slice(0, 2), 16),
+    g: parseInt(clean.slice(2, 4), 16),
+    b: parseInt(clean.slice(4, 6), 16)
+  }
+}
+
+function luminance(hex) {
+  var c = hexToRgb(hex)
+  return (0.299 * c.r + 0.587 * c.g + 0.114 * c.b) / 255
+}
+
+function distance(a, b) {
+  var ca = hexToRgb(a)
+  var cb = hexToRgb(b)
+  return Math.abs(ca.r - cb.r) + Math.abs(ca.g - cb.g) + Math.abs(ca.b - cb.b)
+}
+
 var base00 = "{{background}}"
 var base01 = "{{color0}}"
 var base02 = "{{color8}}"
@@ -17,22 +38,43 @@ var base0D = "{{color4}}"
 var base0E = "{{color5}}"
 var base0F = "{{color13}}"
 
+var filteredSurfaceDark = "{{background | lighten(0.10)}}"
+var filteredSurfaceLight = "{{background | darken(0.07)}}"
+var filteredBorderDark = "{{background | lighten(0.28)}}"
+var filteredBorderLight = "{{background | darken(0.18)}}"
+var filteredTextMutedDark = "{{foreground | darken(0.24)}}"
+var filteredTextMutedLight = "{{foreground | lighten(0.24)}}"
+var filteredTextDimDark = "{{foreground | darken(0.42)}}"
+var filteredTextDimLight = "{{foreground | lighten(0.42)}}"
+var filteredAccentAlt = "{{color4 | complementary | saturate(0.16)}}"
+
 var background = base00
-var surface = base01
 var foreground = base05
-var muted = base03
 var accent = base0D
+var bgIsLight = luminance(base00) > 0.5
+var filteredSurface = bgIsLight ? filteredSurfaceLight : filteredSurfaceDark
+var filteredBorder = bgIsLight ? filteredBorderLight : filteredBorderDark
+var filteredTextMuted = bgIsLight ? filteredTextMutedLight : filteredTextMutedDark
+var filteredTextDim = bgIsLight ? filteredTextDimLight : filteredTextDimDark
+var safeSurface = distance(base01, base00) < 55 ? filteredSurface : base01
+var safeBorder = distance(base02, safeSurface) < 90 ? filteredBorder : base02
+var safeTextMuted = distance(base04, base00) < 130 ? filteredTextMuted : base04
+var safeTextDim = distance(base03, base00) < 130 ? filteredTextDim : base03
+var safeAccentAlt = distance(base0E, base0D) < 90 ? filteredAccentAlt : base0E
+
+var surface = safeSurface
+var muted = safeTextDim
 
 // Names consumed by Theme.qml
 var bg = base00
-var surfaceElevated = base01
-var border = base02
+var surfaceElevated = safeSurface
+var border = safeBorder
 var borderActive = base0D
 var text = base05
-var textMuted = base04
-var textDim = base03
+var textMuted = safeTextMuted
+var textDim = safeTextDim
 var accentPrimary = base0D
-var accentAlt = base0E
+var accentAlt = safeAccentAlt
 var critical = base08
 var success = base0B
 var warning = base0A
