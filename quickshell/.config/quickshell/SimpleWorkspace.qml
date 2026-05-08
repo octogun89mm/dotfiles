@@ -71,19 +71,7 @@ Item {
   }
 
   function iconForClient(client) {
-    const key = String(client.class || client.title || "").toLowerCase()
-    if (key.includes("firefox") || key.includes("zen")) return ""
-    if (key.includes("chrom") || key.includes("brave") || key.includes("helium")) return ""
-    if (key.includes("kitty") || key.includes("wezterm") || key.includes("alacritty") || key.includes("terminal")) return ""
-    if (key.includes("code") || key.includes("cursor") || key.includes("codium")) return ""
-    if (key.includes("discord")) return ""
-    if (key.includes("spotify")) return ""
-    if (key.includes("steam")) return ""
-    if (key.includes("file") || key.includes("nautilus") || key.includes("thunar") || key.includes("dolphin")) return ""
-    if (key.includes("obsidian") || key.includes("notes")) return "󰎞"
-    if (key.includes("gimp") || key.includes("krita") || key.includes("inkscape")) return ""
-    if (key.includes("mpv") || key.includes("vlc")) return ""
-    return ""
+    return WindowIcons.iconFor(String(client.class || client.title || ""))
   }
 
   function iconsForWorkspace(workspaceId) {

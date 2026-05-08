@@ -65,20 +65,7 @@ Item {
 
   function symbolicIcon() {
     const key = itemKey()
-    if (key.includes("signal")) return "󰭹"
-    if (key.includes("firefox") || key.includes("zen")) return ""
-    if (key.includes("chrom") || key.includes("brave") || key.includes("helium")) return ""
-    if (key.includes("kitty") || key.includes("wezterm") || key.includes("alacritty") || key.includes("terminal")) return ""
-    if (key.includes("code") || key.includes("cursor") || key.includes("codium")) return ""
-    if (key.includes("discord")) return ""
-    if (key.includes("spotify")) return ""
-    if (key.includes("steam")) return ""
-    if (key.includes("file") || key.includes("nautilus") || key.includes("thunar") || key.includes("dolphin")) return ""
-    if (key.includes("obsidian") || key.includes("notes")) return "󰎞"
-    if (key.includes("gimp") || key.includes("krita") || key.includes("inkscape")) return ""
-    if (key.includes("mpv") || key.includes("vlc")) return ""
     if (key.includes("expressvpn") || key.includes("vpn")) return VpnState.icon
-    if (key.includes("bluetooth")) return "󰂯"
     if (key.includes("nm-applet")
         || key.includes("network-manager")
         || key.includes("network_manager")
@@ -88,9 +75,26 @@ Item {
         || key.includes("wi-fi")
         || key.includes("wlan")
         || key.includes("nm-signal")) return ""
+    if (key.includes("bluetooth")) return "󰂯"
     if (key.includes("volume") || key.includes("audio")) return "󰕾"
     if (key.includes("battery") || key.includes("power")) return "󰁹"
     if (key.includes("syncthing")) return "󰓦"
+    if (key.includes("dropbox") || key.includes("nextcloud") || key.includes("owncloud")) return "󰅢"
+    if (key.includes("clipboard") || key.includes("copyq")) return "󰆏"
+    if (key.includes("redshift") || key.includes("gammastep") || key.includes("nightlight")) return "󰖔"
+    if (key.includes("printer") || key.includes("cups")) return "󰐪"
+    if (key.includes("keyboard")) return "󰌌"
+    if (key.includes("mic") || key.includes("microphone")) return "󰍬"
+    if (key.includes("brightness") || key.includes("display")) return "󰃞"
+    if (key.includes("notification")) return "󰂚"
+    if (key.includes("update") || key.includes("pacman")) return "󰚸"
+    if (key.includes("trash")) return "󰆴"
+    if (key.includes("disk") || key.includes("storage")) return "󰋊"
+    if (key.includes("password") || key.includes("keepass") || key.includes("bitwarden") || key.includes("1password")) return "󰍁"
+    if (key.includes("calendar")) return ""
+    if (key.includes("weather")) return ""
+    const mapped = WindowIcons.iconFor(key)
+    if (mapped !== WindowIcons.fallback) return mapped
     return ""
   }
 
