@@ -31,7 +31,8 @@ idx="${selection%% *}"
 str="${selection#* }"
 
 if [[ "$idx" == "-1" ]]; then
-    exec speak "$str"
+    monitor="$(hyprctl -j monitors 2>/dev/null | jq -r '.[] | select(.focused).name' 2>/dev/null || true)"
+    exec qs ipc call speak open "$str" "${monitor:-}"
 else
     hash="${hashes[$idx]}"
     ffplay -nodisp -autoexit -loglevel quiet "$CACHE_DIR/$hash.wav"

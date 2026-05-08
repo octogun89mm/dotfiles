@@ -13,5 +13,6 @@ Scope {
   Notif.NotificationPopup {}
   Notif.NotificationCenter {}
   Popup.ThemePicker {}
+  Popup.EnginePicker {}
   Bar {}
 }

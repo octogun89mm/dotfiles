@@ -41,7 +41,7 @@ case "$selection" in
         exec ~/.config/rofi/scripts/wallpaper.sh
         ;;
     "Speak (TTS)")
-        exec ~/.config/rofi/scripts/speak.sh
+        exec ~/.config/quickshell/scripts/speak.sh
         ;;
     "Power menu")
         exec rofi -show power
