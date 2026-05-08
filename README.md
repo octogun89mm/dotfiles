@@ -57,4 +57,4 @@ The Neovim config currently includes:
 
 ## Screenshots
 
-Screenshots are intentionally kept out of git because they can capture personal information from the local desktop session.
+Not in the repo — gitignored. Run it.
