@@ -10,7 +10,6 @@ Singleton {
 
   readonly property var entries: [
     [["firefox", "zen", "librewolf", "waterfox"], ""],
-    [["chrom", "brave", "helium", "vivaldi", "edge", "opera", "qutebrowser"], ""],
     [["kitty", "wezterm", "alacritty", "foot", "termite", "urxvt", "xterm", "konsole", "tilix", "terminal"], ""],
     [["nvim", "neovim"], ""],
     [["emacs"], ""],
@@ -67,6 +66,7 @@ Singleton {
     [["torrent", "transmission", "qbittorrent", "deluge"], "󰆚"],
     [["telegram-desktop"], ""],
     [["scrcpy", "android-studio"], ""],
+    [["chrom", "brave", "helium", "vivaldi", "edge", "opera", "qutebrowser"], ""],
     [["ranger"], ""]
   ]
 
