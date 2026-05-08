@@ -15,14 +15,19 @@ jq -cn --argjson sources "$sources" --argjson outputs "$outputs" '
     | [ $outputs[]
         | select((.corked // false) == false)
         | . as $o
+        | ( $o.properties["application.name"]
+            // $o.properties["application.process.binary"]
+            // $o.properties["node.name"]
+            // "" ) as $app
+        | ( $o.properties["application.process.binary"]
+            // $o.properties["node.name"]
+            // "" ) as $binary
+        | select(([$app, $binary] | map(ascii_downcase) | any(. == "cava" or . == "parec" or . == "pacat")) | not)
         | ($byIdx[$o.source | tostring]) as $s
         | select($s != null)
         | select((($s.properties["device.class"] // "") != "monitor")
                  and (($s.name // "") | endswith(".monitor") | not))
-        | ( $o.properties["application.name"]
-            // $o.properties["application.process.binary"]
-            // $o.properties["node.name"]
-            // "unknown" )
+        | ($app // "unknown")
       ] as $apps
     | { active: (($apps | length) > 0), apps: ($apps | unique) }
 '
