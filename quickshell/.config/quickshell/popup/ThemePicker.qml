@@ -99,7 +99,7 @@ Scope {
         readonly property color textColor: bgIsLight ? Qt.darker(panelBg, 6.0) : Qt.lighter(panelBg, 5.0)
         readonly property color textMuted: bgIsLight ? Qt.darker(panelBg, 2.8) : Qt.lighter(panelBg, 3.2)
 
-        width: 420
+        width: Root.ThemePickerState.mode === "wallpaper" ? 680 : 420
         height: 480
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
@@ -139,7 +139,7 @@ Scope {
               id: titleLabel
               anchors.left: parent.left
               anchors.verticalCenter: parent.verticalCenter
-              text: "THEMES"
+              text: Root.ThemePickerState.modeLabel
               color: panel.textMuted
               font.family: "Iosevka"
               font.pixelSize: 10
@@ -164,6 +164,34 @@ Scope {
                 font.family: "Iosevka"
                 font.pixelSize: 10
                 font.bold: true
+              }
+            }
+
+            Rectangle {
+              anchors.right: parent.right
+              anchors.verticalCenter: parent.verticalCenter
+              width: modeLabel.implicitWidth + 18
+              height: 20
+              color: modeMouse.containsMouse ? panel.surface : "transparent"
+              border.width: 2
+              border.color: panel.subtleBorder
+
+              Text {
+                id: modeLabel
+                anchors.centerIn: parent
+                text: Root.ThemePickerState.mode === "wallpaper" ? "THEMES" : "WALLPAPERS"
+                color: modeMouse.containsMouse ? panel.textColor : panel.textMuted
+                font.family: "Iosevka"
+                font.pixelSize: 10
+                font.bold: true
+              }
+
+              MouseArea {
+                id: modeMouse
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Root.ThemePickerState.toggleMode()
               }
             }
           }
@@ -195,66 +223,124 @@ Scope {
               anchors.verticalCenter: parent.verticalCenter
               anchors.leftMargin: 8
               visible: filterInput.text === "" && !filterInput.activeFocus
-              text: "FILTER"
+              text: Root.ThemePickerState.mode === "wallpaper" ? "FILTER WALLPAPERS" : "FILTER THEMES"
               color: panel.textMuted
               font.family: "Iosevka"
               font.pixelSize: 11
             }
           }
 
-          Item {
+          Row {
             width: parent.width
             height: parent.height - y
+            spacing: 12
 
-            ListView {
-              id: themesList
-              anchors.fill: parent
-              clip: true
-              spacing: 2
-              model: Root.ThemePickerState.filteredThemes
-              currentIndex: Root.ThemePickerState.selectedIndex
-              visible: count > 0
+            Item {
+              width: Root.ThemePickerState.mode === "wallpaper" ? parent.width - previewCard.width - parent.spacing : parent.width
+              height: parent.height
 
-              onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Contain)
+              ListView {
+                id: themesList
+                anchors.fill: parent
+                clip: true
+                spacing: 2
+                model: Root.ThemePickerState.filteredThemes
+                currentIndex: Root.ThemePickerState.selectedIndex
+                visible: count > 0
 
-              delegate: Rectangle {
-                id: themeRow
-                required property int index
-                required property var model
-                readonly property bool selected: ListView.isCurrentItem
-
-                width: themesList.width
-                height: 22
-                color: selected ? panel.selectedBg : "transparent"
-
-                Text {
-                  anchors.left: parent.left
-                  anchors.verticalCenter: parent.verticalCenter
-                  anchors.leftMargin: 8
-                  text: themeRow.model.name
-                  color: themeRow.selected ? panel.selectedFg : panel.textColor
-                  font.family: "Iosevka"
-                  font.pixelSize: 11
+                onCurrentIndexChanged: {
+                  Root.ThemePickerState.selectedIndex = currentIndex
+                  Root.ThemePickerState.updateSelection()
+                  positionViewAtIndex(currentIndex, ListView.Contain)
                 }
 
-                MouseArea {
-                  anchors.fill: parent
-                  hoverEnabled: true
-                  cursorShape: Qt.PointingHandCursor
-                  onEntered: Root.ThemePickerState.selectedIndex = themeRow.index
-                  onClicked: Root.ThemePickerState.apply(themeRow.model.name)
+                delegate: Rectangle {
+                  id: themeRow
+                  required property int index
+                  required property var model
+                  readonly property bool selected: ListView.isCurrentItem
+
+                  width: themesList.width
+                  height: 22
+                  color: selected ? panel.selectedBg : "transparent"
+
+                  Text {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 8
+                    anchors.rightMargin: 8
+                    text: themeRow.model.name
+                    color: themeRow.selected ? panel.selectedFg : panel.textColor
+                    font.family: "Iosevka"
+                    font.pixelSize: 11
+                    elide: Text.ElideMiddle
+                  }
+
+                  MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onEntered: {
+                      Root.ThemePickerState.selectedIndex = themeRow.index
+                      Root.ThemePickerState.updateSelection()
+                    }
+                    onClicked: Root.ThemePickerState.apply(themeRow.model.name, themeRow.model.path || "")
+                  }
                 }
+              }
+
+              Text {
+                anchors.centerIn: parent
+                visible: !themesList.visible
+                text: "NO MATCHES"
+                color: panel.textMuted
+                font.family: "Iosevka"
+                font.pixelSize: 11
+                font.bold: true
               }
             }
 
-            Text {
-              anchors.centerIn: parent
-              visible: !themesList.visible
-              text: "NO MATCHES"
-              color: panel.textMuted
-              font.family: "Iosevka"
-              font.pixelSize: 11
-              font.bold: true
+            Rectangle {
+              id: previewCard
+              visible: Root.ThemePickerState.mode === "wallpaper"
+              width: visible ? 250 : 0
+              height: parent.height
+              color: panel.surface
+              border.width: 2
+              border.color: panel.subtleBorder
+              clip: true
+
+              Image {
+                anchors.fill: parent
+                anchors.margins: 8
+                source: Root.ThemePickerState.selectedPath.length > 0 ? "file://" + Root.ThemePickerState.selectedPath : ""
+                fillMode: Image.PreserveAspectCrop
+                asynchronous: true
+                cache: false
+              }
+
+              Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                height: previewName.height + 16
+                color: Qt.rgba(panel.panelBg.r, panel.panelBg.g, panel.panelBg.b, 0.86)
+
+                Text {
+                  id: previewName
+                  anchors.left: parent.left
+                  anchors.right: parent.right
+                  anchors.verticalCenter: parent.verticalCenter
+                  anchors.leftMargin: 8
+                  anchors.rightMargin: 8
+                  text: Root.ThemePickerState.selectedName
+                  color: panel.textColor
+                  font.family: "Iosevka"
+                  font.pixelSize: 10
+                  elide: Text.ElideMiddle
+                }
+              }
             }
           }
         }
