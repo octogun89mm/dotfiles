@@ -32,9 +32,9 @@ Rectangle {
     const elapsedSeconds = Math.max(0, Math.floor(Date.now() / 1000) - createdAt)
 
     if (elapsedSeconds < 45) return "now"
-    if (elapsedSeconds < 3600) return Math.floor(elapsedSeconds / 60) + "m"
-    if (elapsedSeconds < 86400) return Math.floor(elapsedSeconds / 3600) + "h"
-    return Math.floor(elapsedSeconds / 86400) + "d"
+    if (elapsedSeconds < 3600) return Math.floor(elapsedSeconds / 60) + " min ago"
+    if (elapsedSeconds < 86400) return Math.floor(elapsedSeconds / 3600) + " h ago"
+    return Math.floor(elapsedSeconds / 86400) + " d ago"
   }
 
   function actionButtons() {
@@ -142,6 +142,7 @@ Rectangle {
           color: Root.Theme.textDim
           font.family: Root.Theme.fontFamily
           font.pixelSize: Root.Theme.fontCaption
+          horizontalAlignment: Text.AlignRight
         }
       }
 

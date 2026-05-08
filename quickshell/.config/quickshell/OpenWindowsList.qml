@@ -10,8 +10,6 @@ Item {
   property var windows: []
   property int maxWidth: 600
   property int chipWidth: 180
-  property bool collapsed: false
-  readonly property int handleWidth: 14
 
   readonly property var visibleWindows: {
     const out = []
@@ -54,9 +52,7 @@ Item {
   }
 
   implicitHeight: Theme.chipHeight
-  implicitWidth: collapsed
-      ? handleWidth * 2 + Theme.padXs * 2
-      : Math.min(row.implicitWidth + handleWidth * 2 + Theme.padXs * 2, maxWidth)
+  implicitWidth: Math.min(row.implicitWidth, maxWidth)
   visible: visibleWindows.length > 0
 
   clip: true
@@ -65,68 +61,12 @@ Item {
     NumberAnimation { duration: 220; easing.type: Easing.InOutCubic }
   }
 
-  Item {
-    id: leftHandle
-    anchors.left: parent.left
-    anchors.verticalCenter: parent.verticalCenter
-    width: root.handleWidth
-    height: Theme.chipHeight
-    Text {
-      anchors.centerIn: parent
-      text: root.collapsed ? "›" : "‹"
-      color: leftHandleArea.containsMouse ? Theme.text : Theme.textDim
-      font.family: Theme.fontFamily
-      font.pixelSize: Theme.fontSmall + 4
-      font.bold: true
-      Behavior on color { ColorAnimation { duration: 150 } }
-    }
-    MouseArea {
-      id: leftHandleArea
-      anchors.fill: parent
-      hoverEnabled: true
-      cursorShape: Qt.PointingHandCursor
-      onClicked: root.collapsed = !root.collapsed
-    }
-  }
-
-  Item {
-    id: rightHandle
-    anchors.right: parent.right
-    anchors.verticalCenter: parent.verticalCenter
-    width: root.handleWidth
-    height: Theme.chipHeight
-    Text {
-      anchors.centerIn: parent
-      text: root.collapsed ? "‹" : "›"
-      color: rightHandleArea.containsMouse ? Theme.text : Theme.textDim
-      font.family: Theme.fontFamily
-      font.pixelSize: Theme.fontSmall + 4
-      font.bold: true
-      Behavior on color { ColorAnimation { duration: 150 } }
-    }
-    MouseArea {
-      id: rightHandleArea
-      anchors.fill: parent
-      hoverEnabled: true
-      cursorShape: Qt.PointingHandCursor
-      onClicked: root.collapsed = !root.collapsed
-    }
-  }
-
   Row {
     id: row
     anchors.verticalCenter: parent.verticalCenter
-    anchors.left: leftHandle.right
-    anchors.right: rightHandle.left
-    anchors.leftMargin: Theme.padXs
-    anchors.rightMargin: Theme.padXs
-    opacity: root.collapsed ? 0 : 1
-    visible: opacity > 0
+    anchors.left: parent.left
+    anchors.right: parent.right
     spacing: Theme.padMd
-
-    Behavior on opacity {
-      NumberAnimation { duration: 180; easing.type: Easing.InOutCubic }
-    }
 
     Repeater {
       model: root.visibleWindows
@@ -224,8 +164,6 @@ Item {
           || name === "closewindow"
           || name === "movewindow"
           || name === "movewindowv2"
-          || name === "windowtitle"
-          || name === "windowtitlev2"
           || name === "activewindow"
           || name === "activewindowv2") {
         root.refresh()

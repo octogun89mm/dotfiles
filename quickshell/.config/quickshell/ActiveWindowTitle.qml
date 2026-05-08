@@ -91,12 +91,19 @@ Item {
       const name = event.name
       if (name === "activewindow"
           || name === "activewindowv2"
-          || name === "closewindow"
-          || name === "windowtitle"
-          || name === "windowtitlev2") {
+          || name === "closewindow") {
         root.refresh()
+      } else if (name === "windowtitle" || name === "windowtitlev2") {
+        titleRefreshTimer.restart()
       }
     }
+  }
+
+  Timer {
+    id: titleRefreshTimer
+    interval: 750
+    repeat: false
+    onTriggered: root.refresh()
   }
 
   Process {

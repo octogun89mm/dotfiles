@@ -9,25 +9,14 @@ Rectangle {
 
   visible: !onlyWhenActive || VpnState.connected
   color: "transparent"
-  implicitWidth: indicator.implicitWidth + Theme.padMd + Theme.stripe
+  implicitWidth: indicator.implicitWidth + Theme.padMd
   implicitHeight: Theme.chipHeight
-
-  Rectangle {
-    visible: VpnState.connected
-    anchors {
-      left: parent.left
-      top: parent.top
-      bottom: parent.bottom
-    }
-    width: Theme.stripe
-    color: root.activeColor
-  }
 
   Text {
     id: indicator
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
-    anchors.leftMargin: Theme.stripe + Theme.padSm
+    anchors.leftMargin: Theme.padSm
     text: VpnState.icon
     color: VpnState.connected ? root.activeColor : root.inactiveColor
     font.family: Theme.iconFamily

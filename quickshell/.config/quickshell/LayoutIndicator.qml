@@ -38,14 +38,8 @@ Rectangle {
     }
   }
 
-  function shortLabel(value) {
-    switch (normalizedLayout(value)) {
-    case "MASTER":   return "MAS"
-    case "DWINDLE":  return "DWI"
-    case "SCROLLING": return "SCR"
-    case "MONOCLE":  return "MON"
-    default:         return normalizedLayout(value).slice(0, 3)
-    }
+  function layoutLabel(value) {
+    return normalizedLayout(value)
   }
 
   Row {
@@ -57,7 +51,7 @@ Rectangle {
 
     Text {
       anchors.verticalCenter: parent.verticalCenter
-      text: root.shortLabel(root.layout)
+      text: root.layoutLabel(root.layout)
       color: root.stripeColor(root.layout)
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontCaption

@@ -49,8 +49,18 @@ Item {
   Connections {
     target: Hyprland
 
-    function onRawEvent() {
-      root.refreshState()
+    function onRawEvent(event) {
+      const name = event.name
+      if (name === "workspace"
+          || name === "workspacev2"
+          || name === "focusedmon"
+          || name === "focusedmonv2"
+          || name === "openwindow"
+          || name === "closewindow"
+          || name === "movewindow"
+          || name === "movewindowv2") {
+        root.refreshState()
+      }
     }
   }
 

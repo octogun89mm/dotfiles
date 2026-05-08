@@ -8,28 +8,30 @@ Rectangle {
   property string title: ""
   property string value: ""
   property bool highlighted: false
+  readonly property color highlightBg: Wallust.base0C
+  readonly property color highlightFg: (0.299 * highlightBg.r + 0.587 * highlightBg.g + 0.114 * highlightBg.b) > 0.5 ? Wallust.base00 : Wallust.base06
 
   signal clicked
 
-  color: highlighted ? Wallust.base0C : Wallust.base00
+  color: highlighted ? highlightBg : Wallust.base00
   implicitWidth: 132
   implicitHeight: 54
 
   Row {
     id: content
     anchors.fill: parent
-    anchors.leftMargin: 10
-    anchors.rightMargin: 10
+    anchors.leftMargin: 8
+    anchors.rightMargin: 8
     anchors.topMargin: 8
     anchors.bottomMargin: 8
-    spacing: 10
+    spacing: 6
 
     Text {
       width: 18
       anchors.verticalCenter: parent.verticalCenter
       horizontalAlignment: Text.AlignHCenter
       text: root.icon
-      color: highlighted ? Wallust.base00 : Wallust.base05
+      color: highlighted ? root.highlightFg : Wallust.base05
       font.family: "Symbols Nerd Font Mono"
       font.pixelSize: 16
     }
@@ -43,8 +45,10 @@ Rectangle {
         text: root.title
         width: parent.width
         elide: Text.ElideRight
+        fontSizeMode: Text.HorizontalFit
+        minimumPixelSize: 8
         horizontalAlignment: Text.AlignHCenter
-        color: highlighted ? Wallust.base00 : Wallust.base04
+        color: highlighted ? root.highlightFg : Wallust.base04
         font.family: "Iosevka"
         font.pixelSize: 10
         font.bold: true
@@ -54,8 +58,10 @@ Rectangle {
         text: root.value
         width: parent.width
         elide: Text.ElideRight
+        fontSizeMode: Text.HorizontalFit
+        minimumPixelSize: 8
         horizontalAlignment: Text.AlignHCenter
-        color: highlighted ? Wallust.base00 : Wallust.base05
+        color: highlighted ? root.highlightFg : Wallust.base05
         font.family: "Iosevka"
         font.pixelSize: 11
         font.bold: true

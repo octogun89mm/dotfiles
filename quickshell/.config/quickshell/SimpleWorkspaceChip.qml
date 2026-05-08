@@ -7,6 +7,7 @@ Rectangle {
 
   required property int workspaceId
   required property string displayName
+  property var windowIcons: []
 
   readonly property var workspaceData: {
     const workspaces = Hyprland.workspaces.values
@@ -31,10 +32,10 @@ Rectangle {
 
     return false
   }
-  readonly property bool isOccupied: workspaceData ? workspaceData.toplevels.values.length > 0 : false
+  readonly property bool isOccupied: windowIcons.length > 0 || (workspaceData ? workspaceData.toplevels.values.length > 0 : false)
 
   color: "transparent"
-  implicitWidth: 16
+  implicitWidth: Math.max(20, chipContent.implicitWidth + Theme.padSm * 2)
   implicitHeight: Theme.chipHeight
 
   Rectangle {
@@ -46,17 +47,58 @@ Rectangle {
     }
   }
 
-  Text {
+  Row {
+    id: chipContent
     anchors.centerIn: parent
-    text: root.displayName
-    color: root.isFocused
-      ? Theme.foreground
-      : root.isVisible
+    spacing: 2
+
+    Text {
+      anchors.verticalCenter: parent.verticalCenter
+      text: root.displayName
+      color: root.isFocused
         ? Theme.foreground
-        : root.isOccupied ? Theme.text : Theme.textDim
-    font.family: Theme.fontFamily
-    font.pixelSize: Theme.fontTitle
-    font.bold: root.isFocused
+        : root.isVisible
+          ? Theme.foreground
+          : root.isOccupied ? Theme.text : Theme.textDim
+      font.family: Theme.fontFamily
+      font.pixelSize: 16
+      font.bold: root.isFocused
+    }
+
+    Repeater {
+      model: root.windowIcons
+
+      Item {
+        required property var modelData
+        anchors.verticalCenter: parent.verticalCenter
+        implicitWidth: iconLabel.implicitWidth + (countLabel.visible ? countLabel.implicitWidth + 1 : 0)
+        implicitHeight: Math.max(iconLabel.implicitHeight, countLabel.visible ? countLabel.implicitHeight + 2 : 0)
+
+        Text {
+          id: iconLabel
+          anchors.left: parent.left
+          anchors.verticalCenter: parent.verticalCenter
+          text: modelData.icon
+          color: root.isFocused || root.isVisible ? Theme.foreground : Theme.textDim
+          font.family: Theme.iconFamily
+          font.pixelSize: 9
+        }
+
+        Text {
+          id: countLabel
+          anchors.left: iconLabel.right
+          anchors.leftMargin: 1
+          anchors.top: parent.top
+          anchors.topMargin: -1
+          visible: modelData.count > 1
+          text: modelData.count
+          color: root.isFocused || root.isVisible ? Theme.foreground : Theme.textDim
+          font.family: Theme.fontFamily
+          font.pixelSize: 9
+          font.bold: true
+        }
+      }
+    }
   }
 
   Rectangle {
@@ -76,9 +118,25 @@ Rectangle {
   Connections {
     target: Hyprland
 
-    function onRawEvent() {
-      Hyprland.refreshMonitors()
-      Hyprland.refreshWorkspaces()
+    function onRawEvent(event) {
+      const name = event.name
+      if (name === "workspace"
+          || name === "workspacev2"
+          || name === "focusedmon"
+          || name === "focusedmonv2"
+          || name === "createworkspace"
+          || name === "createworkspacev2"
+          || name === "destroyworkspace"
+          || name === "destroyworkspacev2"
+          || name === "moveworkspace"
+          || name === "moveworkspacev2"
+          || name === "openwindow"
+          || name === "closewindow"
+          || name === "movewindow"
+          || name === "movewindowv2") {
+        Hyprland.refreshMonitors()
+        Hyprland.refreshWorkspaces()
+      }
     }
   }
 

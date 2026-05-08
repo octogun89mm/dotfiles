@@ -8,6 +8,8 @@ Row {
   property bool expanded: false
   property bool showToggle: true
   property color iconColor: Wallust.base04
+  property int iconSize: 16
+  property bool symbolicIcons: false
   clip: true
 
   Repeater {
@@ -17,8 +19,10 @@ Row {
       required property var modelData
       item: modelData
       iconColor: trayRoot.iconColor
+      iconSize: trayRoot.iconSize
+      symbolic: trayRoot.symbolicIcons
       property bool shouldShow: (expanded || (item.id === "expressvpn" && VpnState.connected)) && item.status !== Status.Passive
-      width: shouldShow ? 16 : 0
+      width: shouldShow ? trayRoot.iconSize : 0
       opacity: shouldShow ? 1 : 0
       visible: width > 0 || traySlide.running
 
@@ -50,7 +54,7 @@ Row {
       text: expanded ? "󰅂" : "󰅁"
       color: iconColor
       font.family: "Symbols Nerd Font Mono"
-      font.pixelSize: 14
+      font.pixelSize: trayRoot.iconSize - 2
     }
 
     MouseArea {

@@ -4,7 +4,7 @@ BasePopup {
   id: root
 
   anchorOffsetX: triggerItem ? triggerItem.width - implicitWidth : 0
-  anchorOffsetY: 10
+  anchorOffsetY: shellParentWindow && triggerItem ? shellParentWindow.height - triggerItem.height + 11 : 11
   popupContent: Component {
     CalendarBody {
       pinned: root.pinned

@@ -15,12 +15,16 @@ Rectangle {
   property date viewDate: new Date()
   readonly property int viewYear: viewDate.getFullYear()
   readonly property int viewMonth: viewDate.getMonth()
+  readonly property int cellSize: 28
+  readonly property int weekColumnWidth: 28
+  readonly property int gridWidth: weekColumnWidth + cellSize * 7
+  readonly property int headerHeight: 22
 
   readonly property date today: clock.date
   property date selectedDate: today
   property string selectedDateKey: dateKey(selectedDate)
 
-  implicitWidth: 244
+  implicitWidth: gridWidth + 20
   implicitHeight: calColumn.implicitHeight + 20
 
   SystemClock {
@@ -93,6 +97,25 @@ Rectangle {
     return new Date(year, month, 1).getDay()
   }
 
+  function calendarColor(calendarName) {
+    const colors = [
+      Wallust.base0E,
+      Wallust.base0B,
+      Wallust.base0A,
+      Wallust.base0D,
+      Wallust.base08,
+      Wallust.base0C
+    ]
+    const name = String(calendarName || "default")
+    var hash = 0
+    for (let i = 0; i < name.length; i++) {
+      hash = ((hash << 5) - hash) + name.charCodeAt(i)
+      hash |= 0
+    }
+
+    return colors[Math.abs(hash) % colors.length]
+  }
+
   function rebuildEventList() {
     eventListModel.clear()
     const events = Root.CalendarState.getEvents(selectedDateKey)
@@ -132,11 +155,11 @@ Rectangle {
     spacing: 6
 
     Row {
-      width: 224
+      width: root.gridWidth
       height: 24
 
       Item {
-        width: 24
+        width: root.cellSize
         height: 24
 
         Text {
@@ -154,7 +177,7 @@ Rectangle {
       }
 
       Text {
-        width: parent.width - 96
+        width: parent.width - root.cellSize * 2 - 48
         height: 24
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -188,7 +211,7 @@ Rectangle {
       }
 
       Item {
-        width: 24
+        width: root.cellSize
         height: 24
 
         Text {
@@ -211,11 +234,11 @@ Rectangle {
       columns: 8
       columnSpacing: 0
       rowSpacing: 0
-      width: 224
+      width: root.gridWidth
 
       Text {
-        width: 28
-        height: 20
+        width: root.weekColumnWidth
+        height: root.headerHeight
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         text: "Wk"
@@ -230,8 +253,8 @@ Rectangle {
 
         Text {
           required property var modelData
-          width: 28
-          height: 20
+          width: root.cellSize
+          height: root.headerHeight
           horizontalAlignment: Text.AlignHCenter
           verticalAlignment: Text.AlignVCenter
           text: modelData
@@ -244,7 +267,7 @@ Rectangle {
     }
 
     Column {
-      width: 224
+      width: root.gridWidth
       spacing: 0
 
       Repeater {
@@ -256,9 +279,9 @@ Rectangle {
           readonly property date rowDate: root.weekDate(index)
           readonly property bool currentWeek: root.rowContainsToday(index)
 
-          width: 224
-          height: 28
-          color: currentWeek ? Wallust.base01 : "transparent"
+          width: root.gridWidth
+          height: root.cellSize
+          color: "transparent"
 
           Row {
             id: weekRow
@@ -267,8 +290,8 @@ Rectangle {
             spacing: 0
 
             Text {
-              width: 28
-              height: 28
+              width: root.weekColumnWidth
+              height: root.cellSize
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
               text: root.isoWeekNumber(parent.parent.rowDate)
@@ -290,14 +313,19 @@ Rectangle {
                 readonly property bool isToday: root.isSameDate(dateValue, root.today)
                 readonly property bool isSelected: root.isSameDate(dateValue, root.selectedDate)
                 readonly property string cellDateKey: root.dateKey(dateValue)
-                readonly property bool cellHasEvents: Root.CalendarState.revision >= 0
-                  && (Root.CalendarState.eventsByDate[cellDateKey] || []).length > 0
+                readonly property var cellEvents: Root.CalendarState.eventsByDate[cellDateKey] || []
+                readonly property bool cellHasEvents: Root.CalendarState.revision >= 0 && cellEvents.length > 0
+                readonly property color cellEventColor: cellHasEvents ? root.calendarColor(cellEvents[0].calendar) : Wallust.accent
+                readonly property bool currentWeek: root.rowContainsToday(weekRow.rowIndex)
 
-                width: 28
-                height: 28
+                width: root.cellSize
+                height: root.cellSize
                 color: isToday ? Wallust.accent
                      : isSelected ? Wallust.base02
+                     : currentWeek ? Wallust.base01
                      : "transparent"
+                border.width: 1
+                border.color: isToday || isSelected ? Wallust.base04 : Wallust.base00
 
                 Text {
                   anchors.centerIn: parent
@@ -313,7 +341,7 @@ Rectangle {
                   anchors.horizontalCenter: parent.horizontalCenter
                   anchors.bottom: parent.bottom
                   anchors.bottomMargin: 2
-                  color: parent.isToday ? Wallust.base00 : Wallust.accent
+                  color: parent.isToday ? Wallust.base00 : parent.cellEventColor
                   visible: parent.cellHasEvents
                 }
 
@@ -329,7 +357,7 @@ Rectangle {
     }
 
     Rectangle {
-      width: 224
+      width: root.gridWidth
       height: 1
       color: Wallust.base02
       visible: eventListModel.count > 0
@@ -337,7 +365,7 @@ Rectangle {
 
     Column {
       id: eventSection
-      width: 224
+      width: root.gridWidth
       spacing: 2
       visible: eventListModel.count > 0
 
@@ -353,16 +381,24 @@ Rectangle {
         model: ListModel { id: eventListModel }
 
         Rectangle {
-          width: 224
+          width: root.gridWidth
           height: eventItemCol.implicitHeight + 6
           color: Wallust.base01
+
+          Rectangle {
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: 4
+            color: root.calendarColor(model.calendar)
+          }
 
           Column {
             id: eventItemCol
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 6
+            anchors.leftMargin: 10
             anchors.rightMargin: 6
 
             Text {
@@ -380,6 +416,17 @@ Rectangle {
               color: Wallust.base04
               font.family: "Iosevka"
               font.pixelSize: 9
+            }
+
+            Text {
+              width: parent.width
+              visible: model.calendar !== ""
+              text: model.calendar
+              color: root.calendarColor(model.calendar)
+              font.family: "Iosevka"
+              font.pixelSize: 9
+              font.bold: true
+              elide: Text.ElideRight
             }
           }
         }

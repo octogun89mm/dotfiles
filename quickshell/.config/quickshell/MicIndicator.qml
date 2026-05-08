@@ -9,25 +9,14 @@ Rectangle {
 
   visible: !onlyWhenActive || MicState.active
   color: "transparent"
-  implicitWidth: row.implicitWidth + Theme.padMd + Theme.stripe
+  implicitWidth: row.implicitWidth + Theme.padMd
   implicitHeight: Theme.chipHeight
-
-  Rectangle {
-    visible: MicState.active
-    anchors {
-      left: parent.left
-      top: parent.top
-      bottom: parent.bottom
-    }
-    width: Theme.stripe
-    color: root.activeColor
-  }
 
   Row {
     id: row
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
-    anchors.leftMargin: Theme.stripe + Theme.padSm
+    anchors.leftMargin: Theme.padSm
     spacing: Theme.padSm
 
     Text {

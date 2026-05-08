@@ -28,7 +28,7 @@ Scope {
       }
 
       margins {
-        top: 46
+        top: 28
       }
 
       Column {

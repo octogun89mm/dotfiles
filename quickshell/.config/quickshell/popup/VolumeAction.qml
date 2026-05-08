@@ -52,6 +52,8 @@ Rectangle {
           text: "VOLUME"
           width: parent.width
           elide: Text.ElideRight
+          fontSizeMode: Text.HorizontalFit
+          minimumPixelSize: 8
           color: Wallust.base04
           font.family: "Iosevka"
           font.pixelSize: 10
@@ -62,6 +64,8 @@ Rectangle {
           text: Root.VolumeState.muted ? "MUTED" : Root.VolumeState.volume + "%"
           width: parent.width
           elide: Text.ElideRight
+          fontSizeMode: Text.HorizontalFit
+          minimumPixelSize: 8
           color: Root.VolumeState.muted ? Wallust.base03 : Wallust.base05
           font.family: "Iosevka"
           font.pixelSize: 11
