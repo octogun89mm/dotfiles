@@ -11,8 +11,8 @@ Rectangle {
   property bool compact: false
   property bool borderless: true
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string cycleScript: home + "/.config/hypr/scripts/cycle-layout.sh"
-  readonly property string layoutScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/bar_layout.sh"
+  readonly property string cycleScript: home + "/.dotfiles/rust-tools/target/release/cycle-layout"
+  readonly property string layoutScript: home + "/.dotfiles/rust-tools/target/release/bar-window-count"
   readonly property string refreshStamp: "/tmp/quickshell-layout-refresh.state"
   property string layout: "MASTER"
 
@@ -74,11 +74,17 @@ Rectangle {
 
     stdout: StdioCollector {
       waitForEnd: true
-      onStreamFinished: {
+onStreamFinished: {
         if (!text || !text.trim())
           return
 
-        root.layout = root.normalizedLayout(text)
+        try {
+          const data = JSON.parse(text)
+          root.layout = root.normalizedLayout(data.layout || text)
+        } catch (_) {
+          root.layout = root.normalizedLayout(text)
+        }
+      }
       }
     }
   }

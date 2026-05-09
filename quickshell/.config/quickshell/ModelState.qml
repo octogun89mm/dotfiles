@@ -8,7 +8,7 @@ Singleton {
   id: root
 
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.config/quickshell/scripts/model-status.sh"
+  readonly property string scriptPath: home + "/.dotfiles/rust-tools/target/release/model-status"
 
   property bool loaded: false
   property string icon: "󰧑"

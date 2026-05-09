@@ -8,7 +8,7 @@ Singleton {
   id: root
 
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.dotfiles/quickshell/.config/quickshell/scripts/system-metrics.sh"
+  readonly property string scriptPath: home + "/.dotfiles/rust-tools/target/release/system-metrics"
 
   property real cpuUsage: -1
   property real cpuTemp: -1
@@ -20,7 +20,6 @@ Singleton {
   property real memUsed: -1
   property real memTotal: -1
   property real memPercent: -1
-  property int updates: -1
 
   property var cpuHistory: []
   property var memHistory: []
@@ -71,7 +70,6 @@ Singleton {
           root.memPercent = (root.memTotal > 0 && root.memUsed >= 0)
             ? (root.memUsed / root.memTotal * 100)
             : -1
-          root.updates = num(d.updates) | 0
 
           if (root.cpuUsage >= 0) root.cpuHistory = root.pushHist(root.cpuHistory, root.cpuUsage)
           if (root.memPercent >= 0) root.memHistory = root.pushHist(root.memHistory, root.memPercent)

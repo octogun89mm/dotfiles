@@ -8,7 +8,7 @@ Singleton {
   id: root
 
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.config/quickshell/scripts/mic-in-use.sh"
+  readonly property string scriptPath: home + "/.dotfiles/rust-tools/target/release/mic-in-use"
 
   property bool active: false
   property var apps: []

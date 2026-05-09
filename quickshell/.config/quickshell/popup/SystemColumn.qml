@@ -6,7 +6,7 @@ import "../wallust.js" as Wallust
 Column {
   id: root
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string metricsScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/system-metrics.sh"
+  readonly property string metricsScript: home + "/.dotfiles/rust-tools/target/release/system-metrics"
 
   property bool active: false
   property string cpuUsage: "--"
