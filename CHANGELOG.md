@@ -8,6 +8,27 @@ honours [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`):
 - **MINOR** — new packages or user-visible features.
 - **PATCH** — fixes, small tweaks, lockfile bumps.
 
+## [0.2.0] - 2026-05-09
+
+### Added
+- **quickshell** tailscale toggle indicator with `waybar/scripts/tailscale.sh`
+  helper, sitting next to the suspend toggle.
+- **quickshell** `WindowIcons` is now data-driven: app/tray patterns live in
+  hot-reloaded `window-icons/apps.json` + `tray.json`, and SVG glyphs in
+  `window-icons/svg/` are recolored on the fly. New `helium.svg` (asterisk
+  logo) replaces the previous atom glyph.
+- **quickshell** cava "scope" mode wired into the spectrogram, plus a debounced
+  workspace refresh and a scaffold for SVG window icons.
+
+### Changed
+- **foot** repainted dark palette with warmer foreground and accents.
+- **quickshell** clipboard panel now caps at half the screen height instead of
+  `screen - 20px`.
+- **quickshell** mic cava framerate synced with the main cava state, and the
+  suspend toggle moved next to the tray.
+- **hyprland** `F16` Discord-mute bind now matches both `Vesktop` and
+  `discord` window classes.
+
 ## [0.1.1] - 2026-05-08
 
 ### Changed

@@ -28,7 +28,7 @@ The current desktop stack is centered on Hyprland + Quickshell, with `Iosevka` a
 The Quickshell config is modular and currently includes:
 
 - multi-monitor bar windows
-- Hyprland workspace chips with per-window glyph icons (shared catalog with the tray)
+- Hyprland workspace chips with per-window glyph icons (hot-reloaded JSON catalog at `quickshell/.config/quickshell/window-icons/`, shared with the tray)
 - inline symbolic tray with per-icon fallbacks for common desktop apps
 - centered clock popup with quick actions, weather, and system metrics
 - compact stereo spectrogram widgets flanking the centered clock
@@ -37,7 +37,7 @@ The Quickshell config is modular and currently includes:
 - keybind overlay showing all Hyprland bindings on a visual keyboard layout
 - notification popup and notification center
 - OSD for volume, brightness, and shell state changes
-- tray, sound, VPN, idle inhibitor, suspend toggle, model-status, and keyboard layout indicators
+- tray, sound, VPN, tailscale toggle, idle inhibitor, suspend toggle, model-status, and keyboard layout indicators
 - theme picker with both Wallust theme and wallpaper modes (`scripts/theme-apply.sh`, `scripts/wallpaper-apply.sh`)
 - TTS engine picker overlay driving `scripts/speak.sh` over `qs ipc`
 - Wallust-driven colors via `wallust.js`, with low-contrast colors auto-clamped for readability
