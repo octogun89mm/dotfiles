@@ -70,18 +70,34 @@ Rectangle {
 
       Item {
         required property var modelData
+        readonly property bool isSvg: WindowIcons.isSvgRef(modelData.icon)
+        readonly property color iconColor: root.isFocused || root.isVisible ? Theme.foreground : Theme.textDim
         anchors.verticalCenter: parent.verticalCenter
-        implicitWidth: iconLabel.implicitWidth + (countLabel.visible ? countLabel.implicitWidth + 1 : 0)
-        implicitHeight: Math.max(iconLabel.implicitHeight, countLabel.visible ? countLabel.implicitHeight + 2 : 0)
+        implicitWidth: (isSvg ? iconImage.width : iconLabel.implicitWidth) + (countLabel.visible ? countLabel.implicitWidth + 1 : 0)
+        implicitHeight: Math.max(isSvg ? iconImage.height : iconLabel.implicitHeight, countLabel.visible ? countLabel.implicitHeight + 2 : 0)
 
         Text {
           id: iconLabel
           anchors.left: parent.left
           anchors.verticalCenter: parent.verticalCenter
-          text: modelData.icon
-          color: root.isFocused || root.isVisible ? Theme.foreground : Theme.textDim
+          visible: !parent.isSvg
+          text: parent.isSvg ? "" : modelData.icon
+          color: parent.iconColor
           font.family: Theme.iconFamily
           font.pixelSize: 9
+        }
+
+        Image {
+          id: iconImage
+          anchors.left: parent.left
+          anchors.verticalCenter: parent.verticalCenter
+          visible: parent.isSvg
+          width: 10
+          height: 10
+          sourceSize.width: 10
+          sourceSize.height: 10
+          source: parent.isSvg ? WindowIcons.svgUri(modelData.icon, parent.iconColor) : ""
+          asynchronous: true
         }
 
         Text {

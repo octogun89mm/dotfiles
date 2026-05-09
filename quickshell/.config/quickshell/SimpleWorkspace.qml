@@ -77,7 +77,7 @@ Item {
   }
 
   function iconForClient(client) {
-    return WindowIcons.iconFor(String(client.class || client.title || ""))
+    return WindowIcons.iconForApp(String(client.class || client.title || ""))
   }
 
   function iconsForWorkspace(workspaceId) {

@@ -1,0 +1,21 @@
+[
+  { "patterns": ["nm-applet", "network-manager", "network_manager", "network", "wireless", "wifi", "wi-fi", "wlan", "nm-signal"], "svg": "wifi.svg" },
+  { "patterns": ["bluetooth"], "icon": "󰂯" },
+  { "patterns": ["volume", "audio"], "icon": "󰕾" },
+  { "patterns": ["battery", "power"], "icon": "󰁹" },
+  { "patterns": ["syncthing"], "icon": "󰓦" },
+  { "patterns": ["dropbox", "nextcloud", "owncloud"], "icon": "󰅢" },
+  { "patterns": ["clipboard", "copyq"], "icon": "󰆏" },
+  { "patterns": ["redshift", "gammastep", "nightlight"], "icon": "󰖔" },
+  { "patterns": ["printer", "cups"], "icon": "󰐪" },
+  { "patterns": ["keyboard"], "icon": "󰌌" },
+  { "patterns": ["mic", "microphone"], "icon": "󰍬" },
+  { "patterns": ["brightness", "display"], "icon": "󰃞" },
+  { "patterns": ["notification"], "icon": "󰂚" },
+  { "patterns": ["update", "pacman"], "icon": "󰚸" },
+  { "patterns": ["trash"], "icon": "󰆴" },
+  { "patterns": ["disk", "storage"], "icon": "󰋊" },
+  { "patterns": ["password", "keepass", "bitwarden", "1password"], "icon": "󰍁" },
+  { "patterns": ["calendar"], "icon": "" },
+  { "patterns": ["weather"], "icon": "" }
+]

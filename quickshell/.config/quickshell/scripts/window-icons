@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# Manage quickshell tray/workspace icons.
+#
+# Usage:
+#   window-icons list [apps|tray]
+#   window-icons add <apps|tray> <icon> <pattern> [pattern ...]
+#   window-icons set <apps|tray> <pattern> <icon>
+#   window-icons remove <apps|tray> <pattern>
+#   window-icons svg list
+#   window-icons svg add <name.svg> <path-to-svg>
+#   window-icons svg remove <name.svg>
+#
+# <icon> can be a glyph (e.g. "") or "svg:name.svg" to reference an SVG file.
+# Quickshell hot-reloads automatically via FileView.watchChanges.
+
+set -euo pipefail
+
+DIR="${WINDOW_ICONS_DIR:-$HOME/.dotfiles/quickshell/.config/quickshell/window-icons}"
+SVG_DIR="$DIR/svg"
+
+die()  { printf 'window-icons: %s\n' "$*" >&2; exit 1; }
+
+require_jq() { command -v jq >/dev/null || die "jq is required"; }
+
+catalog_path() {
+    case "$1" in
+        apps) printf '%s/apps.json\n' "$DIR" ;;
+        tray) printf '%s/tray.json\n' "$DIR" ;;
+        *)    die "unknown catalog: $1 (expected apps|tray)" ;;
+    esac
+}
+
+normalize_icon() {
+    local icon="$1"
+    if [[ "$icon" == svg:* ]]; then
+        local name="${icon#svg:}"
+        [[ -f "$SVG_DIR/$name" ]] || die "svg not found: $SVG_DIR/$name (use 'svg add' first)"
+        printf '{"svg":"%s"}\n' "$name"
+    else
+        jq -nc --arg i "$icon" '{icon:$i}'
+    fi
+}
+
+cmd_list() {
+    local catalog="${1:-}"
+    require_jq
+    if [[ -z "$catalog" ]]; then
+        for c in apps tray; do
+            printf '\n== %s ==\n' "$c"
+            cmd_list "$c"
+        done
+        return
+    fi
+    local file; file="$(catalog_path "$catalog")"
+    jq -r '.[] | (.icon // ("svg:" + .svg)) + "\t" + (.patterns | join(", "))' "$file" \
+        | column -t -s $'\t'
+}
+
+cmd_add() {
+    [[ $# -ge 3 ]] || die "usage: add <apps|tray> <icon> <pattern> [...]"
+    require_jq
+    local catalog="$1"; shift
+    local icon="$1"; shift
+    local file; file="$(catalog_path "$catalog")"
+    local entry; entry="$(normalize_icon "$icon")"
+    local patterns; patterns="$(printf '%s\n' "$@" | jq -R . | jq -s .)"
+    local merged; merged="$(jq --argjson e "$entry" --argjson p "$patterns" \
+        '. + [$e + {patterns:$p}]' "$file")"
+    printf '%s\n' "$merged" > "$file"
+    printf 'added → %s\n' "$file"
+}
+
+cmd_set() {
+    [[ $# -eq 3 ]] || die "usage: set <apps|tray> <pattern> <icon>"
+    require_jq
+    local catalog="$1" pattern="$2" icon="$3"
+    local file; file="$(catalog_path "$catalog")"
+    local entry; entry="$(normalize_icon "$icon")"
+    local updated; updated="$(jq --arg p "$pattern" --argjson e "$entry" \
+        'map(if (.patterns | index($p)) then (. - {icon, svg}) + $e else . end)' "$file")"
+    printf '%s\n' "$updated" > "$file"
+    printf 'updated entries containing pattern "%s"\n' "$pattern"
+}
+
+cmd_remove() {
+    [[ $# -eq 2 ]] || die "usage: remove <apps|tray> <pattern>"
+    require_jq
+    local catalog="$1" pattern="$2"
+    local file; file="$(catalog_path "$catalog")"
+    local updated; updated="$(jq --arg p "$pattern" \
+        'map(.patterns -= [$p]) | map(select(.patterns | length > 0))' "$file")"
+    printf '%s\n' "$updated" > "$file"
+    printf 'removed pattern "%s" from %s\n' "$pattern" "$catalog"
+}
+
+cmd_svg() {
+    local sub="${1:-}"; shift || true
+    case "$sub" in
+        list)
+            ls -1 "$SVG_DIR" 2>/dev/null | grep -E '\.svg$' || true
+            ;;
+        add)
+            [[ $# -eq 2 ]] || die "usage: svg add <name.svg> <path>"
+            local name="$1" src="$2"
+            [[ "$name" == *.svg ]] || die "name must end in .svg"
+            [[ -f "$src" ]]       || die "source not found: $src"
+            mkdir -p "$SVG_DIR"
+            cp -- "$src" "$SVG_DIR/$name"
+            printf 'added %s/%s\n' "$SVG_DIR" "$name"
+            ;;
+        remove)
+            [[ $# -eq 1 ]] || die "usage: svg remove <name.svg>"
+            rm -- "$SVG_DIR/$1"
+            printf 'removed %s/%s\n' "$SVG_DIR" "$1"
+            ;;
+        *) die "svg: expected list|add|remove" ;;
+    esac
+}
+
+cmd="${1:-}"; shift || true
+case "$cmd" in
+    list)   cmd_list "$@" ;;
+    add)    cmd_add "$@" ;;
+    set)    cmd_set "$@" ;;
+    remove) cmd_remove "$@" ;;
+    svg)    cmd_svg "$@" ;;
+    ""|-h|--help|help)
+        sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'
+        ;;
+    *) die "unknown command: $cmd (try --help)" ;;
+esac
