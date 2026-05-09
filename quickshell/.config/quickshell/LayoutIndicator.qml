@@ -74,7 +74,7 @@ Rectangle {
 
     stdout: StdioCollector {
       waitForEnd: true
-onStreamFinished: {
+      onStreamFinished: {
         if (!text || !text.trim())
           return
 
@@ -84,7 +84,6 @@ onStreamFinished: {
         } catch (_) {
           root.layout = root.normalizedLayout(text)
         }
-      }
       }
     }
   }

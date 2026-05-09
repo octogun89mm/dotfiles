@@ -13,7 +13,6 @@ Column {
   property string cpuTemp: "--"
   property string memoryUsed: "--"
   property string memoryTotal: "--"
-  property string updates: "--"
   property string gpuUsage: "--"
   property string gpuTemp: "--"
   property string gpuVramUsed: "--"
@@ -28,8 +27,7 @@ Column {
   property var memLoadHistory: []
 
   readonly property int maxHistory: 30
-  readonly property real updatesHeight: 50
-  readonly property real graphCardHeight: Math.max(80, (height - updatesHeight - (spacing * 3)) / 3)
+  readonly property real graphCardHeight: Math.max(80, (height - (spacing * 2)) / 3)
 
   spacing: 10
 
@@ -70,13 +68,6 @@ Column {
     ]
   }
 
-  MetricCard {
-    id: updatesCard
-    title: "UPDATES"
-    value: root.updates.padStart(3, "0")
-    height: root.updatesHeight
-  }
-
   function pushHistory(arr, val) {
     return arr.concat([val]).slice(-maxHistory)
   }
@@ -113,7 +104,6 @@ Column {
           root.cpuTemp = root.formatInt(data.cpu_temp, "--")
           root.memoryUsed = data.mem_used || "--"
           root.memoryTotal = data.mem_total || "--"
-          root.updates = root.formatInt(data.updates, "--")
           root.gpuUsage = root.formatInt(data.gpu, "--")
           root.gpuTemp = root.formatInt(data.gpu_temp, "--")
 
