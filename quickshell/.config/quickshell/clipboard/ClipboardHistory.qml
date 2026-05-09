@@ -19,11 +19,11 @@ Scope {
       readonly property bool activeScreen: Clipboard.ClipboardState.screenName === modelData.name
       readonly property bool overlayVisible: Clipboard.ClipboardState.visible && activeScreen
       readonly property int minPanelHeight: 300
-      readonly property int maxPanelHeight: Math.max(minPanelHeight, modelData.height - 20)
+      readonly property int maxPanelHeight: Math.max(minPanelHeight, Math.round(modelData.height * 0.5))
       readonly property int desiredPanelHeight: headerRow.implicitHeight + filterBox.height + 52
         + (historyList.visible ? historyList.contentHeight : emptyState.implicitHeight + 24)
 
-      visible: (overlayVisible) || slideAnim.running
+      visible: overlayVisible || slideAnim.running
       WlrLayershell.keyboardFocus: overlayVisible ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
       anchors {
