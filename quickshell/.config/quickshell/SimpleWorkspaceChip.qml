@@ -115,31 +115,6 @@ Rectangle {
     onClicked: workspaceProcess.exec(["hyprctl", "dispatch", "workspace", String(root.workspaceId)])
   }
 
-  Connections {
-    target: Hyprland
-
-    function onRawEvent(event) {
-      const name = event.name
-      if (name === "workspace"
-          || name === "workspacev2"
-          || name === "focusedmon"
-          || name === "focusedmonv2"
-          || name === "createworkspace"
-          || name === "createworkspacev2"
-          || name === "destroyworkspace"
-          || name === "destroyworkspacev2"
-          || name === "moveworkspace"
-          || name === "moveworkspacev2"
-          || name === "openwindow"
-          || name === "closewindow"
-          || name === "movewindow"
-          || name === "movewindowv2") {
-        Hyprland.refreshMonitors()
-        Hyprland.refreshWorkspaces()
-      }
-    }
-  }
-
   Process {
     id: workspaceProcess
   }

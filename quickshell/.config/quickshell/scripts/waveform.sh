@@ -13,7 +13,7 @@ fi
 exec parec --format=s16le --rate=8000 --channels=1 -d "${SINK}.monitor" --raw \
   | python3 -u -c '
 import sys, struct
-CHUNK = 67  # ~120Hz at 8000Hz
+CHUNK = 134  # ~60Hz at 8000Hz
 while True:
     data = sys.stdin.buffer.read(CHUNK * 2)
     if not data:

@@ -15,10 +15,13 @@ Singleton {
   property var samples: []           // each entry: {avg, peak}
   readonly property int maxSamples: 240
 
+  property bool isScope: CavaStyleState.current === "scope"
+
   function push(avg, peak) {
+    if (!isScope) return
     const next = samples.slice()
     next.push({ avg: avg, peak: peak })
-    if (next.length > maxSamples) next.splice(0, next.length - maxSamples)
+    if (next.length > maxSamples) next.shift()
     samples = next
     available = true
   }
@@ -28,11 +31,12 @@ Singleton {
   Process {
     id: proc
     command: [root.scriptPath]
-    running: root.enabled
+    running: root.enabled && root.isScope
 
     stdout: SplitParser {
       splitMarker: "\n"
       onRead: function(data) {
+        if (!root.isScope) return
         const line = (data || "").trim()
         if (!line) return
         const parts = line.split(";")
@@ -45,7 +49,14 @@ Singleton {
 
     onExited: function() {
       root.available = false
-      if (root.enabled) restartTimer.restart()
+      if (root.enabled && root.isScope) restartTimer.restart()
+    }
+  }
+
+  onIsScopeChanged: {
+    if (!isScope) {
+      samples = []
+      available = false
     }
   }
 

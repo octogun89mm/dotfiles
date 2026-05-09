@@ -27,16 +27,14 @@ Item {
     return ""
   }
 
-  property int refreshTick: 0
-
-  property var entries: {
-    refreshTick
-    const result = []
-    for (let i = 1; i <= 6; i++) {
-      result.push({ kind: "ws", id: i })
-    }
-    return result
-  }
+  property var entries: [
+    { kind: "ws", id: 1 },
+    { kind: "ws", id: 2 },
+    { kind: "ws", id: 3 },
+    { kind: "ws", id: 4 },
+    { kind: "ws", id: 5 },
+    { kind: "ws", id: 6 }
+  ]
 
   Connections {
     target: Hyprland
@@ -56,9 +54,7 @@ Item {
           || name === "closewindow"
           || name === "movewindow"
           || name === "movewindowv2") {
-        Hyprland.refreshMonitors()
-        Hyprland.refreshWorkspaces()
-        root.refreshTick++
+        hyprRefreshTimer.restart()
       }
 
       if (name === "openwindow"
@@ -67,6 +63,16 @@ Item {
           || name === "movewindowv2") {
         root.refreshClients()
       }
+    }
+  }
+
+  Timer {
+    id: hyprRefreshTimer
+    interval: 50
+    repeat: false
+    onTriggered: {
+      Hyprland.refreshMonitors()
+      Hyprland.refreshWorkspaces()
     }
   }
 
@@ -97,7 +103,16 @@ Item {
   }
 
   function refreshClients() {
-    if (!clientsProcess.running) clientsProcess.exec(["hyprctl", "clients", "-j"])
+    refreshTimer.restart()
+  }
+
+  Timer {
+    id: refreshTimer
+    interval: 150
+    repeat: false
+    onTriggered: {
+      if (!clientsProcess.running) clientsProcess.exec(["hyprctl", "clients", "-j"])
+    }
   }
 
   Component.onCompleted: refreshClients()

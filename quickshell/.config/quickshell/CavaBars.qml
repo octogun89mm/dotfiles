@@ -23,19 +23,15 @@ Item {
   implicitWidth: 60
   implicitHeight: bandCount > 0 ? Math.min(maxHeight, (bandCount * rowHeight) + ((bandCount - 1) * rowSpacing)) : 0
 
-  function trimHistory() {
-    if (history.length > maxColumns) {
-      history = history.slice(history.length - maxColumns)
-    }
-  }
-
   function pushFrame(levels) {
     if (!levels || !levels.length) return
 
-    const nextHistory = history.slice()
-    nextHistory.push(levels.slice())
-    history = nextHistory
-    trimHistory()
+    if (CavaStyleState.current === "spectrogram") {
+      const nextHistory = history.slice()
+      nextHistory.push(levels.slice())
+      if (nextHistory.length > maxColumns) nextHistory.shift()
+      history = nextHistory
+    }
     spectrogram.requestPaint()
   }
 
@@ -46,7 +42,6 @@ Item {
   }
 
   onMaxColumnsChanged: {
-    trimHistory()
     spectrogram.requestPaint()
   }
 

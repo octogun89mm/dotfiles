@@ -77,10 +77,12 @@ Singleton {
     }
   }
 
+  property bool isScope: CavaStyleState.current === "scope"
+
   Process {
     id: cavaProcess
     command: ["/usr/bin/cava", "-p", root.configPath]
-    running: root.enabled
+    running: root.enabled && !root.isScope
 
     stdout: SplitParser {
       splitMarker: "\n"
@@ -102,7 +104,7 @@ Singleton {
     interval: 1000
     repeat: false
     onTriggered: {
-      if (root.enabled && !cavaProcess.running) {
+      if (root.enabled && !root.isScope && !cavaProcess.running) {
         cavaProcess.running = true
       }
     }
