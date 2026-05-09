@@ -60,7 +60,7 @@
   { "patterns": ["opera"], "icon": "" },
   { "patterns": ["safari"], "icon": "" },
   { "patterns": ["brave"], "icon": "󰕥" },
-  { "patterns": ["helium"], "icon": "󰣣" },
+  { "patterns": ["helium"], "svg": "helium.svg" },
   { "patterns": ["vivaldi"], "icon": "󰣩" },
   { "patterns": ["qutebrowser"], "icon": "" },
   { "patterns": ["chromium", "chrome"], "icon": "" }
