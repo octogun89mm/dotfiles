@@ -159,7 +159,6 @@ Scope {
             MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             ModelIndicator { anchors.verticalCenter: parent.verticalCenter }
             IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
-            SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: true }
             Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
 
             Text {
@@ -364,6 +363,9 @@ Scope {
                 acceptedButtons: Qt.NoButton
               }
             }
+
+            Tailscale { anchors.verticalCenter: parent.verticalCenter }
+            SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: false }
           }
 
           // RIGHT cluster — media + language
