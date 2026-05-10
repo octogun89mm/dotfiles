@@ -42,14 +42,22 @@ fn main() {
 
     // Expand ~ to $HOME
     let home = std::env::var("HOME").unwrap_or_default();
-    let expanded = if script.starts_with("~/") {
-        format!("{}/{}", home.trim_end_matches('/'), &script[2..])
+    let expanded = if let Some(stripped) = script.strip_prefix("~/") {
+        format!("{}/{}", home.trim_end_matches('/'), stripped)
     } else {
         script.to_string()
     };
 
-    let cmd: &str = if expanded.ends_with(".sh") { "sh" } else { &expanded };
-    let sh_args: &[&str] = if expanded.ends_with(".sh") { &[&expanded] } else { args };
+    let cmd: &str = if expanded.ends_with(".sh") {
+        "sh"
+    } else {
+        &expanded
+    };
+    let sh_args: &[&str] = if expanded.ends_with(".sh") {
+        &[&expanded]
+    } else {
+        args
+    };
 
     let err = Command::new(cmd)
         .args(sh_args)
@@ -66,7 +74,7 @@ fn run_rofi(items: &[&str], prompt: &str) -> Option<String> {
     let input = items.join("\n");
 
     let mut child = Command::new("rofi")
-        .args(&["-dmenu", "-i", "-p", prompt, "-no-custom"])
+        .args(["-dmenu", "-i", "-p", prompt, "-no-custom"])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
@@ -87,5 +95,9 @@ fn run_rofi(items: &[&str], prompt: &str) -> Option<String> {
     }
 
     let result = String::from_utf8_lossy(&output.stdout).trim().to_string();
-    if result.is_empty() { None } else { Some(result) }
+    if result.is_empty() {
+        None
+    } else {
+        Some(result)
+    }
 }

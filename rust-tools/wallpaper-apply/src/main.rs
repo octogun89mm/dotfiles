@@ -30,7 +30,10 @@ fn main() {
 
     // Preload and set wallpaper via hyprpaper
     run_cmd("hyprctl", &["hyprpaper", "preload", wallpaper]);
-    run_cmd("hyprctl", &["hyprpaper", "wallpaper", &format!(",{}", wallpaper)]);
+    run_cmd(
+        "hyprctl",
+        &["hyprpaper", "wallpaper", &format!(",{}", wallpaper)],
+    );
     run_cmd("hyprctl", &["hyprpaper", "unload", "unused"]);
 
     // Write hyprpaper.conf
@@ -51,9 +54,18 @@ fn main() {
     let cache_dir = format!("{}/.cache", home);
     fs::create_dir_all(&cache_dir).ok();
     write_file(&format!("{}/wallust-current-theme", cache_dir), name);
-    write_file(&format!("{}/wallust-current-wallpaper", cache_dir), wallpaper);
-    write_file(&format!("{}/wallust-current-source", cache_dir), "wallpaper");
-    write_file(&format!("{}/quickshell-theme-picker-mode", cache_dir), "wallpaper");
+    write_file(
+        &format!("{}/wallust-current-wallpaper", cache_dir),
+        wallpaper,
+    );
+    write_file(
+        &format!("{}/wallust-current-source", cache_dir),
+        "wallpaper",
+    );
+    write_file(
+        &format!("{}/quickshell-theme-picker-mode", cache_dir),
+        "wallpaper",
+    );
 
     // Reload services
     run_cmd("hyprctl", &["reload"]);
@@ -62,20 +74,32 @@ fn main() {
     // Update kitty colors
     let kitty_colors = format!("{}/.config/kitty/themes/wallust.conf", home);
     if Path::new(&kitty_colors).exists() {
-        run_cmd("kitty", &["@", "set-colors", "--all", "--configured", &kitty_colors]);
+        run_cmd(
+            "kitty",
+            &["@", "set-colors", "--all", "--configured", &kitty_colors],
+        );
     }
 
     // Notify
-    run_cmd("notify-send", &[
-        "-a", "Wallpaper",
-        "-u", "low",
-        "-t", "2500",
-        "Wallpaper",
-        &format!("Set to {}", name),
-    ]);
+    run_cmd(
+        "notify-send",
+        &[
+            "-a",
+            "Wallpaper",
+            "-u",
+            "low",
+            "-t",
+            "2500",
+            "Wallpaper",
+            &format!("Set to {}", name),
+        ],
+    );
 
     // Restart quickshell
-    let restart_bin = format!("{}/.dotfiles/rust-tools/target/release/quickshell-restart", home);
+    let restart_bin = format!(
+        "{}/.dotfiles/rust-tools/target/release/quickshell-restart",
+        home
+    );
     if Path::new(&restart_bin).exists() {
         run_cmd_detached(&restart_bin, &[]);
     }

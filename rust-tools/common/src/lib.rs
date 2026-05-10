@@ -39,7 +39,9 @@ pub fn pactl_json(args: &[&str]) -> Result<serde_json::Value, String> {
 
 /// Read a file's contents as a trimmed String.
 pub fn read_state_file(path: &std::path::Path) -> Option<String> {
-    std::fs::read_to_string(path).ok().map(|s| s.trim().to_string())
+    std::fs::read_to_string(path)
+        .ok()
+        .map(|s| s.trim().to_string())
 }
 
 /// Write a String to a file, creating parent dirs.

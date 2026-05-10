@@ -43,7 +43,7 @@ fn find_llama_server() -> Option<String> {
         // Extract alias
         if let Some(pos) = cmdline.find("--alias") {
             let after = &cmdline[pos + 7..];
-            let alias = after.trim_start_matches(|c: char| c == ' ' || c == '=');
+            let alias = after.trim_start_matches([' ', '=']);
             let end = alias.find('\0').unwrap_or(alias.len());
             let name = alias[..end].trim().to_string();
             if !name.is_empty() {

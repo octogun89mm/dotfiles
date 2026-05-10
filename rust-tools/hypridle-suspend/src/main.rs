@@ -31,7 +31,11 @@ fn do_status() {
 
     qs_common::print_json(&Status {
         active,
-        status: if active { "enabled".to_string() } else { "disabled".to_string() },
+        status: if active {
+            "enabled".to_string()
+        } else {
+            "disabled".to_string()
+        },
         tooltip: if active {
             "Automatic suspend: ON".to_string()
         } else {
@@ -48,10 +52,30 @@ fn do_toggle() {
 
     if Path::new(&path).exists() {
         fs::remove_file(&path).ok();
-        run_cmd("notify-send", &["-a", "Hypridle", "-t", "2000", "Automatic suspend", "Enabled"]);
+        run_cmd(
+            "notify-send",
+            &[
+                "-a",
+                "Hypridle",
+                "-t",
+                "2000",
+                "Automatic suspend",
+                "Enabled",
+            ],
+        );
     } else {
         fs::write(&path, "").ok();
-        run_cmd("notify-send", &["-a", "Hypridle", "-t", "2000", "Automatic suspend", "Disabled"]);
+        run_cmd(
+            "notify-send",
+            &[
+                "-a",
+                "Hypridle",
+                "-t",
+                "2000",
+                "Automatic suspend",
+                "Disabled",
+            ],
+        );
     }
 }
 
@@ -63,7 +87,7 @@ fn do_suspend() {
 
     // Suspend
     let err = Command::new("systemctl")
-        .args(&["suspend"])
+        .args(["suspend"])
         .stdin(std::process::Stdio::inherit())
         .stdout(std::process::Stdio::inherit())
         .stderr(std::process::Stdio::inherit())

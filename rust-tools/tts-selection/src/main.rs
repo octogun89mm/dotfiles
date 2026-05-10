@@ -32,7 +32,16 @@ fn main() {
 
     // Run kokoro-tts
     let mut child = Command::new(&kokoro)
-        .args(&["-", &tmpfile, "--voice", "am_michael", "--model", &model, "--voices", &voices])
+        .args([
+            "-",
+            &tmpfile,
+            "--voice",
+            "am_michael",
+            "--model",
+            &model,
+            "--voices",
+            &voices,
+        ])
         .stdin(Stdio::piped())
         .stdout(Stdio::null())
         .stderr(Stdio::null())

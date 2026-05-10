@@ -17,12 +17,7 @@ fn main() {
     if let Ok(dir) = fs::read_dir(&cache_dir) {
         let mut txt_files: Vec<_> = dir
             .filter_map(|e| e.ok())
-            .filter(|e| {
-                e.path()
-                    .extension()
-                    .and_then(|ext| ext.to_str())
-                    == Some("txt")
-            })
+            .filter(|e| e.path().extension().and_then(|ext| ext.to_str()) == Some("txt"))
             .collect();
         // Sort by modification time, newest first
         txt_files.sort_by(|a, b| {
@@ -56,12 +51,15 @@ fn main() {
     }
 
     // Build rofi input
-    let displays: Vec<&str> = entries.iter().map(|(_, preview, _)| preview.as_str()).collect();
+    let displays: Vec<&str> = entries
+        .iter()
+        .map(|(_, preview, _)| preview.as_str())
+        .collect();
     let display_input = displays.join("\n");
 
     // Run rofi
     let mut child = match Command::new("rofi")
-        .args(&["-dmenu", "-i", "-p", "speak", "-format", "i s"])
+        .args(["-dmenu", "-i", "-p", "speak", "-format", "i s"])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
@@ -108,7 +106,7 @@ fn main() {
         let monitor = get_focused_monitor();
         // Open quickshell IPC speak
         Command::new("quickshell")
-            .args(&["ipc", "call", "--", "speak", "open", text, &monitor])
+            .args(["ipc", "call", "--", "speak", "open", text, &monitor])
             .stdout(Stdio::null())
             .stderr(Stdio::null())
             .status()
@@ -117,20 +115,26 @@ fn main() {
         // Play selected
         let (hash, _, wav_path) = &entries[idx];
         Command::new("ffplay")
-            .args(&["-nodisp", "-autoexit", "-loglevel", "quiet", wav_path])
+            .args(["-nodisp", "-autoexit", "-loglevel", "quiet", wav_path])
             .stdout(Stdio::null())
             .stderr(Stdio::null())
             .status()
             .ok();
-        // Touch files to update mtime
-        let _ = fs::write(format!("{}/{}.txt", cache_dir, hash), "");
-        let _ = fs::write(format!("{}/{}.wav", cache_dir, hash), "");
+        // Touch files to update mtime without truncating cached content.
+        let _ = Command::new("touch")
+            .args(&[
+                format!("{}/{}.txt", cache_dir, hash),
+                format!("{}/{}.wav", cache_dir, hash),
+            ])
+            .stdout(Stdio::null())
+            .stderr(Stdio::null())
+            .status();
     }
 }
 
 fn get_focused_monitor() -> String {
     let output = Command::new("hyprctl")
-        .args(&["-j", "monitors"])
+        .args(["-j", "monitors"])
         .output()
         .ok();
     match output {
@@ -139,7 +143,8 @@ fn get_focused_monitor() -> String {
             if let Ok(v) = serde_json::from_str::<serde_json::Value>(&stdout) {
                 v.as_array()
                     .and_then(|arr| {
-                        arr.iter().find(|m| m.get("focused").and_then(|f| f.as_bool()) == Some(true))
+                        arr.iter()
+                            .find(|m| m.get("focused").and_then(|f| f.as_bool()) == Some(true))
                     })
                     .and_then(|m| m.get("name").and_then(|n| n.as_str()))
                     .unwrap_or("")

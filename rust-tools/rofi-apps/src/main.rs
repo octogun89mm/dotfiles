@@ -28,7 +28,10 @@ fn main() {
     let (cmd, args): (&str, &[&str]) = match selection.as_str() {
         "App launcher" => ("rofi", &["-show", "drun"]),
         "Terminal" => ("foot", &[]),
-        "Dropdown terminal" => ("foot", &["--app-id", "foot-scratchpad", "-o", "colors-dark.alpha=0.9"]),
+        "Dropdown terminal" => (
+            "foot",
+            &["--app-id", "foot-scratchpad", "-o", "colors-dark.alpha=0.9"],
+        ),
         "Ranger" => ("foot", &["-e", "ranger"]),
         "Neovim" => ("foot", &["--app-id", "nvim", "-e", "nvim"]),
         "Emacs" => ("emacsclient", &["-c"]),
@@ -57,7 +60,7 @@ fn run_rofi(items: &[&str], prompt: &str) -> Option<String> {
     let input = items.join("\n");
 
     let mut child = Command::new("rofi")
-        .args(&["-dmenu", "-i", "-p", prompt, "-no-custom"])
+        .args(["-dmenu", "-i", "-p", prompt, "-no-custom"])
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
@@ -78,5 +81,9 @@ fn run_rofi(items: &[&str], prompt: &str) -> Option<String> {
     }
 
     let result = String::from_utf8_lossy(&output.stdout).trim().to_string();
-    if result.is_empty() { None } else { Some(result) }
+    if result.is_empty() {
+        None
+    } else {
+        Some(result)
+    }
 }

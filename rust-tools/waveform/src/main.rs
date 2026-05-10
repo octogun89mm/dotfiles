@@ -22,7 +22,7 @@ fn main() {
     // Spawn parec
     let monitor = format!("{}.monitor", sink);
     let mut child = Command::new("parec")
-        .args(&[
+        .args([
             "--format=s16le",
             &format!("--rate={}", SAMPLE_RATE),
             &format!("--channels={}", CHANNELS),
@@ -87,10 +87,7 @@ fn main() {
 
 fn get_default_sink() -> Option<String> {
     // Try pactl info first
-    let output = Command::new("pactl")
-        .args(&["info"])
-        .output()
-        .ok()?;
+    let output = Command::new("pactl").args(["info"]).output().ok()?;
     let stdout = String::from_utf8_lossy(&output.stdout);
     for line in stdout.lines() {
         if let Some(name) = line.strip_prefix("Default Sink: ") {
@@ -100,9 +97,13 @@ fn get_default_sink() -> Option<String> {
 
     // Fall back to reading the pacmd default
     let output = Command::new("pactl")
-        .args(&["get-default-sink"])
+        .args(["get-default-sink"])
         .output()
         .ok()?;
     let name = String::from_utf8_lossy(&output.stdout).trim().to_string();
-    if name.is_empty() { None } else { Some(name) }
+    if name.is_empty() {
+        None
+    } else {
+        Some(name)
+    }
 }

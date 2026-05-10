@@ -42,7 +42,7 @@ fn main() {
     // Dispatch
     let dispatch_args: Vec<&str> = args[1..].iter().map(|s| s.as_str()).collect();
     Command::new("hyprctl")
-        .args(&["dispatch"])
+        .args(["dispatch"])
         .args(&dispatch_args)
         .stdout(Stdio::null())
         .stderr(Stdio::null())
@@ -56,7 +56,9 @@ fn main() {
                 .find(|m| m.get("focused").and_then(|f| f.as_bool()) == Some(true))
                 .map(|m| {
                     let ws = m.get("activeWorkspace");
-                    let ws_name = ws.and_then(|w| w.get("name").and_then(|n| n.as_str())).unwrap_or("");
+                    let ws_name = ws
+                        .and_then(|w| w.get("name").and_then(|n| n.as_str()))
+                        .unwrap_or("");
                     let mon_name = m.get("name").and_then(|n| n.as_str()).unwrap_or("");
                     (ws_name.to_string(), mon_name.to_string())
                 })
@@ -81,7 +83,7 @@ fn main() {
 
     // Call quickshell IPC
     Command::new("quickshell")
-        .args(&["ipc", "call", "--", "workspaceflash", "show", &ws, &monitor])
+        .args(["ipc", "call", "--", "workspaceflash", "show", &ws, &monitor])
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .spawn()

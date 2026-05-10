@@ -7,7 +7,7 @@ use std::process::Command;
 fn main() {
     // Get all sinks
     let sinks_output = Command::new("pactl")
-        .args(&["list", "short", "sinks"])
+        .args(["list", "short", "sinks"])
         .output()
         .unwrap_or_else(|e| {
             eprintln!("cycle-sink: pactl error: {e}");
@@ -26,7 +26,7 @@ fn main() {
 
     // Get current default sink
     let info_output = Command::new("pactl")
-        .args(&["info"])
+        .args(["info"])
         .output()
         .unwrap_or_else(|e| {
             eprintln!("cycle-sink: pactl error: {e}");
@@ -48,7 +48,7 @@ fn main() {
 
     // Set default sink
     Command::new("pactl")
-        .args(&["set-default-sink", next_sink])
+        .args(["set-default-sink", next_sink])
         .stdout(std::process::Stdio::null())
         .stderr(std::process::Stdio::null())
         .status()
@@ -56,7 +56,7 @@ fn main() {
 
     // Move all sink-inputs
     let inputs_output = Command::new("pactl")
-        .args(&["list", "short", "sink-inputs"])
+        .args(["list", "short", "sink-inputs"])
         .output()
         .unwrap_or_else(|e| {
             eprintln!("cycle-sink: pactl error: {e}");
@@ -66,7 +66,7 @@ fn main() {
     for line in inputs_stdout.lines() {
         if let Some(input_id) = line.split_whitespace().next() {
             Command::new("pactl")
-                .args(&["move-sink-input", input_id, next_sink])
+                .args(["move-sink-input", input_id, next_sink])
                 .stdout(std::process::Stdio::null())
                 .stderr(std::process::Stdio::null())
                 .status()
@@ -76,9 +76,11 @@ fn main() {
 
     // Notify
     Command::new("notify-send")
-        .args(&[
-            "-a", "Audio Output",
-            "-t", "2000",
+        .args([
+            "-a",
+            "Audio Output",
+            "-t",
+            "2000",
             "Sink switched",
             next_sink,
         ])

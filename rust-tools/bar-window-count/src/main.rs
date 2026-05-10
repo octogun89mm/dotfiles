@@ -53,7 +53,8 @@ fn main() {
     let active_ws = monitors
         .as_array()
         .and_then(|arr| {
-            arr.iter().find(|m| m.get("name").and_then(|n| n.as_str()) == Some(monitor_name))
+            arr.iter()
+                .find(|m| m.get("name").and_then(|n| n.as_str()) == Some(monitor_name))
         })
         .and_then(|m| m.get("activeWorkspace"))
         .and_then(|ws| ws.get("id"))

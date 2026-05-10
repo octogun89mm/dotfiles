@@ -62,7 +62,11 @@ fn main() {
             continue;
         }
 
-        let props = o.get("properties").and_then(|p| p.as_object()).cloned().unwrap_or_default();
+        let props = o
+            .get("properties")
+            .and_then(|p| p.as_object())
+            .cloned()
+            .unwrap_or_default();
         let app_name = props
             .get("application.name")
             .or_else(|| props.get("application.process.binary"))
@@ -105,10 +109,7 @@ fn main() {
             continue;
         }
 
-        let source_name = source
-            .get("name")
-            .and_then(|n| n.as_str())
-            .unwrap_or("");
+        let source_name = source.get("name").and_then(|n| n.as_str()).unwrap_or("");
         if source_name.ends_with(".monitor") {
             continue;
         }

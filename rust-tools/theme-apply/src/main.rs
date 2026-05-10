@@ -47,7 +47,10 @@ fn main() {
     write_file(&format!("{}/wallust-current-theme", cache_dir), theme);
     write_file(&format!("{}/wallust-current-mode", cache_dir), mode);
     write_file(&format!("{}/wallust-current-source", cache_dir), "theme");
-    write_file(&format!("{}/quickshell-theme-picker-mode", cache_dir), "theme");
+    write_file(
+        &format!("{}/quickshell-theme-picker-mode", cache_dir),
+        "theme",
+    );
 
     // Reload services
     run_cmd("hyprctl", &["reload"]);
@@ -56,11 +59,17 @@ fn main() {
     // Update kitty colors
     let kitty_colors = format!("{}/.config/kitty/themes/wallust.conf", home);
     if Path::new(&kitty_colors).exists() {
-        run_cmd("kitty", &["@", "set-colors", "--all", "--configured", &kitty_colors]);
+        run_cmd(
+            "kitty",
+            &["@", "set-colors", "--all", "--configured", &kitty_colors],
+        );
     }
 
     // Restart quickshell
-    let restart_bin = format!("{}/.dotfiles/rust-tools/target/release/quickshell-restart", home);
+    let restart_bin = format!(
+        "{}/.dotfiles/rust-tools/target/release/quickshell-restart",
+        home
+    );
     if Path::new(&restart_bin).exists() {
         run_cmd_detached(&restart_bin, &[]);
     }

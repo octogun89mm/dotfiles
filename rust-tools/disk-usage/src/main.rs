@@ -61,11 +61,7 @@ fn main() {
             let label = if mount == "/" {
                 "ROOT".to_string()
             } else {
-                mount
-                    .rsplit('/')
-                    .next()
-                    .unwrap_or("")
-                    .to_uppercase()
+                mount.rsplit('/').next().unwrap_or("").to_uppercase()
             };
             result.push(Mount {
                 mount: mount.clone(),

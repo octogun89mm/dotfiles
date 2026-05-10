@@ -4,17 +4,12 @@
 //! Outputs single JSON line consumed by MetricsState.qml.
 
 use std::fs;
-use std::path::Path;
 use std::process::Command;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 fn read_u64_from(path: &str) -> Option<u64> {
     let s = fs::read_to_string(path).ok()?;
     s.trim().parse().ok()
-}
-
-fn read_line(path: &str) -> Option<String> {
-    fs::read_to_string(path).ok().map(|s| s.trim().to_string())
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone, Copy, Debug)]
@@ -66,7 +61,7 @@ fn idle(t: &CpuTimes) -> u64 {
 fn cpu_usage_pct() -> Option<f64> {
     let current = read_cpu_times()?;
     let state_file = "/tmp/system-metrics-last-stat";
-    
+
     let last: Option<CpuTimes> = if let Ok(content) = fs::read_to_string(state_file) {
         serde_json::from_str(&content).ok()
     } else {
@@ -96,7 +91,9 @@ fn cpu_usage_pct() -> Option<f64> {
     let t2 = read_cpu_times()?;
     let total_delta = total(&t2).saturating_sub(total(&current));
     let idle_delta = idle(&t2).saturating_sub(idle(&current));
-    if total_delta == 0 { return None; }
+    if total_delta == 0 {
+        return None;
+    }
     let busy = total_delta.saturating_sub(idle_delta);
     Some(busy as f64 / total_delta as f64 * 100.0)
 }
@@ -112,10 +109,15 @@ fn cpu_temp() -> Option<String> {
             let name_path = path.join("name");
             if let Ok(name) = fs::read_to_string(&name_path) {
                 let name = name.trim().to_lowercase();
-                let priority = if name.contains("coretemp") { 10 }
-                    else if name.contains("zenpower") || name.contains("k10temp") { 9 }
-                    else if name.contains("cpu") { 5 }
-                    else { 1 };
+                let priority = if name.contains("coretemp") {
+                    10
+                } else if name.contains("zenpower") || name.contains("k10temp") {
+                    9
+                } else if name.contains("cpu") {
+                    5
+                } else {
+                    1
+                };
 
                 if priority >= best_priority {
                     if let Ok(hwmon_dir) = fs::read_dir(&path) {
@@ -143,7 +145,11 @@ fn cpu_temp() -> Option<String> {
     if let Ok(dir) = fs::read_dir("/sys/class/thermal") {
         for entry in dir.filter_map(|e| e.ok()) {
             let path = entry.path();
-            if path.file_name().and_then(|n| n.to_str()).map_or(false, |n| n.starts_with("thermal_zone")) {
+            if path
+                .file_name()
+                .and_then(|n| n.to_str())
+                .is_some_and(|n| n.starts_with("thermal_zone"))
+            {
                 if let Some(temp) = read_u64_from(&path.join("temp").to_string_lossy()) {
                     return Some(format!("{:.0}°C", temp as f64 / 1000.0));
                 }
@@ -164,10 +170,10 @@ fn read_meminfo() -> Option<MemInfo> {
     let mut available = None;
     for line in contents.lines() {
         if let Some(val) = line.strip_prefix("MemTotal:") {
-            total = val.trim().split_whitespace().next().and_then(|s| s.parse().ok());
+            total = val.split_whitespace().next().and_then(|s| s.parse().ok());
         }
         if let Some(val) = line.strip_prefix("MemAvailable:") {
-            available = val.trim().split_whitespace().next().and_then(|s| s.parse().ok());
+            available = val.split_whitespace().next().and_then(|s| s.parse().ok());
         }
     }
     Some(MemInfo {
@@ -187,7 +193,10 @@ struct GpuInfo {
 fn gpu_info() -> GpuInfo {
     // Try nvidia-smi first
     let nvidia = Command::new("nvidia-smi")
-        .args(&["--query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total", "--format=csv,noheader,nounits"])
+        .args([
+            "--query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total",
+            "--format=csv,noheader,nounits",
+        ])
         .output();
 
     if let Ok(out) = nvidia {
@@ -207,16 +216,18 @@ fn gpu_info() -> GpuInfo {
 
     // Fallback to sysfs (AMD/Intel/Open NVIDIA)
     let mut info = GpuInfo::default();
-    
+
     // Find a card with usage info
     if let Ok(dir) = fs::read_dir("/sys/class/drm") {
         for entry in dir.filter_map(|e| e.ok()) {
             let path = entry.path();
             let name = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
-            if !name.starts_with("card") || name.contains('-') { continue; }
+            if !name.starts_with("card") || name.contains('-') {
+                continue;
+            }
 
             let device = path.join("device");
-            
+
             // Usage
             if info.usage.is_none() {
                 if let Some(u) = read_u64_from(&device.join("gpu_busy_percent").to_string_lossy()) {
@@ -226,9 +237,13 @@ fn gpu_info() -> GpuInfo {
 
             // VRAM
             if info.vram_total.is_none() {
-                if let Some(total) = read_u64_from(&device.join("mem_info_vram_total").to_string_lossy()) {
+                if let Some(total) =
+                    read_u64_from(&device.join("mem_info_vram_total").to_string_lossy())
+                {
                     info.vram_total = Some(total / 1024 / 1024);
-                    if let Some(used) = read_u64_from(&device.join("mem_info_vram_used").to_string_lossy()) {
+                    if let Some(used) =
+                        read_u64_from(&device.join("mem_info_vram_used").to_string_lossy())
+                    {
                         info.vram_used = Some(used / 1024 / 1024);
                     }
                 }
@@ -238,7 +253,9 @@ fn gpu_info() -> GpuInfo {
             if info.temp.is_none() {
                 if let Ok(hw_dir) = fs::read_dir(device.join("hwmon")) {
                     for hw in hw_dir.filter_map(|e| e.ok()) {
-                        if let Some(t) = read_u64_from(&hw.path().join("temp1_input").to_string_lossy()) {
+                        if let Some(t) =
+                            read_u64_from(&hw.path().join("temp1_input").to_string_lossy())
+                        {
                             info.temp = Some(format!("{}°C", t / 1000));
                             break;
                         }
@@ -274,7 +291,10 @@ fn main() {
     let cpu_temp = cpu_temp();
     let load1 = load1();
     let gpu = gpu_info();
-    let mem = read_meminfo().unwrap_or(MemInfo { total_kb: 0, available_kb: 0 });
+    let mem = read_meminfo().unwrap_or(MemInfo {
+        total_kb: 0,
+        available_kb: 0,
+    });
 
     let mem_used_gb = (mem.total_kb.saturating_sub(mem.available_kb)) as f64 / 1024.0 / 1024.0;
     let mem_total_gb = mem.total_kb as f64 / 1024.0 / 1024.0;

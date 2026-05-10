@@ -2,8 +2,8 @@
 //!
 //! Cycles through master/dwindle/scrolling/monocle for the focused workspace.
 
-use std::process::Command;
 use std::fs;
+use std::process::Command;
 
 const LAYOUTS: &[&str] = &["master", "dwindle", "scrolling", "monocle"];
 const REFRESH_STAMP: &str = "/tmp/quickshell-layout-refresh.state";
@@ -30,10 +30,7 @@ fn main() {
         }
     };
 
-    let ws_id = active
-        .get("id")
-        .and_then(|id| id.as_i64())
-        .unwrap_or(1);
+    let ws_id = active.get("id").and_then(|id| id.as_i64()).unwrap_or(1);
 
     let current_layout = active
         .get("tiledLayout")
@@ -49,15 +46,25 @@ fn main() {
 
     // Apply layout
     Command::new("hyprctl")
-        .args(&["keyword", "workspace", &format!("{},layout:{}", ws_id, next_layout)])
+        .args([
+            "keyword",
+            "workspace",
+            &format!("{},layout:{}", ws_id, next_layout),
+        ])
         .stdout(std::process::Stdio::null())
         .stderr(std::process::Stdio::null())
         .status()
         .ok();
 
     // Touch refresh stamp
-    let _ = fs::write(REFRESH_STAMP, format!("{}\n", std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map(|d| d.as_secs())
-        .unwrap_or(0)));
+    let _ = fs::write(
+        REFRESH_STAMP,
+        format!(
+            "{}\n",
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs())
+                .unwrap_or(0)
+        ),
+    );
 }

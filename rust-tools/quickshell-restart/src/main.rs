@@ -40,12 +40,16 @@ fn main() {
         .exec();
 
     // If exec fails
-    eprintln!("quickshell-restart: failed to exec {}: {}", launch_script, err);
+    eprintln!(
+        "quickshell-restart: failed to exec {}: {}",
+        launch_script, err
+    );
     std::process::exit(1);
 }
 
 fn find_quickshell_pids(config_path: &str) -> Vec<u32> {
     let mut pids = Vec::new();
+    let quickshell_list = quickshell_list_output();
 
     // Read /proc for quickshell processes
     if let Ok(proc_dir) = fs::read_dir("/proc") {
@@ -67,24 +71,11 @@ fn find_quickshell_pids(config_path: &str) -> Vec<u32> {
                 continue;
             }
 
-            // Check if this quickshell instance has our config
-            // Quickshell list output parsing
-            let output = Command::new("quickshell")
-                .arg("list")
-                .output()
-                .ok();
-
-            if let Some(out) = output {
-                let stdout = String::from_utf8_lossy(&out.stdout);
-                let mut found = false;
-                for line in stdout.lines() {
-                    if line.contains("Process ID:") && line.contains(&pid.to_string()) {
-                        found = true;
-                    }
-                    if found && line.contains("Config path:") && line.contains(config_path) {
-                        pids.push(pid);
-                        break;
-                    }
+            // Check if this quickshell instance has our config.
+            // Parse `quickshell list` once instead of spawning it for every /proc entry.
+            if let Some(stdout) = &quickshell_list {
+                if list_has_pid_config(stdout, pid, config_path) {
+                    pids.push(pid);
                 }
             } else {
                 // Fallback: just kill any quickshell with matching config path
@@ -104,11 +95,41 @@ fn find_quickshell_pids(config_path: &str) -> Vec<u32> {
     pids
 }
 
+fn quickshell_list_output() -> Option<String> {
+    let output = Command::new("quickshell").arg("list").output().ok()?;
+    if !output.status.success() {
+        return None;
+    }
+
+    Some(String::from_utf8_lossy(&output.stdout).into_owned())
+}
+
+fn list_has_pid_config(list_output: &str, pid: u32, config_path: &str) -> bool {
+    let pid_text = pid.to_string();
+    let mut found_pid = false;
+
+    for line in list_output.lines() {
+        if line.contains("Process ID:") {
+            found_pid = line
+                .split_once(':')
+                .map(|(_, value)| value.trim() == pid_text)
+                .unwrap_or(false);
+            continue;
+        }
+
+        if found_pid && line.contains("Config path:") && line.contains(config_path) {
+            return true;
+        }
+    }
+
+    false
+}
+
 fn kill_pids(pids: &[u32]) {
     for &pid in pids {
         // Send SIGTERM first
         let _ = Command::new("kill")
-            .args(&[&pid.to_string()])
+            .args([&pid.to_string()])
             .stdout(Stdio::null())
             .stderr(Stdio::null())
             .status();
