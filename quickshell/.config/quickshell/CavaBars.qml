@@ -11,17 +11,23 @@ Item {
   property int rowSpacing: 0
   property int maxHeight: 16
   property color accentColor: Theme.accent
+  property bool showOffLabel: true
   property var history: []
 
   readonly property var channelBars: channel === "right" ? state.rightBars : state.leftBars
   readonly property int bandCount: channelBars.length
   readonly property int maxColumns: Math.max(1, Math.floor(implicitWidth / columnWidth))
-
-  visible: CavaStyleState.current === "scope"
+  readonly property bool styleOff: CavaStyleState.current === "off"
+  readonly property bool sourceVisible: CavaStyleState.current === "scope"
       ? WaveformState.available
       : (state.enabled && state.available)
+
+  visible: styleOff || sourceVisible
+  opacity: styleOff ? (CavaStyleState.offLabelVisible ? 1 : 0) : 1
   implicitWidth: 60
-  implicitHeight: bandCount > 0 ? Math.min(maxHeight, (bandCount * rowHeight) + ((bandCount - 1) * rowSpacing)) : 0
+  implicitHeight: styleOff ? Theme.chipHeight : (bandCount > 0 ? Math.min(maxHeight, (bandCount * rowHeight) + ((bandCount - 1) * rowSpacing)) : 0)
+
+  Behavior on opacity { NumberAnimation { duration: 220; easing.type: Easing.InOutSine } }
 
   function pushFrame(levels) {
     if (!levels || !levels.length) return
@@ -79,6 +85,7 @@ Item {
   Canvas {
     id: spectrogram
     anchors.fill: parent
+    visible: !root.styleOff
 
     function paintSpectrogram(ctx) {
       for (let xIndex = 0; xIndex < root.history.length; xIndex++) {
@@ -390,6 +397,19 @@ Item {
       }
       ctx.globalAlpha = 1.0
     }
+  }
+
+  Text {
+    anchors.centerIn: parent
+    visible: root.showOffLabel && root.styleOff && CavaStyleState.offLabelVisible
+    opacity: CavaStyleState.offLabelOn ? 1 : 0
+    text: "OFF"
+    color: Theme.textDim
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontCaption
+    font.bold: true
+
+    Behavior on opacity { NumberAnimation { duration: 220; easing.type: Easing.InOutSine } }
   }
 
   MouseArea {

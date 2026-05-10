@@ -19,11 +19,55 @@ Singleton {
     "glow",
     "ribbon",
     "equalizer",
-    "scope"
+    "scope",
+    "off"
   ]
   property int index: 0
   readonly property string current: styles[index]
+  property bool offLabelVisible: false
+  property bool offLabelOn: false
 
-  function next() { index = (index + 1) % styles.length }
-  function prev() { index = (index - 1 + styles.length) % styles.length }
+  function setIndex(nextIndex) {
+    index = (nextIndex + styles.length) % styles.length
+    if (current === "off") showOffLabel()
+  }
+
+  function next() { setIndex(index + 1) }
+  function prev() { setIndex(index - 1) }
+
+  function showOffLabel() {
+    offHoldTimer.stop()
+    offHideTimer.stop()
+    offFadeInTimer.stop()
+    offLabelOn = false
+    offLabelVisible = true
+    offFadeInTimer.restart()
+  }
+
+  Timer {
+    id: offFadeInTimer
+    interval: 1
+    repeat: false
+    onTriggered: {
+      root.offLabelOn = true
+      offHoldTimer.restart()
+    }
+  }
+
+  Timer {
+    id: offHoldTimer
+    interval: 650
+    repeat: false
+    onTriggered: {
+      root.offLabelOn = false
+      offHideTimer.restart()
+    }
+  }
+
+  Timer {
+    id: offHideTimer
+    interval: 260
+    repeat: false
+    onTriggered: root.offLabelVisible = false
+  }
 }

@@ -78,6 +78,7 @@ Scope {
               mirrored: true
               channel: "left"
               implicitWidth: 50
+              showOffLabel: false
             }
 
             CavaBars {
@@ -86,23 +87,6 @@ Scope {
               channel: "left"
               implicitWidth: 70
               accentColor: Theme.accentAlt
-            }
-
-            Text {
-              anchors.verticalCenter: parent.verticalCenter
-              text: "‹"
-              color: cavaPrev.containsMouse ? Theme.text : Theme.textDim
-              font.family: Theme.fontFamily
-              font.pixelSize: Theme.fontSmall
-              Behavior on color { ColorAnimation { duration: 120 } }
-              MouseArea {
-                id: cavaPrev
-                anchors.fill: parent
-                anchors.margins: -4
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: CavaStyleState.prev()
-              }
             }
 
             SimpleClock {
@@ -114,23 +98,6 @@ Scope {
                   scope.pinnedScreen = null
                 else
                   scope.pinnedScreen = barWindow.modelData
-              }
-            }
-
-            Text {
-              anchors.verticalCenter: parent.verticalCenter
-              text: "›"
-              color: cavaNext.containsMouse ? Theme.text : Theme.textDim
-              font.family: Theme.fontFamily
-              font.pixelSize: Theme.fontSmall
-              Behavior on color { ColorAnimation { duration: 120 } }
-              MouseArea {
-                id: cavaNext
-                anchors.fill: parent
-                anchors.margins: -4
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: CavaStyleState.next()
               }
             }
 
@@ -146,6 +113,7 @@ Scope {
               state: CavaMicState
               channel: "right"
               implicitWidth: 50
+              showOffLabel: false
             }
           }
 
@@ -160,39 +128,19 @@ Scope {
 
             Text {
               anchors.verticalCenter: parent.verticalCenter
-              visible: BarDetailState.level < BarDetailState.maxLevel
-              text: "‹"
-              color: lessArea.containsMouse ? Theme.text : Theme.textDim
+              text: BarDetailState.level === BarDetailState.minLevel ? "‹" : "›"
+              color: vitalsHandleArea.containsMouse ? Theme.text : Theme.textDim
               font.family: Theme.fontFamily
               font.pixelSize: Theme.fontSmall + 2
               Behavior on color { ColorAnimation { duration: 120 } }
 
               MouseArea {
-                id: lessArea
+                id: vitalsHandleArea
                 anchors.fill: parent
                 anchors.margins: -4
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                onClicked: BarDetailState.more()
-              }
-            }
-
-            Text {
-              anchors.verticalCenter: parent.verticalCenter
-              visible: BarDetailState.level > BarDetailState.minLevel
-              text: "›"
-              color: moreArea.containsMouse ? Theme.text : Theme.textDim
-              font.family: Theme.fontFamily
-              font.pixelSize: Theme.fontSmall + 2
-              Behavior on color { ColorAnimation { duration: 120 } }
-
-              MouseArea {
-                id: moreArea
-                anchors.fill: parent
-                anchors.margins: -4
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: BarDetailState.less()
+                onClicked: BarDetailState.toggleCollapsed()
               }
             }
 
@@ -215,6 +163,16 @@ Scope {
               }
               Behavior on scale {
                 NumberAnimation { duration: 480; easing.type: Easing.OutBack; easing.overshoot: 2.4 }
+              }
+
+              MouseArea {
+                anchors.fill: parent
+                z: 10
+                enabled: !metricsBox.collapsed
+                hoverEnabled: true
+                acceptedButtons: Qt.LeftButton
+                cursorShape: Qt.PointingHandCursor
+                onClicked: BarDetailState.cycleDetails()
               }
 
               Row {
