@@ -3,7 +3,6 @@
 # =========================
 
 # --- Environment Variables ---
-export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export VISUAL="nvim"
 [[ -S "/run/user/$UID/gcr/ssh" ]] && export SSH_AUTH_SOCK="/run/user/$UID/gcr/ssh"
@@ -12,35 +11,97 @@ export VISUAL="nvim"
 # --- PATH ---
 # Prepend to PATH without duplicates (safe against re-sourcing)
 path_prepend() {
-  case ":$PATH:" in
-    *":$1:"*) ;;
-    *) export PATH="$1:$PATH" ;;
-  esac
+  local dir="$1"
+  path=("${(@)path:#$dir}")
+  path=("$dir" $path)
+  export PATH
 }
 
 export PNPM_HOME="$HOME/.local/share/pnpm"
 
-path_prepend "$HOME/.local/bin"
 path_prepend "$HOME/.cargo/bin"
 path_prepend "$HOME/.npm-global/bin"
 path_prepend "$PNPM_HOME"
 path_prepend "$HOME/repos/llama.cpp/build/bin"
+path_prepend "$HOME/.local/bin"
 
-# --- Oh My Zsh Plugins ---
-plugins=(git colorize colored-man-pages command-not-found man thefuck wallust zsh-autosuggestions zsh-syntax-highlighting)
+# --- Vanilla Zsh Plugins ---
+# Plugins live outside Oh My Zsh and are loaded directly with standard zsh.
+export ZSH_PLUGIN_DIR="$HOME/.zsh/plugins"
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+mkdir -p "$ZSH_CACHE_DIR"
 
-# --- Custom keybindings for Zsh Plugins ---
-bindkey '^F' autosuggest-accept
+# Make custom completions and plugin completions visible before compinit.
+fpath=(
+  "$HOME/.zfunc"
+  "$ZSH_PLUGIN_DIR/wallust"
+  "$ZSH_PLUGIN_DIR/zsh-autosuggestions"
+  "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting"
+  $fpath
+)
 
-# Make custom completion files visible before Oh My Zsh runs compinit.
-fpath=("$HOME/.zfunc" $fpath)
+autoload -Uz compinit colors
+colors
+compinit -d "$ZSH_CACHE_DIR/zcompdump"
 
-# --- Source Oh My Zsh ---
-[[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
+source_if_readable() { [[ -r "$1" ]] && source "$1"; }
+
+# Helper expected by the vendored git aliases plugin.
+git_current_branch() {
+  command git symbolic-ref --quiet --short HEAD 2>/dev/null \
+    || command git rev-parse --short HEAD 2>/dev/null
+}
+
+source_if_readable "$ZSH_PLUGIN_DIR/git/git.plugin.zsh"
+source_if_readable "$ZSH_PLUGIN_DIR/colorize/colorize.plugin.zsh"
+source_if_readable "$ZSH_PLUGIN_DIR/colored-man-pages/colored-man-pages.plugin.zsh"
+source_if_readable "$ZSH_PLUGIN_DIR/man/man.plugin.zsh"
+source_if_readable "$ZSH_PLUGIN_DIR/wallust/wallust.plugin.zsh"
+
+# command-not-found: source the platform handler when present.
+for command_not_found_file in \
+  /usr/share/doc/pkgfile/command-not-found.zsh \
+  /usr/share/zsh/plugins/xbps-command-not-found/xbps-command-not-found.zsh; do
+  if [[ -r "$command_not_found_file" ]]; then
+    source "$command_not_found_file"
+    break
+  fi
+done
+unset command_not_found_file
+
+# Debian/Ubuntu-style command-not-found helper, if installed.
+if [[ -x /usr/lib/command-not-found || -x /usr/share/command-not-found/command-not-found ]]; then
+  command_not_found_handler() {
+    if [[ -x /usr/lib/command-not-found ]]; then
+      /usr/lib/command-not-found -- "$1"
+    else
+      /usr/share/command-not-found/command-not-found -- "$1"
+    fi
+  }
+fi
+
+# thefuck integration, without Oh My Zsh.
+if (( $+commands[thefuck] )); then
+  [[ -r "$ZSH_CACHE_DIR/thefuck" ]] || thefuck --alias >| "$ZSH_CACHE_DIR/thefuck"
+  source "$ZSH_CACHE_DIR/thefuck"
+
+  fuck-command-line() {
+    local fixed_command
+    fixed_command="$(THEFUCK_REQUIRE_CONFIRMATION=0 thefuck $(fc -ln -1 | tail -n 1) 2>/dev/null)"
+    [[ -z "$fixed_command" ]] && echo -n -e "\a" && return
+    BUFFER="$fixed_command"
+    zle end-of-line
+  }
+  zle -N fuck-command-line
+  bindkey -M emacs '\e\e' fuck-command-line
+  bindkey -M vicmd '\e\e' fuck-command-line
+  bindkey -M viins '\e\e' fuck-command-line
+fi
+
+source_if_readable "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # --- Aliases ---
 alias zshconfig="$EDITOR ~/.zshrc"
-alias ohmyzsh="$EDITOR ~/.oh-my-zsh"
 alias ls="eza -a --color=always --icons=always --group-directories-first"
 alias ll="eza -a -l --color=always --icons=always --group-directories-first"
 alias clr="clear"
@@ -51,6 +112,7 @@ alias sysinfo='macchina'
 
 # --- Vi Mode ---
 bindkey -v
+bindkey '^F' autosuggest-accept
 export KEYTIMEOUT=1
 
 # --- Zsh Options ---
@@ -127,8 +189,16 @@ precmd() {
 VI_MODE='%B%F{green}❯%f%b'
 function zle-line-init zle-keymap-select {
   case $KEYMAP in
-    vicmd) VI_MODE='%B%F{red}❮%f%b' ;;
-    *)     VI_MODE='%B%F{green}❯%f%b' ;;
+    vicmd)
+      VI_MODE='%B%F{red}❮%f%b'
+      # steady block + red cursor
+      printf '\e[2 q\e]12;#ff5555\a'
+      ;;
+    *)
+      VI_MODE='%B%F{green}❯%f%b'
+      # steady block + green cursor
+      printf '\e[2 q\e]12;#50fa7b\a'
+      ;;
   esac
   zle reset-prompt
 }
@@ -138,10 +208,15 @@ zle -N zle-keymap-select
 # Transient prompt - simplify previous prompt after command execution
 function zle-line-finish {
   PROMPT='%F{%(?.green.red)}❯%f '
+  # reset cursor shape + color when leaving the line
+  printf '\e[2 q\e]112\a'
   zle reset-prompt
   set-full-prompt
 }
 zle -N zle-line-finish
+
+# Must be loaded after widgets and keybindings.
+source_if_readable "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 function set-full-prompt {
   PROMPT=$'
@@ -213,6 +288,18 @@ export AICHAT_HOTKEY='^[e'   # Alt+e
 # Override any 'journal' alias defined by aichat scripts above
 unalias journal 2>/dev/null
 alias journal='aichat --agent journal'
+alias claudev='claude --verbose'
+
+# System update: packages + Neovim plugins
+update() {
+  echo "==> Updating packages..."
+  yay -Syu
+
+  echo "==> Updating Neovim plugins..."
+  time nvim --headless "+Lazy! update" +qa
+
+  echo "==> Done."
+}
 
 # Toggle LLM auto-approve (skips tool confirmation prompts)
 function llm-approve() {
@@ -224,9 +311,6 @@ function llm-approve() {
     echo "LLM auto-approve disabled"
   fi
 }
-
-# --- OpenClaw Completion ---
-[[ -f "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"
 
 # --- System info greeting ---
 command -v macchina >/dev/null 2>&1 && macchina
