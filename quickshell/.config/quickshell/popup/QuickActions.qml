@@ -4,7 +4,7 @@ Row {
   id: root
 
   property bool active: false
-  readonly property int actionCount: 6
+  readonly property int actionCount: 5
 
   width: implicitWidth
   spacing: 10
@@ -34,8 +34,4 @@ Row {
     active: root.active
   }
 
-  FruitagerAction {
-    width: (root.width - root.spacing * (root.actionCount - 1)) / root.actionCount
-    active: root.active
-  }
 }

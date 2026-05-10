@@ -78,7 +78,8 @@ Column {
 
   function formatInt(value, fallback) {
     if (value === null || value === undefined || value === "") return fallback
-    return String(value)
+    const n = parseFloat(String(value))
+    return isNaN(n) ? fallback : String(Math.round(n))
   }
 
   onActiveChanged: {
@@ -107,9 +108,10 @@ Column {
           root.gpuUsage = root.formatInt(data.gpu, "--")
           root.gpuTemp = root.formatInt(data.gpu_temp, "--")
 
-          const used = parseFloat(data.gpu_vram_used || 0)
-          root.gpuVramUsed = isNaN(used) ? "--" : used.toFixed(1).padStart(4, "0")
-          root.gpuVramTotal = data.gpu_vram_total || "--"
+          const used = parseFloat(data.gpu_vram_used)
+          const total = parseFloat(data.gpu_vram_total)
+          root.gpuVramUsed = isNaN(used) ? "--" : (used / 1024).toFixed(1)
+          root.gpuVramTotal = isNaN(total) ? "--" : (total / 1024).toFixed(1)
 
           var v
           v = parseFloat(data.cpu)
@@ -119,7 +121,7 @@ Column {
           v = parseFloat(data.gpu)
           if (!isNaN(v)) root.gpuUsageHistory = root.pushHistory(root.gpuUsageHistory, v)
           v = parseFloat(data.gpu_vram_used)
-          if (!isNaN(v)) root.gpuVramHistory = root.pushHistory(root.gpuVramHistory, v)
+          if (!isNaN(v)) root.gpuVramHistory = root.pushHistory(root.gpuVramHistory, v / 1024)
           v = parseFloat(data.gpu_temp)
           if (!isNaN(v)) root.gpuTempHistory = root.pushHistory(root.gpuTempHistory, v)
 
