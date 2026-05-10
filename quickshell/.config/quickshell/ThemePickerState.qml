@@ -116,9 +116,9 @@ Singleton {
     applyProc.running = false
     if (mode === "wallpaper") {
       if (!path) return
-      applyProc.exec([(Quickshell.env("HOME") || "") + "/.config/quickshell/scripts/wallpaper-apply.sh", path])
+      applyProc.exec([(Quickshell.env("HOME") || "") + "/.dotfiles/rust-tools/target/release/wallpaper-apply", path])
     } else {
-      applyProc.exec([(Quickshell.env("HOME") || "") + "/.config/quickshell/scripts/theme-apply.sh", name])
+      applyProc.exec([(Quickshell.env("HOME") || "") + "/.dotfiles/rust-tools/target/release/theme-apply", name])
     }
     hide()
   }

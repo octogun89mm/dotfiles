@@ -1,0 +1,31 @@
+[workspace]
+resolver = "2"
+members = [
+    "common",
+    "system-metrics",
+    "bar-window-count",
+    "disk-usage",
+    "mic-in-use",
+    "model-status",
+    "waveform",
+    "speak-tts",
+    "theme-apply",
+    "wallpaper-apply",
+    "quickshell-restart",
+    "cycle-layout",
+    "cycle-sink",
+    "hypridle-suspend",
+    "rofi-apps",
+    "rofi-tools",
+    "tts-selection",
+    "wsflash",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+libc = "0.2"

@@ -8,7 +8,7 @@ Singleton {
   id: root
 
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.dotfiles/quickshell/.config/quickshell/scripts/waveform.sh"
+  readonly property string scriptPath: home + "/.dotfiles/rust-tools/target/release/waveform"
 
   property bool enabled: true
   property bool available: false

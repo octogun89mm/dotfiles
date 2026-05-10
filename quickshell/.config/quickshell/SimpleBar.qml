@@ -157,9 +157,6 @@ Scope {
             spacing: Theme.padMd
 
             MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
-            ModelIndicator { anchors.verticalCenter: parent.verticalCenter }
-            IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
-            Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
 
             Text {
               anchors.verticalCenter: parent.verticalCenter
@@ -365,6 +362,8 @@ Scope {
             }
 
             Tailscale { anchors.verticalCenter: parent.verticalCenter }
+            Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: false }
           }
 

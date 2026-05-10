@@ -1,0 +1,10 @@
+[package]
+name = "disk-usage"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+qs-common = { path = "../common" }
+libc = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

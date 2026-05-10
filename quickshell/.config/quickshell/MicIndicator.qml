@@ -9,33 +9,16 @@ Rectangle {
 
   visible: !onlyWhenActive || MicState.active
   color: "transparent"
-  implicitWidth: row.implicitWidth + Theme.padMd
+  implicitWidth: indicator.implicitWidth + Theme.padSm
   implicitHeight: Theme.chipHeight
 
-  Row {
-    id: row
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-    anchors.leftMargin: Theme.padSm
-    spacing: Theme.padSm
-
-    Text {
-      visible: MicState.active
-      anchors.verticalCenter: parent.verticalCenter
-      text: "MIC ON LIVE"
-      color: root.activeColor
-      font.family: "Iosevka Heavy"
-      font.pixelSize: Theme.fontSmall
-    }
-
-    Text {
-      id: indicator
-      anchors.verticalCenter: parent.verticalCenter
-      text: MicState.active ? "󰍬" : "󰍭"
-      color: MicState.active ? root.activeColor : root.inactiveColor
-      font.family: Theme.iconFamily
-      font.pixelSize: Theme.fontSmall + 3
-    }
+  Text {
+    id: indicator
+    anchors.centerIn: parent
+    text: MicState.active ? "󰍬" : "󰍭"
+    color: MicState.active ? root.activeColor : root.inactiveColor
+    font.family: Theme.iconFamily
+    font.pixelSize: Theme.fontSmall + 3
   }
 
   MouseArea {

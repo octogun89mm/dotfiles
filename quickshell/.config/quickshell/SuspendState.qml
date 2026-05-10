@@ -7,7 +7,7 @@ import Quickshell.Io
 Singleton {
   id: root
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.config/hypr/scripts/hypridle-suspend.sh"
+  readonly property string scriptPath: home + "/.dotfiles/rust-tools/target/release/hypridle-suspend"
   readonly property string statePath: home + "/.local/state/hypridle-suspend-disabled"
 
   property bool enabled: true

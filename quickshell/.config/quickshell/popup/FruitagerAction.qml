@@ -7,7 +7,7 @@ ActionCard {
   id: root
 
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string applyScript: home + "/.config/quickshell/scripts/theme-apply.sh"
+  readonly property string applyScript: home + "/.dotfiles/rust-tools/target/release/theme-apply"
   property bool active: false
 
   title: "FRUIT"

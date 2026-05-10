@@ -1,0 +1,9 @@
+[package]
+name = "wsflash"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+qs-common = { path = "../common" }
+serde = { workspace = true }
+serde_json = { workspace = true }

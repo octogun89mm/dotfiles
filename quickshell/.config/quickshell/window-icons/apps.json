@@ -1,67 +1,508 @@
 [
-  { "patterns": ["firefox", "zen", "librewolf", "waterfox"], "icon": "" },
-  { "patterns": ["kitty", "wezterm", "alacritty", "foot", "termite", "urxvt", "xterm", "konsole", "tilix", "terminal"], "icon": "" },
-  { "patterns": ["nvim", "neovim"], "icon": "" },
-  { "patterns": ["emacs"], "icon": "" },
-  { "patterns": ["vim"], "icon": "" },
-  { "patterns": ["jetbrains", "idea", "pycharm", "webstorm", "clion", "rubymine", "phpstorm", "goland", "rider", "datagrip"], "icon": "" },
-  { "patterns": ["code", "vscodium", "codium", "cursor"], "icon": "" },
-  { "patterns": ["sublime"], "icon": "" },
-  { "patterns": ["zed"], "icon": "" },
-  { "patterns": ["postman", "insomnia", "bruno", "hoppscotch"], "icon": "" },
-  { "patterns": ["github", "gitkraken", "gitg", "lazygit"], "icon": "" },
-  { "patterns": ["docker", "podman"], "icon": "" },
-  { "patterns": ["virt-manager", "qemu", "virtualbox", "vmware"], "icon": "󰡹" },
-  { "patterns": ["wireshark"], "icon": "" },
-  { "patterns": ["discord", "vesktop", "webcord"], "svg": "discord.svg" },
-  { "patterns": ["slack"], "icon": "󰚑" },
-  { "patterns": ["mattermost"], "icon": "󰊭" },
-  { "patterns": ["telegram"], "icon": "" },
-  { "patterns": ["whatsapp"], "icon": "" },
-  { "patterns": ["signal"], "icon": "󰭹" },
-  { "patterns": ["element", "matrix", "fractal"], "icon": "󰭩" },
-  { "patterns": ["teams"], "icon": "󰊻" },
-  { "patterns": ["zoom"], "icon": "󰕧" },
-  { "patterns": ["thunderbird", "evolution", "mailspring", "geary", "betterbird"], "icon": "󰇮" },
-  { "patterns": ["mail", "protonmail"], "icon": "󰺰" },
-  { "patterns": ["spotify", "rhythmbox", "audacious", "clementine", "strawberry", "ncmpcpp", "cmus", "mpd"], "icon": "" },
-  { "patterns": ["mpv", "vlc", "totem", "celluloid", "smplayer"], "icon": "" },
-  { "patterns": ["obs-studio", "obs"], "icon": "󰕧" },
-  { "patterns": ["steam", "lutris", "heroic", "minecraft", "prismlauncher"], "icon": "" },
-  { "patterns": ["nautilus", "thunar", "dolphin", "pcmanfm", "nemo", "ranger", "yazi", "files"], "icon": "" },
-  { "patterns": ["lf"], "icon": "" },
-  { "patterns": ["obsidian", "notion", "logseq"], "icon": "󰎞" },
-  { "patterns": ["joplin", "standardnotes", "simplenote"], "icon": "󰎞" },
-  { "patterns": ["notes"], "icon": "󰎞" },
-  { "patterns": ["anki"], "icon": "󰧑" },
-  { "patterns": ["gimp", "krita", "darktable", "rawtherapee"], "icon": "" },
-  { "patterns": ["inkscape"], "icon": "" },
-  { "patterns": ["blender"], "icon": "󰂫" },
-  { "patterns": ["figma"], "icon": "" },
-  { "patterns": ["feh", "imv", "sxiv", "nsxiv", "qview", "gthumb"], "icon": "" },
-  { "patterns": ["eog", "loupe", "geeqie"], "icon": "" },
-  { "patterns": ["zathura", "evince", "okular", "xreader", "foliate", "mupdf"], "icon": "" },
-  { "patterns": ["calibre"], "icon": "" },
-  { "patterns": ["libreoffice-writer", "writer", "abiword"], "icon": "󰈙" },
-  { "patterns": ["libreoffice-calc", "gnumeric"], "icon": "󰈛" },
-  { "patterns": ["libreoffice-impress"], "icon": "󰈜" },
-  { "patterns": ["libreoffice", "soffice", "onlyoffice"], "icon": "" },
-  { "patterns": ["pavucontrol", "easyeffects", "helvum", "pulsemixer"], "icon": "󰓃" },
-  { "patterns": ["bluetooth", "blueman", "blueberry"], "icon": "󰂯" },
-  { "patterns": ["bitwarden", "keepassxc", "1password", "proton-pass"], "icon": "󰌾" },
-  { "patterns": ["calcurse", "calendar", "gnome-calendar", "morgen"], "icon": "" },
-  { "patterns": ["calculator", "qalculate", "gnome-calculator", "kcalc"], "icon": "" },
-  { "patterns": ["htop", "btop", "bottom", "gotop", "glances"], "icon": "" },
-  { "patterns": ["newsboat", "feedreader", "rss"], "icon": "" },
-  { "patterns": ["torrent", "transmission", "qbittorrent", "deluge"], "icon": "󰆚" },
-  { "patterns": ["telegram-desktop"], "icon": "" },
-  { "patterns": ["scrcpy", "android-studio"], "icon": "" },
-  { "patterns": ["edge"], "icon": "" },
-  { "patterns": ["opera"], "icon": "" },
-  { "patterns": ["safari"], "icon": "" },
-  { "patterns": ["brave"], "icon": "󰕥" },
-  { "patterns": ["helium"], "svg": "helium.svg" },
-  { "patterns": ["vivaldi"], "icon": "󰣩" },
-  { "patterns": ["qutebrowser"], "icon": "" },
-  { "patterns": ["chromium", "chrome"], "icon": "" }
+  {
+    "patterns": [
+      "firefox",
+      "zen",
+      "librewolf",
+      "waterfox"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "kitty",
+      "wezterm",
+      "alacritty",
+      "foot",
+      "termite",
+      "urxvt",
+      "xterm",
+      "konsole",
+      "tilix",
+      "terminal"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "nvim",
+      "neovim"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "emacs"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "vim"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "jetbrains",
+      "idea",
+      "pycharm",
+      "webstorm",
+      "clion",
+      "rubymine",
+      "phpstorm",
+      "goland",
+      "rider",
+      "datagrip"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "code",
+      "vscodium",
+      "codium",
+      "cursor"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "sublime"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "zed"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "postman",
+      "insomnia",
+      "bruno",
+      "hoppscotch"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "github",
+      "gitkraken",
+      "gitg",
+      "lazygit"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "docker",
+      "podman"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "virt-manager",
+      "qemu",
+      "virtualbox",
+      "vmware"
+    ],
+    "icon": "󰡹"
+  },
+  {
+    "patterns": [
+      "wireshark"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "discord",
+      "vesktop",
+      "webcord"
+    ],
+    "svg": "discord.svg"
+  },
+  {
+    "patterns": [
+      "slack"
+    ],
+    "icon": "󰚑"
+  },
+  {
+    "patterns": [
+      "mattermost"
+    ],
+    "icon": "󰊭"
+  },
+  {
+    "patterns": [
+      "telegram"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "whatsapp"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "signal"
+    ],
+    "icon": "󰭹"
+  },
+  {
+    "patterns": [
+      "element",
+      "matrix",
+      "fractal"
+    ],
+    "icon": "󰭩"
+  },
+  {
+    "patterns": [
+      "teams"
+    ],
+    "icon": "󰊻"
+  },
+  {
+    "patterns": [
+      "zoom"
+    ],
+    "icon": "󰕧"
+  },
+  {
+    "patterns": [
+      "thunderbird",
+      "evolution",
+      "mailspring",
+      "geary",
+      "betterbird"
+    ],
+    "icon": "󰇮"
+  },
+  {
+    "patterns": [
+      "mail",
+      "protonmail"
+    ],
+    "icon": "󰺰"
+  },
+  {
+    "patterns": [
+      "spotify",
+      "rhythmbox",
+      "audacious",
+      "clementine",
+      "strawberry",
+      "ncmpcpp",
+      "cmus",
+      "mpd"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "mpv",
+      "vlc",
+      "totem",
+      "celluloid",
+      "smplayer"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "obs-studio",
+      "obs"
+    ],
+    "icon": "󰕧"
+  },
+  {
+    "patterns": [
+      "steam",
+      "lutris",
+      "heroic",
+      "minecraft",
+      "prismlauncher"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "nautilus",
+      "thunar",
+      "dolphin",
+      "pcmanfm",
+      "nemo",
+      "ranger",
+      "yazi",
+      "files"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "lf"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "obsidian",
+      "notion",
+      "logseq"
+    ],
+    "icon": "󰎞"
+  },
+  {
+    "patterns": [
+      "joplin",
+      "standardnotes",
+      "simplenote"
+    ],
+    "icon": "󰎞"
+  },
+  {
+    "patterns": [
+      "notes"
+    ],
+    "icon": "󰎞"
+  },
+  {
+    "patterns": [
+      "anki"
+    ],
+    "icon": "󰧑"
+  },
+  {
+    "patterns": [
+      "gimp",
+      "krita",
+      "darktable",
+      "rawtherapee"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "inkscape"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "blender"
+    ],
+    "icon": "󰂫"
+  },
+  {
+    "patterns": [
+      "figma"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "feh",
+      "imv",
+      "sxiv",
+      "nsxiv",
+      "qview",
+      "gthumb"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "eog",
+      "loupe",
+      "geeqie"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "zathura",
+      "evince",
+      "okular",
+      "xreader",
+      "foliate",
+      "mupdf"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "calibre"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "libreoffice-writer",
+      "writer",
+      "abiword"
+    ],
+    "icon": "󰈙"
+  },
+  {
+    "patterns": [
+      "libreoffice-calc",
+      "gnumeric"
+    ],
+    "icon": "󰈛"
+  },
+  {
+    "patterns": [
+      "libreoffice-impress"
+    ],
+    "icon": "󰈜"
+  },
+  {
+    "patterns": [
+      "libreoffice",
+      "soffice",
+      "onlyoffice"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "pavucontrol",
+      "easyeffects",
+      "helvum",
+      "pulsemixer"
+    ],
+    "icon": "󰓃"
+  },
+  {
+    "patterns": [
+      "bluetooth",
+      "blueman",
+      "blueberry"
+    ],
+    "icon": "󰂯"
+  },
+  {
+    "patterns": [
+      "bitwarden",
+      "keepassxc",
+      "1password",
+      "proton-pass"
+    ],
+    "icon": "󰌾"
+  },
+  {
+    "patterns": [
+      "calcurse",
+      "calendar",
+      "gnome-calendar",
+      "morgen"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "calculator",
+      "qalculate",
+      "gnome-calculator",
+      "kcalc"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "htop",
+      "btop",
+      "bottom",
+      "gotop",
+      "glances"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "newsboat",
+      "feedreader",
+      "rss"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "torrent",
+      "transmission",
+      "qbittorrent",
+      "deluge"
+    ],
+    "icon": "󰆚"
+  },
+  {
+    "patterns": [
+      "telegram-desktop"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "scrcpy",
+      "android-studio"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "edge"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "opera"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "safari"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "brave"
+    ],
+    "icon": "󰕥"
+  },
+  {
+    "patterns": [
+      "helium"
+    ],
+    "svg": "helium.svg"
+  },
+  {
+    "patterns": [
+      "vivaldi"
+    ],
+    "icon": "󰣩"
+  },
+  {
+    "patterns": [
+      "qutebrowser"
+    ],
+    "icon": ""
+  },
+  {
+    "patterns": [
+      "chromium",
+      "chrome"
+    ],
+    "icon": ""
+  }
 ]

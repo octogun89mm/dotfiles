@@ -6,7 +6,7 @@ import "../wallust.js" as Wallust
 Rectangle {
   id: root
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string diskScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/disk-usage.sh"
+  readonly property string diskScript: home + "/.dotfiles/rust-tools/target/release/disk-usage"
 
   property bool active: false
   property var disks: []

@@ -8,6 +8,7 @@ import "popup" as Popup
 
 Scope {
   Osd {}
+  WorkspaceFlash {}
   Keybinds.KeybindOverlay {}
   Clipboard.ClipboardHistory {}
   Notif.NotificationPopup {}

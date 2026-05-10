@@ -8,7 +8,7 @@ Item {
 
   required property string monitorName
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string countScript: home + "/.dotfiles/quickshell/.config/quickshell/scripts/bar_window_count.sh"
+  readonly property string countScript: home + "/.dotfiles/rust-tools/target/release/bar-window-count"
   property int windowCount: 0
   property string layoutName: ""
 
