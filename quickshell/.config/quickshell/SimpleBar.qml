@@ -124,8 +124,6 @@ Scope {
             anchors.verticalCenter: parent.verticalCenter
             spacing: Theme.padMd
 
-            MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
-
             Text {
               anchors.verticalCenter: parent.verticalCenter
               text: BarDetailState.level === BarDetailState.minLevel ? "‹" : "›"
@@ -322,6 +320,7 @@ Scope {
             Tailscale { anchors.verticalCenter: parent.verticalCenter }
             Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: false }
           }
 
