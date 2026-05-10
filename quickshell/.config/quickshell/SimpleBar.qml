@@ -360,50 +360,6 @@ Scope {
               }
             }
 
-            Rectangle {
-              anchors.verticalCenter: parent.verticalCenter
-              width: 38
-              height: Theme.chipHeight
-              color: themeModeMouse.containsMouse ? Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.06) : "transparent"
-              border.width: Theme.hairline
-              border.color: ThemePickerState.mode === "wallpaper" ? Theme.accentAlt : Theme.border
-
-              Row {
-                anchors.centerIn: parent
-                spacing: 4
-
-                Text {
-                  anchors.verticalCenter: parent.verticalCenter
-                  text: ThemePickerState.modeIcon
-                  color: ThemePickerState.mode === "wallpaper" ? Theme.accentAlt : Theme.textDim
-                  font.family: Theme.iconFamily
-                  font.pixelSize: Theme.fontSmall + 1
-                }
-
-                Text {
-                  anchors.verticalCenter: parent.verticalCenter
-                  text: ThemePickerState.mode === "wallpaper" ? "W" : "T"
-                  color: themeModeMouse.containsMouse ? Theme.text : Theme.textDim
-                  font.family: Theme.fontFamily
-                  font.pixelSize: Theme.fontCaption
-                  font.bold: true
-                }
-              }
-
-              MouseArea {
-                id: themeModeMouse
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked: function(mouse) {
-                  if (mouse.button === Qt.RightButton)
-                    ThemePickerState.show(barWindow.modelData.name)
-                  else
-                    ThemePickerState.toggleMode()
-                }
-              }
-            }
 
             KeyboardLayout { anchors.verticalCenter: parent.verticalCenter }
           }
