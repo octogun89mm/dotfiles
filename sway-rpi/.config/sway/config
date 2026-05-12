@@ -1,0 +1,130 @@
+# Raspberry Pi Sway config.
+# Read `man 5 sway` for the full reference.
+
+### Outputs ###
+# Common Pi HDMI output names are HDMI-A-1 and HDMI-A-2. Uncomment and adjust
+# if the automatic mode choice is wrong for your display.
+# output HDMI-A-1 resolution 1920x1080 position 0,0
+
+### Variables ###
+set $mod Mod4
+set $left h
+set $down j
+set $up k
+set $right l
+
+set $term foot
+set $menu rofi -show drun
+set $browser chromium-browser
+set $lock swaylock -f -c 0B0F14
+set $power_menu ~/.local/bin/pi-power-menu
+set $screenshot ~/.local/bin/pi-screenshot
+set $display_power ~/.local/bin/pi-display-power
+
+### Session ###
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland
+exec xsettingsd
+exec mako
+exec swaybg -c '#0B0F14'
+
+### Idle ###
+exec swayidle -w \
+  timeout 600 "$lock" \
+  timeout 900 "$display_power off" \
+    resume "$display_power on" \
+  before-sleep "$lock"
+
+### Input ###
+input type:keyboard {
+  xkb_layout us
+  xkb_options caps:escape
+  xkb_numlock enabled
+}
+
+input type:touchpad {
+  tap enabled
+  natural_scroll enabled
+}
+
+### Key Bindings ###
+floating_modifier $mod normal
+
+bindsym $mod+Return exec $term
+bindsym $mod+d exec $menu
+bindsym $mod+w exec $browser
+bindsym $mod+Shift+s exec $screenshot
+
+bindsym $mod+q kill
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+q exec $power_menu
+
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+bindsym $mod+minus move scratchpad
+bindsym $mod+equal scratchpad show
+
+bindsym $mod+f fullscreen
+bindsym $mod+Shift+f floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+period layout toggle split tabbed
+
+mode "resize" {
+  bindsym $left resize shrink width 10px
+  bindsym $down resize grow height 10px
+  bindsym $up resize shrink height 10px
+  bindsym $right resize grow width 10px
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+### Bar ###
+bar {
+  swaybar_command waybar
+  mode dock
+}
+
+### Look And Feel ###
+font pango:Hack 9
+default_border pixel 2
+default_floating_border normal 2
+title_align center
+smart_borders on
+smart_gaps on
+gaps inner 6
+gaps outer 0
+
+client.focused          #6EA8FE #6EA8FE #0B0F14 #9AC4FF #6EA8FE
+client.focused_inactive #344052 #344052 #D8E0EA #344052 #344052
+client.unfocused        #171B20 #171B20 #ADB3BB #171B20 #171B20
+client.urgent           #FF5C57 #FF5C57 #0B0F14 #FF8580 #FF5C57
