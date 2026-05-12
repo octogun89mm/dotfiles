@@ -86,8 +86,11 @@ if (( $+commands[thefuck] )); then
   source "$ZSH_CACHE_DIR/thefuck"
 
   fuck-command-line() {
+    local -a last_command
     local fixed_command
-    fixed_command="$(THEFUCK_REQUIRE_CONFIRMATION=0 thefuck $(fc -ln -1 | tail -n 1) 2>/dev/null)"
+    last_command=("${(z)$(fc -ln -1)}")
+    (( $#last_command )) || return
+    fixed_command="$(THEFUCK_REQUIRE_CONFIRMATION=0 thefuck "${last_command[@]}" 2>/dev/null)"
     [[ -z "$fixed_command" ]] && echo -n -e "\a" && return
     BUFFER="$fixed_command"
     zle end-of-line
@@ -98,7 +101,13 @@ if (( $+commands[thefuck] )); then
   bindkey -M viins '\e\e' fuck-command-line
 fi
 
-source_if_readable "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+if [[ -z $ZSH_DISABLE_AUTOSUGGESTIONS ]]; then
+  source_if_readable "$ZSH_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+
+if (( $+widgets[autosuggest-accept] )); then
+  bindkey '^F' autosuggest-accept
+fi
 
 # --- Aliases ---
 alias zshconfig="$EDITOR ~/.zshrc"
@@ -112,12 +121,14 @@ alias sysinfo='macchina'
 
 # --- Vi Mode ---
 bindkey -v
-bindkey '^F' autosuggest-accept
 export KEYTIMEOUT=1
 
 # --- Zsh Options ---
 # Include dotfiles in globs
 setopt globdots
+
+# Prevent accidental terminal freezes from software flow control.
+[[ -t 0 ]] && stty -ixon 2>/dev/null
 
 # --- Node Version Manager (nvm) ---
 export NVM_DIR="$HOME/.nvm"
@@ -139,6 +150,11 @@ zstyle ':vcs_info:git:*' unstagedstr '*'
 zstyle ':vcs_info:git:*' formats '%b%u%c%m'
 zstyle ':vcs_info:git:*' actionformats '%b%u%c%m (%a)'
 
+# Reset extended keyboard modes that TUIs can leave enabled after a crash/kill.
+reset_terminal_input_modes() {
+  [[ $TERM == xterm-kitty* ]] && printf '\e[<u\e[<u\e[<u\e[>4;0m'
+}
+
 # Hook to detect untracked files and show ** indicator
 +vi-git-untracked() {
   if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) == 'true' ]]; then
@@ -152,6 +168,7 @@ zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
 precmd() {
   local exit_code=$?
+  reset_terminal_input_modes
   vcs_info
 
   # Exit code display (only shown when non-zero)
@@ -215,8 +232,11 @@ function zle-line-finish {
 }
 zle -N zle-line-finish
 
-# Must be loaded after widgets and keybindings.
-source_if_readable "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+# zsh-syntax-highlighting currently freezes this setup when the buffer reaches
+# "pi". Keep it opt-in until the plugin is replaced or updated.
+if [[ -n $ZSH_ENABLE_SYNTAX_HIGHLIGHTING ]]; then
+  source_if_readable "$ZSH_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
 
 function set-full-prompt {
   PROMPT=$'
@@ -262,8 +282,24 @@ if [[ -f ~/.cache/wallust/colors.sh ]]; then
     "
 fi
 
-# Source fzf keybindings and fuzzy completion
-command -v fzf >/dev/null 2>&1 && source <(fzf --zsh)
+# Source fzf keybindings and fuzzy completion.
+# fzf 0.72 snapshots the readonly zle option and errors when restoring it.
+source_fzf_zsh() {
+  local fzf_script
+  fzf_script="$(fzf --zsh 2>/dev/null)" || return 1
+
+  if [[ $fzf_script == *'__fzf_key_bindings_options="options='* ||
+        $fzf_script == *'__fzf_completion_options="options='* ]]; then
+    print -r -- "$fzf_script" | sed -E \
+    -e '/__fzf_key_bindings_options="options=/a\  __fzf_key_bindings_options=${__fzf_key_bindings_options/ zle on/}' \
+    -e '/__fzf_key_bindings_options="options=/a\  __fzf_key_bindings_options=${__fzf_key_bindings_options/ zle off/}' \
+    -e '/__fzf_completion_options="options=/a\  __fzf_completion_options=${__fzf_completion_options/ zle on/}' \
+    -e '/__fzf_completion_options="options=/a\  __fzf_completion_options=${__fzf_completion_options/ zle off/}'
+  else
+    print -r -- "$fzf_script"
+  fi
+}
+command -v fzf >/dev/null 2>&1 && source <(source_fzf_zsh)
 
 # FZF function for editing files
 fe() { fzf -m --preview='bat --color=always {}' --bind 'enter:become(nvim {+})'; }
@@ -313,4 +349,4 @@ function llm-approve() {
 }
 
 # --- System info greeting ---
-command -v macchina >/dev/null 2>&1 && macchina
+command -v macchina >/dev/null 2>&1 && macchina -o operating-system
