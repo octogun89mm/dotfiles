@@ -43,7 +43,10 @@ Item {
   IconImage {
     anchors.fill: parent
     implicitSize: root.iconSize
-    source: item.icon
+    source: {
+      const icon = item.icon || ""
+      return (icon.startsWith("/") ? "file://" : "") + icon
+    }
     asynchronous: true
     visible: !root.symbolic && item.id !== "expressvpn"
   }

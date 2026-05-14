@@ -105,7 +105,10 @@ Rectangle {
 
           IconImage {
             anchors.fill: parent
-            source: root.notification && root.notification.appIcon ? root.notification.appIcon : ""
+            source: {
+              const icon = root.notification && root.notification.appIcon ? root.notification.appIcon : ""
+              return (icon.startsWith("/") ? "file://" : "") + icon
+            }
             asynchronous: true
           }
 
@@ -210,7 +213,10 @@ Rectangle {
       width: 48
       height: 48
       visible: root.notification && root.notification.image
-      source: root.notification ? root.notification.image : ""
+      source: {
+        const icon = root.notification ? root.notification.image : ""
+        return (icon.startsWith("/") ? "file://" : "") + icon
+      }
       fillMode: Image.PreserveAspectFit
       asynchronous: true
       anchors.verticalCenter: parent.verticalCenter

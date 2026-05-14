@@ -46,9 +46,10 @@ Item {
 
   function iconFor(w) {
     if (!w.class) return ""
-    return Quickshell.iconPath(w.class.toLowerCase(), true)
-        || Quickshell.iconPath(w.class, true)
-        || ""
+    const icon = Quickshell.iconPath(w.class.toLowerCase(), true)
+              || Quickshell.iconPath(w.class, true)
+              || ""
+    return (icon.startsWith("/") ? "file://" : "") + icon
   }
 
   implicitHeight: Theme.chipHeight
