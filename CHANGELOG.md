@@ -8,6 +8,22 @@ honours [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`):
 - **MINOR** — new packages or user-visible features.
 - **PATCH** — fixes, small tweaks, lockfile bumps.
 
+## [0.2.1] - 2026-05-13
+
+### Added
+- **quickshell** CPU governor indicator for the expanded details row.
+- **zsh** prompt schema contract for the custom multi-line prompt.
+
+### Changed
+- **hyprland** keeps normal gaps and borders on the 4K monitor workspaces while
+  limiting single-window no-decoration rules to the side and top monitors.
+- **quickshell** trims always-on cava work, moves status indicators to the left
+  side of the secondary bar, and uses file URIs for local tray/notification
+  icons.
+- **foot** refreshes the dark terminal palette from the current Wallust colors.
+- **zsh** enables persistent shared history and adds user/host to the full
+  prompt.
+
 ## [0.2.0] - 2026-05-09
 
 ### Added
