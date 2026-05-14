@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.juju/dotfiles/zsh/prompt.schema.json",
+  "title": "Juju Zsh Prompt Contract",
+  "description": "Machine-readable contract for rebuilding the custom zsh prompt in zsh/.zshrc.",
+  "type": "object",
+  "required": [
+    "shell",
+    "promptSubstitution",
+    "layout",
+    "dynamicSegments",
+    "zleHooks",
+    "validation"
+  ],
+  "properties": {
+    "shell": {
+      "const": "zsh"
+    },
+    "promptSubstitution": {
+      "type": "object",
+      "required": ["required", "zshOption"],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "zshOption": {
+          "const": "PROMPT_SUBST"
+        }
+      },
+      "additionalProperties": false
+    },
+    "layout": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "type": "object",
+          "required": ["line", "segments"],
+          "properties": {
+            "line": {
+              "const": 1
+            },
+            "segments": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "object",
+                  "required": ["name", "zshPromptEscape", "color"],
+                  "properties": {
+                    "name": {
+                      "const": "user-host"
+                    },
+                    "zshPromptEscape": {
+                      "const": "%n@%m"
+                    },
+                    "color": {
+                      "const": "cyan"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ],
+              "items": false
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["line", "segments"],
+          "properties": {
+            "line": {
+              "const": 2
+            },
+            "segments": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "object",
+                  "required": ["name", "zshPromptEscape", "style"],
+                  "properties": {
+                    "name": {
+                      "const": "working-directory"
+                    },
+                    "zshPromptEscape": {
+                      "const": "%~"
+                    },
+                    "style": {
+                      "const": "italic"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": ["name", "source"],
+                  "properties": {
+                    "name": {
+                      "const": "exit-status"
+                    },
+                    "source": {
+                      "const": "EXIT_STATUS"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": ["name", "source"],
+                  "properties": {
+                    "name": {
+                      "const": "git-info"
+                    },
+                    "source": {
+                      "const": "GIT_INFO"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ],
+              "items": false
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["line", "segments"],
+          "properties": {
+            "line": {
+              "const": 3
+            },
+            "segments": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "object",
+                  "required": ["name", "source"],
+                  "properties": {
+                    "name": {
+                      "const": "llm-auto-approve"
+                    },
+                    "source": {
+                      "const": "LLM_INFO"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": ["name", "source"],
+                  "properties": {
+                    "name": {
+                      "const": "python-venv"
+                    },
+                    "source": {
+                      "const": "VENV_INFO"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "required": ["name", "source"],
+                  "properties": {
+                    "name": {
+                      "const": "vi-mode"
+                    },
+                    "source": {
+                      "const": "VI_MODE"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ],
+              "items": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "items": false
+    },
+    "dynamicSegments": {
+      "type": "object",
+      "required": ["exitStatus", "gitInfo", "pythonVenv", "llmAutoApprove", "viMode"],
+      "properties": {
+        "exitStatus": {
+          "type": "object",
+          "required": ["computedIn", "behavior"],
+          "properties": {
+            "computedIn": {
+              "const": "precmd"
+            },
+            "behavior": {
+              "const": "show red numeric exit code only when the previous command failed"
+            }
+          },
+          "additionalProperties": false
+        },
+        "gitInfo": {
+          "type": "object",
+          "required": ["computedIn", "provider", "format"],
+          "properties": {
+            "computedIn": {
+              "const": "precmd"
+            },
+            "provider": {
+              "const": "vcs_info"
+            },
+            "format": {
+              "const": "green italic branch with * for unstaged, + for staged, ** for untracked"
+            }
+          },
+          "additionalProperties": false
+        },
+        "pythonVenv": {
+          "type": "object",
+          "required": ["computedIn", "behavior"],
+          "properties": {
+            "computedIn": {
+              "const": "precmd"
+            },
+            "behavior": {
+              "const": "show basename of VIRTUAL_ENV in yellow parentheses"
+            }
+          },
+          "additionalProperties": false
+        },
+        "llmAutoApprove": {
+          "type": "object",
+          "required": ["computedIn", "behavior"],
+          "properties": {
+            "computedIn": {
+              "const": "precmd"
+            },
+            "behavior": {
+              "const": "show red [llm-auto-approve] only when LLM_AUTO_APPROVE is non-empty"
+            }
+          },
+          "additionalProperties": false
+        },
+        "viMode": {
+          "type": "object",
+          "required": ["computedIn", "insertMode", "commandMode"],
+          "properties": {
+            "computedIn": {
+              "const": "zle-line-init and zle-keymap-select"
+            },
+            "insertMode": {
+              "const": "bold green ❯"
+            },
+            "commandMode": {
+              "const": "bold red ❮"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "zleHooks": {
+      "type": "object",
+      "required": ["lineInit", "keymapSelect", "lineFinish"],
+      "properties": {
+        "lineInit": {
+          "const": "updates VI_MODE and resets prompt"
+        },
+        "keymapSelect": {
+          "const": "updates VI_MODE and cursor color when switching vi modes"
+        },
+        "lineFinish": {
+          "const": "uses a one-line transient prompt, resets cursor, then restores full prompt"
+        }
+      },
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "contains": {
+        "const": "zsh -n ~/.zshrc"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "shell": "zsh",
+      "promptSubstitution": {
+        "required": true,
+        "zshOption": "PROMPT_SUBST"
+      },
+      "layout": [
+        {
+          "line": 1,
+          "segments": [
+            {
+              "name": "user-host",
+              "zshPromptEscape": "%n@%m",
+              "color": "cyan"
+            }
+          ]
+        },
+        {
+          "line": 2,
+          "segments": [
+            {
+              "name": "working-directory",
+              "zshPromptEscape": "%~",
+              "style": "italic"
+            },
+            {
+              "name": "exit-status",
+              "source": "EXIT_STATUS"
+            },
+            {
+              "name": "git-info",
+              "source": "GIT_INFO"
+            }
+          ]
+        },
+        {
+          "line": 3,
+          "segments": [
+            {
+              "name": "llm-auto-approve",
+              "source": "LLM_INFO"
+            },
+            {
+              "name": "python-venv",
+              "source": "VENV_INFO"
+            },
+            {
+              "name": "vi-mode",
+              "source": "VI_MODE"
+            }
+          ]
+        }
+      ],
+      "dynamicSegments": {
+        "exitStatus": {
+          "computedIn": "precmd",
+          "behavior": "show red numeric exit code only when the previous command failed"
+        },
+        "gitInfo": {
+          "computedIn": "precmd",
+          "provider": "vcs_info",
+          "format": "green italic branch with * for unstaged, + for staged, ** for untracked"
+        },
+        "pythonVenv": {
+          "computedIn": "precmd",
+          "behavior": "show basename of VIRTUAL_ENV in yellow parentheses"
+        },
+        "llmAutoApprove": {
+          "computedIn": "precmd",
+          "behavior": "show red [llm-auto-approve] only when LLM_AUTO_APPROVE is non-empty"
+        },
+        "viMode": {
+          "computedIn": "zle-line-init and zle-keymap-select",
+          "insertMode": "bold green ❯",
+          "commandMode": "bold red ❮"
+        }
+      },
+      "zleHooks": {
+        "lineInit": "updates VI_MODE and resets prompt",
+        "keymapSelect": "updates VI_MODE and cursor color when switching vi modes",
+        "lineFinish": "uses a one-line transient prompt, resets cursor, then restores full prompt"
+      },
+      "validation": [
+        "zsh -n ~/.zshrc",
+        "source ~/.zshrc",
+        "confirm first line is user@host",
+        "confirm second line is italic path plus optional exit/git state",
+        "confirm third line has optional LLM/venv indicators followed by vi-mode arrow"
+      ]
+    }
+  ]
+}

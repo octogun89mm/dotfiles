@@ -8,6 +8,19 @@ export VISUAL="nvim"
 [[ -S "/run/user/$UID/gcr/ssh" ]] && export SSH_AUTH_SOCK="/run/user/$UID/gcr/ssh"
 # export SUDO_ASKPASS="/usr/bin/ksshaskpass"
 
+# --- History ---
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=50000
+export SAVEHIST=50000
+setopt EXTENDED_HISTORY
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
+
 # --- PATH ---
 # Prepend to PATH without duplicates (safe against re-sourcing)
 path_prepend() {
@@ -240,6 +253,7 @@ fi
 
 function set-full-prompt {
   PROMPT=$'
+%F{cyan}%n@%m%f
 %{\x1b[3m%}%~%{\x1b[23m%}${EXIT_STATUS}${GIT_INFO}
 ${LLM_INFO}${VENV_INFO}${VI_MODE} '
 }
