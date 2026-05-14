@@ -12,7 +12,9 @@ Item {
   property int maxHeight: 16
   property color accentColor: Theme.accent
   property bool showOffLabel: true
+  property int paintEvery: 2
   property var history: []
+  property int frameCounter: 0
 
   readonly property var channelBars: channel === "right" ? state.rightBars : state.leftBars
   readonly property int bandCount: channelBars.length
@@ -31,6 +33,8 @@ Item {
 
   function pushFrame(levels) {
     if (!levels || !levels.length) return
+    frameCounter = (frameCounter + 1) % Math.max(1, paintEvery)
+    if (frameCounter !== 0) return
 
     if (CavaStyleState.current === "spectrogram") {
       const nextHistory = history.slice()

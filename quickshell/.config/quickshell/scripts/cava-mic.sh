@@ -7,9 +7,9 @@ trap 'rm -f "$TMP"' EXIT
 
 cat > "$TMP" <<EOF
 [general]
-framerate = 15
+framerate = 10
 autosens = 1
-bars = 12
+bars = 8
 sleep_timer = 0
 
 [input]

@@ -9,7 +9,7 @@ Singleton {
 
   readonly property string home: Quickshell.env("HOME") || ""
   readonly property string configPath: home + "/.dotfiles/quickshell/.config/quickshell/ressources/cava-bar.conf"
-  readonly property int barCount: 6
+  readonly property int barCount: 4
   readonly property int rawBarCount: barCount * 2
 
   property bool enabled: true

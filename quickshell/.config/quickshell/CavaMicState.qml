@@ -9,7 +9,7 @@ Singleton {
 
   readonly property string home: Quickshell.env("HOME") || ""
   readonly property string scriptPath: home + "/.dotfiles/quickshell/.config/quickshell/scripts/cava-mic.sh"
-  readonly property int barCount: 6
+  readonly property int barCount: 4
   readonly property int rawBarCount: barCount * 2
 
   readonly property bool enabled: MicState.active

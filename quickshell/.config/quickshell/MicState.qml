@@ -59,7 +59,7 @@ Singleton {
       splitMarker: "\n"
       onRead: function(data) {
         if (!data) return
-        if (data.indexOf("source-output") !== -1 || data.indexOf("on source #") !== -1 || data.indexOf("on client") !== -1) {
+        if (data.indexOf("source-output") !== -1 || data.indexOf("on source #") !== -1) {
           debounce.restart()
         }
       }
