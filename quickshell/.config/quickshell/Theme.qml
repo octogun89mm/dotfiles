@@ -27,6 +27,7 @@ QtObject {
   readonly property string iconFamily: "Symbols Nerd Font Mono"
   readonly property int fontCaption: 10
   readonly property int fontSmall: 11
+  readonly property int fontMd: 12
   readonly property int fontBody: 12
   readonly property int fontTitle: 14
 
@@ -36,6 +37,11 @@ QtObject {
   readonly property int padMd: 8
   readonly property int padLg: 12
   readonly property int padXl: 16
+
+  // Radius
+  readonly property int radiusSm: 4
+  readonly property int radiusMd: 6
+  readonly property int radiusLg: 8
 
   // Bar dimensions
   readonly property int rowHeight: 18

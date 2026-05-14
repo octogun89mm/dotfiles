@@ -66,28 +66,11 @@ Scope {
             height: 1
           }
 
-          // CENTER cluster — cava + clock + cava
+          // CENTER cluster
           Row {
             id: centerCluster
             anchors.centerIn: parent
             spacing: Theme.padMd
-
-            CavaBars {
-              anchors.verticalCenter: parent.verticalCenter
-              state: CavaMicState
-              mirrored: true
-              channel: "left"
-              implicitWidth: 50
-              showOffLabel: false
-            }
-
-            CavaBars {
-              anchors.verticalCenter: parent.verticalCenter
-              mirrored: true
-              channel: "left"
-              implicitWidth: 70
-              accentColor: Theme.accentAlt
-            }
 
             SimpleClock {
               id: centerClock
@@ -99,21 +82,6 @@ Scope {
                 else
                   scope.pinnedScreen = barWindow.modelData
               }
-            }
-
-            CavaBars {
-              anchors.verticalCenter: parent.verticalCenter
-              channel: "right"
-              implicitWidth: 70
-              accentColor: Theme.accentAlt
-            }
-
-            CavaBars {
-              anchors.verticalCenter: parent.verticalCenter
-              state: CavaMicState
-              channel: "right"
-              implicitWidth: 50
-              showOffLabel: false
             }
           }
 
@@ -195,6 +163,11 @@ Scope {
                   Behavior on graphWidth { NumberAnimation { duration: 320; easing.type: Easing.OutBack; easing.overshoot: 1.4 } }
                 }
 
+                CpuGovernor {
+                  anchors.verticalCenter: parent.verticalCenter
+                  visible: BarDetailState.level >= 2
+                }
+
                 InlineMetric {
                   anchors.verticalCenter: parent.verticalCenter
                   label: "MEM"
@@ -261,22 +234,23 @@ Scope {
           }
           height: Theme.rowHeight
 
-          // LEFT cluster — system metrics
+          // LEFT cluster — indicators
           Row {
             anchors.left: parent.left
             anchors.leftMargin: Theme.padMd
             anchors.verticalCenter: parent.verticalCenter
             spacing: Theme.padSm
 
-            SimpleWindowCount {
-              monitorName: barWindow.modelData.name
-            }
+            Tailscale { anchors.verticalCenter: parent.verticalCenter }
+            Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: false }
           }
 
           Row {
             id: workspaceSegment
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.centerIn: parent
             spacing: Theme.padSm
 
             SimpleWorkspace {
@@ -316,12 +290,6 @@ Scope {
                 acceptedButtons: Qt.NoButton
               }
             }
-
-            Tailscale { anchors.verticalCenter: parent.verticalCenter }
-            Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
-            IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
-            MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
-            SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: false }
           }
 
           // RIGHT cluster — media + language
