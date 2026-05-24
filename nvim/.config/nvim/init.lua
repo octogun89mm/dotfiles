@@ -1,6 +1,5 @@
 -- All the basic settings
 require("settings")
-require("config.wallust")
 -- Lazy plugins manager configuration and the list of all the plugins
 require("config.lazy")
 -- Core treesitter bootstrap without the archived nvim-treesitter plugin
@@ -8,7 +7,7 @@ require("config.treesitter")
 -- Import all mappings
 require('mappings')
 -- Theme
-vim.cmd.colorscheme('wallust')
+vim.cmd("colorscheme darklime")
 -- Neovim diagnostic config
 vim.diagnostic.config({
     virtual_text = true,

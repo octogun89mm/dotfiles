@@ -24,7 +24,7 @@ vim.opt.guicursor = "n-v-c-sm-i-ci-ve:block,r-cr-o:hor20"
 -- Workaround for nvimcmp
 vim.opt.completeopt = { "menu", "menuone", "noinsert" }
 -- Theme
-vim.cmd.colorscheme('wallust')
+vim.cmd("colorscheme darklime")
 -- Always show signcolumn with padding to avoid flicker
 vim.opt.signcolumn = "yes:2"
 -- Hack to keep the cursor in the middle of the screen

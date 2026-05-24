@@ -5,7 +5,7 @@ return {
     require('lualine').setup({
       options = {
         globalstatus = true,
-        theme = 'wallust',
+        theme = 'darklime',
         section_separators = '',
         component_separators = '',
         always_show_tabline = false
