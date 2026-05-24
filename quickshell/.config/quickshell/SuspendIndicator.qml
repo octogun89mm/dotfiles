@@ -7,16 +7,17 @@ Rectangle {
   property color activeColor: Theme.warning
   property color inactiveColor: Theme.textDim
 
-  visible: !onlyWhenDisabled || !SuspendState.enabled
+  readonly property bool shouldShow: !onlyWhenDisabled || !SuspendState.enabled
+
+  visible: true
+  opacity: shouldShow ? 1 : 0
   color: "transparent"
-  implicitWidth: indicator.implicitWidth + Theme.padMd
+  implicitWidth: Theme.fontSmall + 3 + Theme.padMd
   implicitHeight: Theme.chipHeight
 
   Text {
     id: indicator
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-    anchors.leftMargin: Theme.padSm
+    anchors.centerIn: parent
     text: SuspendState.icon
     color: SuspendState.enabled ? root.inactiveColor : root.activeColor
     font.family: Theme.iconFamily
@@ -25,6 +26,7 @@ Rectangle {
 
   MouseArea {
     anchors.fill: parent
+    enabled: root.shouldShow
     onClicked: SuspendState.toggle()
   }
 }

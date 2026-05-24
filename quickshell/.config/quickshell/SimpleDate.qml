@@ -9,7 +9,7 @@ Item {
 
   signal clicked
 
-  implicitWidth: dateLabel.implicitWidth + Theme.padMd * 2
+  implicitWidth: dateMetrics.width + Theme.padMd * 2
   implicitHeight: Theme.chipHeight
 
   Text {
@@ -24,6 +24,14 @@ Item {
     Behavior on color {
       ColorAnimation { duration: 200; easing.type: Easing.InOutSine }
     }
+  }
+
+  TextMetrics {
+    id: dateMetrics
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontSmall
+    font.bold: true
+    text: "WED 00 MMM"
   }
 
   Rectangle {

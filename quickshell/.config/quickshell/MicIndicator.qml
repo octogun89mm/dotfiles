@@ -7,9 +7,12 @@ Rectangle {
   property color activeColor: Theme.critical
   property color inactiveColor: Theme.textDim
 
-  visible: !onlyWhenActive || MicState.active
+  readonly property bool shouldShow: !onlyWhenActive || MicState.active
+
+  visible: true
+  opacity: shouldShow ? 1 : 0
   color: "transparent"
-  implicitWidth: indicator.implicitWidth + Theme.padSm
+  implicitWidth: Theme.fontSmall + 3 + Theme.padMd
   implicitHeight: Theme.chipHeight
 
   Text {
@@ -24,6 +27,7 @@ Rectangle {
   MouseArea {
     id: area
     anchors.fill: parent
+    enabled: root.shouldShow
     hoverEnabled: true
   }
 }

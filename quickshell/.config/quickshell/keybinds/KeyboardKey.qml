@@ -81,7 +81,7 @@ Rectangle {
     visible: !!root.description
     text: root.displayDescription
     color: root.textColor
-    font.family: "Iosevka"
+    font.family: "Liberation Mono"
     font.pixelSize: 8
     wrapMode: Text.Wrap
     maximumLineCount: 3
@@ -96,7 +96,7 @@ Rectangle {
     anchors.bottomMargin: 6
     text: keyModel.label
     color: root.textColor
-    font.family: "Iosevka"
+    font.family: "Liberation Mono"
     font.pixelSize: 11
     font.bold: true
   }

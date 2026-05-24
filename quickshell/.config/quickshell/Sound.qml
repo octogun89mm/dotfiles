@@ -15,7 +15,7 @@ Rectangle {
     anchors.centerIn: parent
     text: VolumeState.volume.toString().padStart(2, "0")
     color: VolumeState.muted ? Wallust.base03 : Wallust.accent
-    font.family: "Iosevka"
+    font.family: "Liberation Mono"
     font.pixelSize: 12
     font.bold: true
   }

@@ -24,7 +24,7 @@ Rectangle {
     anchors.centerIn: parent
     text: String(Notif.NotificationServer.unreadCount).padStart(2, '0')
     color: root.foregroundColor
-    font.family: "Iosevka"
+    font.family: "Liberation Mono"
     font.pixelSize: 12
     font.bold: true
   }

@@ -36,7 +36,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         text: "NOTIFICATIONS"
         color: Wallust.base04
-        font.family: "Iosevka"
+        font.family: "Liberation Mono"
         font.pixelSize: 10
         font.bold: true
       }
@@ -56,7 +56,7 @@ Rectangle {
           anchors.centerIn: parent
           text: root.count
           color: Wallust.base05
-          font.family: "Iosevka"
+          font.family: "Liberation Mono"
           font.pixelSize: 10
           font.bold: true
         }
@@ -76,7 +76,7 @@ Rectangle {
           anchors.centerIn: parent
           text: "CLEAR ALL"
           color: root.count > 0 ? Wallust.base05 : Wallust.base03
-          font.family: "Iosevka"
+          font.family: "Liberation Mono"
           font.pixelSize: 10
           font.bold: true
         }
@@ -142,7 +142,7 @@ Rectangle {
         Text {
           text: "NO NOTIFICATIONS"
           color: Wallust.base04
-          font.family: "Iosevka"
+          font.family: "Liberation Mono"
           font.pixelSize: 11
           font.bold: true
         }

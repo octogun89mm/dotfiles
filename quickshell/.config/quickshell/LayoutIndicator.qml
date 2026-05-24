@@ -21,7 +21,7 @@ Rectangle {
   }
 
   color: "transparent"
-  implicitWidth: row.implicitWidth + Theme.padSm
+  implicitWidth: layoutMetrics.width + Theme.padSm * 2
   implicitHeight: Theme.chipHeight
 
   function normalizedLayout(value) {
@@ -52,6 +52,9 @@ Rectangle {
     Text {
       anchors.verticalCenter: parent.verticalCenter
       text: root.layoutLabel(root.layout)
+      width: layoutMetrics.width
+      horizontalAlignment: Text.AlignHCenter
+      elide: Text.ElideRight
       color: root.stripeColor(root.layout)
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontCaption
@@ -62,6 +65,15 @@ Rectangle {
         ColorAnimation { duration: 220; easing.type: Easing.InOutSine }
       }
     }
+  }
+
+  TextMetrics {
+    id: layoutMetrics
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontCaption
+    font.bold: true
+    font.letterSpacing: 0.6
+    text: "SCROLLING"
   }
 
   MouseArea {

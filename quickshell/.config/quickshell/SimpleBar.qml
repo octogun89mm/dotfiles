@@ -246,6 +246,14 @@ Scope {
             IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: false }
+
+            SimpleWindowCount {
+              monitorName: barWindow.modelData.name
+            }
+
+            NetworkChip {
+              anchors.verticalCenter: parent.verticalCenter
+            }
           }
 
           Row {
@@ -268,8 +276,9 @@ Scope {
 
             Rectangle {
               anchors.verticalCenter: parent.verticalCenter
-              implicitWidth: trayInWorkspace.implicitWidth + Theme.padSm * 2
+              implicitWidth: 72
               implicitHeight: Theme.chipHeight
+              clip: true
               color: trayHover.containsMouse ? Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.06) : "transparent"
 
               Tray {
@@ -301,14 +310,16 @@ Scope {
 
             Item {
               anchors.verticalCenter: parent.verticalCenter
-              visible: ThemeNameState.name !== ""
-              implicitWidth: themeNameText.implicitWidth
+              visible: true
+              opacity: ThemeNameState.name !== "" ? 1 : 0
+              implicitWidth: 128
               implicitHeight: themeNameText.implicitHeight
 
               Text {
                 id: themeNameText
                 anchors.fill: parent
                 text: ThemeNameState.name
+                elide: Text.ElideRight
                 color: themeNameMouse.containsMouse ? Theme.text : Theme.textDim
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSmall

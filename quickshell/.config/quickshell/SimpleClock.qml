@@ -9,7 +9,7 @@ Item {
 
   signal clicked
 
-  implicitWidth: clockLabel.implicitWidth + Theme.padMd * 2
+  implicitWidth: clockMetrics.width + Theme.padMd * 2
   implicitHeight: Theme.chipHeight
 
   Rectangle {
@@ -35,6 +35,14 @@ Item {
     Behavior on color {
       ColorAnimation { duration: 200; easing.type: Easing.InOutSine }
     }
+  }
+
+  TextMetrics {
+    id: clockMetrics
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontTitle
+    font.bold: true
+    text: "00:00 PM"
   }
 
   Rectangle {

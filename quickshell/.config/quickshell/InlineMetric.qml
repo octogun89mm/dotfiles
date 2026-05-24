@@ -36,6 +36,8 @@ Item {
     Text {
       anchors.verticalCenter: parent.verticalCenter
       text: root.value
+      width: valueMetrics.width
+      horizontalAlignment: Text.AlignRight
       color: Theme.text
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontSmall
@@ -45,6 +47,8 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       visible: root.showDetail && root.detail !== ""
       text: root.detail
+      width: detailMetrics.width
+      elide: Text.ElideRight
       color: Theme.textDim
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontCaption
@@ -135,4 +139,18 @@ Item {
 
   onHistoryChanged: spark.requestPaint()
   onGraphWidthChanged: spark.requestPaint()
+
+  TextMetrics {
+    id: valueMetrics
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontSmall
+    text: "0000"
+  }
+
+  TextMetrics {
+    id: detailMetrics
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontCaption
+    text: "000000000000"
+  }
 }

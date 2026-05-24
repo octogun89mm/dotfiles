@@ -141,7 +141,7 @@ Scope {
               anchors.verticalCenter: parent.verticalCenter
               text: Root.ThemePickerState.modeLabel
               color: panel.textMuted
-              font.family: "Iosevka"
+              font.family: "Liberation Mono"
               font.pixelSize: 10
               font.bold: true
             }
@@ -161,7 +161,7 @@ Scope {
                 anchors.centerIn: parent
                 text: Root.ThemePickerState.filteredThemes.count
                 color: panel.textColor
-                font.family: "Iosevka"
+                font.family: "Liberation Mono"
                 font.pixelSize: 10
                 font.bold: true
               }
@@ -181,7 +181,7 @@ Scope {
                 anchors.centerIn: parent
                 text: Root.ThemePickerState.mode === "wallpaper" ? "THEMES" : "WALLPAPERS"
                 color: modeMouse.containsMouse ? panel.textColor : panel.textMuted
-                font.family: "Iosevka"
+                font.family: "Liberation Mono"
                 font.pixelSize: 10
                 font.bold: true
               }
@@ -209,7 +209,7 @@ Scope {
               anchors.fill: parent
               anchors.margins: 8
               color: panel.textColor
-              font.family: "Iosevka"
+              font.family: "Liberation Mono"
               font.pixelSize: 11
               clip: true
               selectByMouse: true
@@ -225,7 +225,7 @@ Scope {
               visible: filterInput.text === "" && !filterInput.activeFocus
               text: Root.ThemePickerState.mode === "wallpaper" ? "FILTER WALLPAPERS" : "FILTER THEMES"
               color: panel.textMuted
-              font.family: "Iosevka"
+              font.family: "Liberation Mono"
               font.pixelSize: 11
             }
           }
@@ -272,7 +272,7 @@ Scope {
                     anchors.rightMargin: 8
                     text: themeRow.model.name
                     color: themeRow.selected ? panel.selectedFg : panel.textColor
-                    font.family: "Iosevka"
+                    font.family: "Liberation Mono"
                     font.pixelSize: 11
                     elide: Text.ElideMiddle
                   }
@@ -295,7 +295,7 @@ Scope {
                 visible: !themesList.visible
                 text: "NO MATCHES"
                 color: panel.textMuted
-                font.family: "Iosevka"
+                font.family: "Liberation Mono"
                 font.pixelSize: 11
                 font.bold: true
               }
@@ -336,7 +336,7 @@ Scope {
                   anchors.rightMargin: 8
                   text: Root.ThemePickerState.selectedName
                   color: panel.textColor
-                  font.family: "Iosevka"
+                  font.family: "Liberation Mono"
                   font.pixelSize: 10
                   elide: Text.ElideMiddle
                 }

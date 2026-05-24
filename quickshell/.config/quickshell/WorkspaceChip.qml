@@ -41,7 +41,7 @@ Rectangle {
     anchors.centerIn: parent
     text: displayName
     color: isHighlighted ? Wallust.base00 : Wallust.base05
-    font.family: "Iosevka"
+    font.family: "Liberation Mono"
     font.pixelSize: 12
     font.bold: true
   }

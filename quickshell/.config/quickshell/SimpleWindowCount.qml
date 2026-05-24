@@ -16,7 +16,7 @@ Item {
     countProcess.exec([countScript, monitorName])
   }
 
-  implicitWidth: cluster.implicitWidth + Theme.padMd
+  implicitWidth: countMetrics.width + winMetrics.width + Theme.padSm + Theme.padMd
   implicitHeight: Theme.chipHeight
   visible: true
 
@@ -30,6 +30,8 @@ Item {
     Text {
       anchors.verticalCenter: parent.verticalCenter
       text: String(root.windowCount).padStart(2, "0")
+      width: countMetrics.width
+      horizontalAlignment: Text.AlignRight
       color: root.windowCount > 0 ? Theme.text : Theme.textDim
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontSmall
@@ -44,6 +46,22 @@ Item {
       font.pixelSize: Theme.fontCaption
       font.letterSpacing: 0.5
     }
+  }
+
+  TextMetrics {
+    id: countMetrics
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontSmall
+    font.bold: true
+    text: "000"
+  }
+
+  TextMetrics {
+    id: winMetrics
+    font.family: Theme.fontFamily
+    font.pixelSize: Theme.fontCaption
+    font.letterSpacing: 0.5
+    text: "WIN"
   }
 
   Connections {

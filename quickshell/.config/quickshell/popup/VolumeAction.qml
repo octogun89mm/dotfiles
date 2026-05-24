@@ -55,7 +55,7 @@ Rectangle {
           fontSizeMode: Text.HorizontalFit
           minimumPixelSize: 8
           color: Wallust.base04
-          font.family: "Iosevka"
+          font.family: "Liberation Mono"
           font.pixelSize: 10
           font.bold: true
         }
@@ -67,7 +67,7 @@ Rectangle {
           fontSizeMode: Text.HorizontalFit
           minimumPixelSize: 8
           color: Root.VolumeState.muted ? Wallust.base03 : Wallust.base05
-          font.family: "Iosevka"
+          font.family: "Liberation Mono"
           font.pixelSize: 11
           font.bold: true
         }

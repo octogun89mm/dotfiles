@@ -7,16 +7,17 @@ Rectangle {
   property color activeColor: Theme.success
   property color inactiveColor: Theme.textDim
 
-  visible: !onlyWhenActive || VpnState.connected
+  readonly property bool shouldShow: !onlyWhenActive || VpnState.connected
+
+  visible: true
+  opacity: shouldShow ? 1 : 0
   color: "transparent"
-  implicitWidth: indicator.implicitWidth + Theme.padMd
+  implicitWidth: Theme.fontSmall + 3 + Theme.padMd
   implicitHeight: Theme.chipHeight
 
   Text {
     id: indicator
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-    anchors.leftMargin: Theme.padSm
+    anchors.centerIn: parent
     text: VpnState.icon
     color: VpnState.connected ? root.activeColor : root.inactiveColor
     font.family: Theme.iconFamily
@@ -25,6 +26,7 @@ Rectangle {
 
   MouseArea {
     anchors.fill: parent
+    enabled: root.shouldShow
     onClicked: VpnState.toggle()
   }
 }

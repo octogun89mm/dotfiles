@@ -26,7 +26,7 @@ Rectangle {
       text: root.title
       elide: Text.ElideRight
       color: Wallust.base04
-      font.family: "Iosevka"
+      font.family: "Liberation Mono"
       font.pixelSize: 10
       font.bold: true
     }
@@ -36,7 +36,7 @@ Rectangle {
       text: root.value
       elide: Text.ElideRight
       color: Wallust.base05
-      font.family: "Iosevka"
+      font.family: "Liberation Mono"
       font.pixelSize: 13
       font.bold: true
     }
@@ -46,7 +46,7 @@ Rectangle {
       text: root.detail
       elide: Text.ElideRight
       color: Wallust.base05
-      font.family: "Iosevka"
+      font.family: "Liberation Mono"
       font.pixelSize: 10
       visible: text !== ""
     }
@@ -56,7 +56,7 @@ Rectangle {
       text: root.detail2
       elide: Text.ElideRight
       color: Wallust.base05
-      font.family: "Iosevka"
+      font.family: "Liberation Mono"
       font.pixelSize: 10
       visible: text !== ""
     }

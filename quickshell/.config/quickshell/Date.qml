@@ -44,7 +44,7 @@ Rectangle {
     anchors.centerIn: parent
     text: Qt.formatDate(clock.date, "ddd-dd-MM-yy")
     color: Wallust.base00
-    font.family: "Iosevka"
+    font.family: "Liberation Mono"
     font.pixelSize: 12
     font.bold: true
   }

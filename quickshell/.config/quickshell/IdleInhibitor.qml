@@ -7,16 +7,17 @@ Rectangle {
   property color activeColor: Theme.warning
   property color inactiveColor: Theme.textDim
 
-  visible: !onlyWhenActive || IdleState.active
+  readonly property bool shouldShow: !onlyWhenActive || IdleState.active
+
+  visible: true
+  opacity: shouldShow ? 1 : 0
   color: "transparent"
-  implicitWidth: indicator.implicitWidth + Theme.padMd
+  implicitWidth: Theme.fontSmall + 3 + Theme.padMd
   implicitHeight: Theme.chipHeight
 
   Text {
     id: indicator
-    anchors.verticalCenter: parent.verticalCenter
-    anchors.left: parent.left
-    anchors.leftMargin: Theme.padSm
+    anchors.centerIn: parent
     text: IdleState.icon
     color: IdleState.active ? root.activeColor : root.inactiveColor
     font.family: Theme.iconFamily
@@ -25,6 +26,7 @@ Rectangle {
 
   MouseArea {
     anchors.fill: parent
+    enabled: root.shouldShow
     onClicked: IdleState.toggle()
   }
 }

@@ -49,7 +49,7 @@ Rectangle {
         minimumPixelSize: 8
         horizontalAlignment: Text.AlignHCenter
         color: highlighted ? root.highlightFg : Wallust.base04
-        font.family: "Iosevka"
+        font.family: "Liberation Mono"
         font.pixelSize: 10
         font.bold: true
       }
@@ -62,7 +62,7 @@ Rectangle {
         minimumPixelSize: 8
         horizontalAlignment: Text.AlignHCenter
         color: highlighted ? root.highlightFg : Wallust.base05
-        font.family: "Iosevka"
+        font.family: "Liberation Mono"
         font.pixelSize: 11
         font.bold: true
       }

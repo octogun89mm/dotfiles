@@ -35,8 +35,9 @@ Rectangle {
   readonly property bool isOccupied: windowIcons.length > 0 || (workspaceData ? workspaceData.toplevels.values.length > 0 : false)
 
   color: "transparent"
-  implicitWidth: Math.max(20, chipContent.implicitWidth + Theme.padSm * 2)
+  implicitWidth: 54
   implicitHeight: Theme.chipHeight
+  clip: true
 
   Rectangle {
     anchors.fill: parent
