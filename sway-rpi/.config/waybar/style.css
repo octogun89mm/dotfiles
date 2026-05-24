@@ -1,0 +1,80 @@
+* {
+  border: none;
+  border-radius: 0;
+  font-family: Hack, monospace;
+  font-size: 12px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: #050309;
+  color: #FFB0C6;
+}
+
+#workspaces button {
+  padding: 0 8px;
+  color: #D190A2;
+}
+
+#workspaces button.focused {
+  background: #965889;
+  color: #07050B;
+}
+
+#workspaces button.urgent {
+  background: #65434A;
+  color: #07050B;
+}
+
+#clock,
+#cpu,
+#memory,
+#temperature,
+#network,
+#custom-bluetooth-speaker,
+#pulseaudio,
+#battery,
+#tray,
+#mode {
+  padding: 0 8px;
+}
+
+#cpu,
+#memory {
+  color: #5E386B;
+}
+
+#network,
+#pulseaudio {
+  color: #CA778C;
+}
+
+#battery,
+#clock {
+  color: #F5C8D3;
+}
+
+#temperature {
+  color: #937473;
+}
+
+#temperature.critical {
+  background: #65434A;
+  color: #07050B;
+}
+
+#custom-bluetooth-speaker {
+  padding: 0 8px;
+}
+
+#custom-bluetooth-speaker.active {
+  color: #CA778C;
+}
+
+#custom-bluetooth-speaker.connected {
+  color: #D190A2;
+}
+
+#custom-bluetooth-speaker.disconnected {
+  color: #937473;
+}

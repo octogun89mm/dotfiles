@@ -13,6 +13,8 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **foot** | Foot terminal config and shared Wallust color include |
 | **waybar** | Secondary bar config and utility scripts reused by other packages |
 | **sway** | Sway compositor config (legacy) |
+| **sway-rpi** | Lightweight Raspberry Pi Sway package, excluded from default install and installed explicitly with `./install.sh sway-rpi` |
+| **zsh-rpi** | Minimal Raspberry Pi zsh package without vi mode, excluded from default install and installed explicitly with `./install.sh zsh-rpi` |
 | **tmux** | Terminal multiplexer config |
 | **nvim** | Lazy.nvim-based Neovim config with built-in treesitter, LSP, completion, Telescope, git tooling, AI helpers, and focused editing UX |
 | **scripts** | Repo-local helper scripts such as `set-font.sh` for swapping the monospace family across configs |

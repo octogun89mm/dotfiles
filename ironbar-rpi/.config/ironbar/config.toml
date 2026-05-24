@@ -1,0 +1,81 @@
+position = "top"
+anchor_to_edges = true
+height = 32
+layer = "top"
+exclusive_zone = true
+popup_gap = 6
+popup_autohide = true
+
+[[start]]
+type = "workspaces"
+all_monitors = true
+favorites = ["1", "2", "3", "4", "5", "6"]
+sort = "name"
+
+[[start]]
+type = "bindmode"
+name = "mode"
+
+[[center]]
+type = "clock"
+name = "time"
+format = "%H:%M"
+format_popup = "%A, %B %d, %Y"
+
+[[end]]
+type = "script"
+name = "bluetooth-speaker"
+cmd = "~/.config/ironbar/scripts/bluetooth-speaker.sh"
+mode = "watch"
+interval = 5000
+on_click_left = "~/.config/ironbar/scripts/bluetooth-speaker.sh toggle"
+
+[[end]]
+type = "script"
+name = "volume"
+cmd = "~/.config/ironbar/scripts/volume.sh"
+mode = "poll"
+interval = 1000
+on_click_left = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+on_scroll_up = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+"
+on_scroll_down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-"
+
+[[end]]
+type = "script"
+name = "network-rate"
+cmd = "~/.config/ironbar/scripts/network-rate.sh"
+mode = "watch"
+interval = 5000
+
+[[end]]
+type = "sys_info"
+name = "system"
+format = ["CPU {cpu_percent}%", "RAM {memory_percent}%", "{temp}C"]
+interval.cpu = 2
+interval.memory = 5
+interval.temp = 5
+
+[[end]]
+type = "script"
+name = "disk-usage"
+cmd = "~/.config/ironbar/scripts/disk-usage.sh"
+mode = "poll"
+interval = 30000
+
+[[end]]
+type = "battery"
+name = "battery"
+format = "BAT {percentage}%"
+show_if = "test -d /sys/class/power_supply/BAT0 || ls /sys/class/power_supply/BAT* >/dev/null 2>&1"
+thresholds.warning = 20
+thresholds.critical = 10
+
+[[end]]
+type = "tray"
+icon_size = 16
+
+[[end]]
+type = "clock"
+name = "date"
+format = "%a %b %d"
+format_popup = "%H:%M:%S"

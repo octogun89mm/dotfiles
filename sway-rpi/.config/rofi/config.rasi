@@ -1,0 +1,14 @@
+configuration {
+  modi: "drun,run,window";
+  terminal: "foot";
+  drun-display-format: "{name}";
+  show-icons: true;
+  icon-theme: "Papirus-Dark";
+  matching: "fuzzy";
+  sort: true;
+  hover-select: false;
+  me-select-entry: "";
+  me-accept-entry: "MousePrimary";
+}
+
+@theme "~/.config/rofi/themes/pi.rasi"

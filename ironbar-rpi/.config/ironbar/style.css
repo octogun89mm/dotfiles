@@ -1,0 +1,89 @@
+* {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: Hack, monospace;
+  font-size: 12px;
+  min-height: 0;
+}
+
+window,
+window.background,
+.bar {
+  background: #050309;
+  color: #ffb0c6;
+}
+
+.container {
+  background: transparent;
+}
+
+.workspaces .item,
+.bindmode,
+.clock,
+.script,
+.sys-info,
+.battery,
+.tray {
+  padding: 0 8px;
+}
+
+.workspaces .item {
+  color: #d190a2;
+}
+
+.workspaces .item.focused,
+.workspaces .item.visible {
+  background: #965889;
+  color: #07050b;
+}
+
+.workspaces .item.urgent {
+  background: #65434a;
+  color: #07050b;
+}
+
+#mode {
+  color: #f5c8d3;
+}
+
+#time,
+#date,
+.battery {
+  color: #f5c8d3;
+}
+
+#system {
+  color: #5e386b;
+}
+
+#volume,
+#network-rate,
+#bluetooth-speaker {
+  color: #ca778c;
+}
+
+#disk-usage {
+  color: #937473;
+}
+
+.battery.warning,
+#disk-usage.warning {
+  color: #f5c8d3;
+  background: #65434a;
+}
+
+.battery.critical,
+#disk-usage.critical {
+  color: #07050b;
+  background: #65434a;
+}
+
+.popup,
+.popup-clock,
+.popup-battery {
+  background: #121015;
+  border: 1px solid #65434a;
+  color: #ffb0c6;
+  padding: 8px;
+}

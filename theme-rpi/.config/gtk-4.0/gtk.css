@@ -1,0 +1,44 @@
+@define-color theme_bg_color #050309;
+@define-color theme_fg_color #FFB0C6;
+@define-color theme_base_color #07050B;
+@define-color theme_text_color #FFB0C6;
+@define-color theme_selected_bg_color #965889;
+@define-color theme_selected_fg_color #F5C8D3;
+@define-color insensitive_bg_color #B36478;
+@define-color insensitive_fg_color #A67281;
+@define-color borders #B36478;
+@define-color warning_color #937473;
+@define-color error_color #65434A;
+@define-color success_color #5E386B;
+
+window,
+dialog,
+popover,
+menu,
+.background {
+  background-color: @theme_bg_color;
+  color: @theme_fg_color;
+}
+
+entry,
+textview,
+treeview,
+list,
+sidebar {
+  background-color: @theme_base_color;
+  color: @theme_text_color;
+}
+
+button,
+headerbar,
+toolbar {
+  background-color: #19171D;
+  color: @theme_fg_color;
+  border-color: @borders;
+}
+
+selection,
+*:selected {
+  background-color: @theme_selected_bg_color;
+  color: @theme_selected_fg_color;
+}

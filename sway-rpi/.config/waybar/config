@@ -1,0 +1,65 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 32,
+  "modules-left": ["sway/workspaces", "sway/mode"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/bluetooth-speaker", "pulseaudio", "custom/network-rate", "cpu", "memory", "custom/disk-usage", "temperature", "battery", "tray", "clock#date"],
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "persistent_workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": []
+    }
+  },
+  "clock": {
+    "format": "{:%H:%M}"
+  },
+  "clock#date": {
+    "format": "{:%a %b %d}"
+  },
+  "cpu": {
+    "format": "CPU {usage}%"
+  },
+  "memory": {
+    "format": "RAM {}%"
+  },
+  "custom/disk-usage": {
+    "exec": "~/.config/waybar/disk-usage.sh",
+    "interval": 30,
+    "return-type": "json",
+    "format": "{}"
+  },
+  "temperature": {
+    "thermal-zone": 0,
+    "critical-threshold": 80,
+    "format": "{temperatureC}C"
+  },
+  "custom/network-rate": {
+    "exec": "~/.config/waybar/network-rate.sh",
+    "interval": 1,
+    "return-type": "text",
+    "format": "{}"
+  },
+  "pulseaudio": {
+    "format": "VOL {volume}%",
+    "format-muted": "muted"
+  },
+  "custom/bluetooth-speaker": {
+    "exec": "~/.config/waybar/bluetooth-speaker.sh",
+    "interval": "once",
+    "signal": 8,
+    "return-type": "json",
+    "format": "{}",
+    "on-click": "~/.config/waybar/bluetooth-speaker.sh toggle"
+  },
+  "battery": {
+    "format": "BAT {capacity}%",
+    "format-charging": "BAT {capacity}%+"
+  }
+}

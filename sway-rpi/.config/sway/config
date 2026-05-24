@@ -8,24 +8,33 @@
 
 ### Variables ###
 set $mod Mod4
-set $left h
-set $down j
-set $up k
-set $right l
 
 set $term foot
 set $menu rofi -show drun
 set $browser chromium-browser
-set $lock swaylock -f -c 0B0F14
+set $lock swaylock -f -c 07050B
 set $power_menu ~/.local/bin/pi-power-menu
 set $screenshot ~/.local/bin/pi-screenshot
 set $display_power ~/.local/bin/pi-display-power
+
+set $file_manager foot -e ranger
+set $alt_file_manager pcmanfm
+set $nvim foot -e nvim
+set $emacsclient emacsclient -c
+set $dropdown_terminal foot --app-id=dropdown-terminal
+set $pulsemixer foot --app-id=pulsemixer -e pulsemixer
+set $rofiapps ~/.dotfiles/rust-tools/target/release/rofi-apps
+set $rofitools ~/.dotfiles/rust-tools/target/release/rofi-tools
+set $windowmenu rofi -show window
 
 ### Session ###
 exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway XDG_SESSION_TYPE=wayland
 exec xsettingsd
 exec mako
-exec swaybg -c '#0B0F14'
+exec_always sh -c 'pkill -x ironbar 2>/dev/null || true; exec ironbar'
+exec swaybg -c '#050309'
+exec wl-paste --watch cliphist store
+exec foot --app-id=dropdown-terminal
 
 ### Idle ###
 exec swayidle -w \
@@ -49,25 +58,66 @@ input type:touchpad {
 ### Key Bindings ###
 floating_modifier $mod normal
 
+# Launchers
 bindsym $mod+Return exec $term
+bindsym $mod+Shift+Return exec $dropdown_terminal
 bindsym $mod+d exec $menu
+bindsym $mod+e exec $file_manager
+bindsym $mod+Shift+e exec $alt_file_manager
+bindsym $mod+a exec $nvim
+bindsym $mod+Shift+a exec $emacsclient
 bindsym $mod+w exec $browser
+# bindsym $mod+Shift+w exec zen-browser --new-window # (Zen browser usually not on Pi)
+bindsym $mod+b exec $rofiapps
+bindsym $mod+Tab exec $windowmenu
 bindsym $mod+Shift+s exec $screenshot
 
+# Window actions
 bindsym $mod+q kill
-bindsym $mod+Shift+c reload
+bindsym $mod+Shift+f floating toggle
+bindsym $mod+f fullscreen
+bindsym $mod+p sticky toggle
+bindsym $mod+Shift+c move position center
+bindsym $mod+Shift+o reload
+
+# Tabbed / Group Navigation (Hyprland layoutmsg/changegroupactive equivalent)
+bindsym $mod+g layout toggle tabbed splith splitv
+bindsym $mod+bracketleft focus prev
+bindsym $mod+bracketright focus next
+
+# Bar control
+bindsym $mod+Ctrl+Shift+slash exec ironbar reload
+
+# Theme selector
+bindsym $mod+Shift+slash exec ~/.local/bin/wallust-random-dark
+bindsym $mod+Shift+semicolon exec ~/.local/bin/wallust-random-light
+
+# Audio / Volume
+bindsym $mod+Up exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+
+bindsym $mod+Down exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-
+bindsym $mod+Left exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym $mod+Right exec ~/.dotfiles/rust-tools/target/release/cycle-sink
+bindsym $mod+Shift+Up exec $pulsemixer
+
+# Rofi tools and utilities
 bindsym $mod+Shift+q exec $power_menu
+bindsym $mod+s exec $rofitools
+bindsym $mod+v exec cliphist list | rofi -dmenu -p "Clipboard" | cliphist decode | wl-copy
+bindsym $mod+i exec ~/.config/waybar/scripts/idle-inhibit.sh toggle
 
-bindsym $mod+$left focus left
-bindsym $mod+$down focus down
-bindsym $mod+$up focus up
-bindsym $mod+$right focus right
+# Navigation
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
-bindsym $mod+Shift+$left move left
-bindsym $mod+Shift+$down move down
-bindsym $mod+Shift+$up move up
-bindsym $mod+Shift+$right move right
+# Moving windows
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
+# Workspaces
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
 bindsym $mod+3 workspace number 3
@@ -79,6 +129,12 @@ bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
 
+bindsym $mod+z workspace prev_on_output
+bindsym $mod+x workspace next_on_output
+bindsym $mod+Shift+z workspace prev
+bindsym $mod+Shift+x workspace next
+
+# Move container to workspace
 bindsym $mod+Shift+1 move container to workspace number 1
 bindsym $mod+Shift+2 move container to workspace number 2
 bindsym $mod+Shift+3 move container to workspace number 3
@@ -90,29 +146,44 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
-bindsym $mod+minus move scratchpad
-bindsym $mod+equal scratchpad show
+# Scratchpads
+bindsym $mod+minus scratchpad show
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+equal [app_id="dropdown-terminal"] scratchpad show
+bindsym $mod+Shift+equal move scratchpad
 
-bindsym $mod+f fullscreen
-bindsym $mod+Shift+f floating toggle
-bindsym $mod+space focus mode_toggle
-bindsym $mod+period layout toggle split tabbed
+# Quick resize keys
+bindsym $mod+comma resize shrink width 20px
+bindsym $mod+period resize grow width 20px
+bindsym $mod+Shift+comma resize shrink height 20px
+bindsym $mod+Shift+period resize grow height 20px
 
+# Resize / Move mode (Hyprland submap resize equivalent)
 mode "resize" {
-  bindsym $left resize shrink width 10px
-  bindsym $down resize grow height 10px
-  bindsym $up resize shrink height 10px
-  bindsym $right resize grow width 10px
+  # Shrink/grow windows
+  bindsym b resize shrink width 20px
+  bindsym f resize grow width 20px
+  bindsym p resize shrink height 20px
+  bindsym n resize grow height 20px
+
+  # Move floating windows
+  bindsym Shift+b move left 20px
+  bindsym Shift+f move right 20px
+  bindsym Shift+p move up 20px
+  bindsym Shift+n move down 20px
+
+  # Center floating window
+  bindsym c move position center
+
   bindsym Return mode "default"
   bindsym Escape mode "default"
+  bindsym $mod+r mode "default"
 }
 bindsym $mod+r mode "resize"
 
-### Bar ###
-bar {
-  swaybar_command waybar
-  mode dock
-}
+### Window Rules ###
+for_window [app_id="dropdown-terminal"] floating enable, move scratchpad, resize set 800 540, move position center
+for_window [app_id="pulsemixer"] floating enable, resize set 1000 400, move position center
 
 ### Look And Feel ###
 font pango:Hack 9
@@ -124,7 +195,7 @@ smart_gaps on
 gaps inner 6
 gaps outer 0
 
-client.focused          #6EA8FE #6EA8FE #0B0F14 #9AC4FF #6EA8FE
-client.focused_inactive #344052 #344052 #D8E0EA #344052 #344052
-client.unfocused        #171B20 #171B20 #ADB3BB #171B20 #171B20
-client.urgent           #FF5C57 #FF5C57 #0B0F14 #FF8580 #FF5C57
+client.focused          #965889 #965889 #07050B #965889 #965889
+client.focused_inactive #B36478 #B36478 #FFB0C6 #B36478 #B36478
+client.unfocused        #121015 #121015 #CC8D9E #121015 #121015
+client.urgent           #65434A #65434A #07050B #65434A #65434A
