@@ -3,9 +3,9 @@
 * {
   background-color: transparent;
   text-color: @fg;
-  font: "Iosevka 10";
-  bold-font: "Iosevka Bold 10";
-  big-font: "Iosevka 12";
+  font: "Liberation Mono 10";
+  bold-font: "Liberation Mono Bold 10";
+  big-font: "Liberation Mono 12";
   padding: 0px;
   margin: 0px;
 }

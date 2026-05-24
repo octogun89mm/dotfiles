@@ -12,7 +12,7 @@
     show_indicators = false
     frame_width = 2
     separator_color = "#5D6070"
-    font = "Iosevka 10"
+    font = "Liberation Mono 10"
     corner_radius = 0
     padding = 10
     horizontal_padding = 12

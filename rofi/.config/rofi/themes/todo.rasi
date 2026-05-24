@@ -3,8 +3,8 @@
 * {
   background-color: transparent;
   text-color: @fg;
-  font: "Iosevka 11";
-  bold-font: "Iosevka Bold 11";
+  font: "Liberation Mono 11";
+  bold-font: "Liberation Mono Bold 11";
   padding: 0px;
   margin: 0px;
 }

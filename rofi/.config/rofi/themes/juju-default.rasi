@@ -1,9 +1,9 @@
 @import "wallust.rasi"
 
 * {
-    font: "Iosevka 12";
-    font-bold: "Iosevka Bold 12";
-    font-alt: "Iosevka 14";
+    font: "Liberation Mono 12";
+    font-bold: "Liberation Mono Bold 12";
+    font-alt: "Liberation Mono 14";
     border: 0px;
     padding: 0px;
     margin: 0px;
@@ -13,7 +13,7 @@ window {
     fullscreen: true;
     background-color: transparent;
     transparency: "real";
-    font: "Iosevka 12";
+    font: "Liberation Mono 12";
     border: 0px;
 }
 
