@@ -4,7 +4,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: Iosevka;
+    font-family: Liberation Mono;
     font-size: 9pt;
     color: @fg;
     padding: 0px;
@@ -91,7 +91,7 @@ tooltip {
 }
 
 #workspaces button label {
-  font-family: "Iosevka";
+  font-family: "Liberation Mono";
   font-size: 12pt;
   font-weight: bold;
 }

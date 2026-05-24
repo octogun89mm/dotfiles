@@ -4,7 +4,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: Iosevka;
+    font-family: Liberation Mono;
     font-size: 9pt;
     color: @fg;
     padding: 0px;
@@ -25,6 +25,26 @@ window#waybar {
   font-family: "Symbols Nerd Font Mono";
   font-size: 12pt;
   color: @c14;
+}
+
+/* DISK USAGE */
+#custom-df {
+  font-family: "Symbols Nerd Font Mono";
+  font-size: 11pt;
+  font-weight: bold;
+  color: @c14;
+}
+
+#custom-df.warning {
+  color: @c11;
+}
+
+#custom-df.critical {
+  color: @c11;
+}
+
+#custom-df.error {
+  color: @c11;
 }
 
 /* SEPARATOR */
@@ -48,7 +68,7 @@ window#waybar {
 }
 
 #workspaces button label {
-  font-family: "Iosevka";
+  font-family: "Liberation Mono";
   font-size: 12pt;
   font-weight: bold;
 }

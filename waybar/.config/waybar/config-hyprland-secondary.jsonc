@@ -15,6 +15,8 @@
     "hyprland/workspaces"
   ],
   "modules-right": [
+    "custom/df",
+    "custom/separator",
     "clock#date",
     "custom/separator",
     "clock#clock",
@@ -31,6 +33,12 @@
   "custom/archicon": {
     "format": "󰣇",
     "tooltip": false
+  },
+  "custom/df": {
+    "exec": "~/.config/waybar/scripts/df.sh",
+    "return-type": "json",
+    "format": "{text}",
+    "interval": 30
   },
   "hyprland/workspaces": {
     "format": "{icon}",
