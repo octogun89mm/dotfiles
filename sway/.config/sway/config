@@ -12,31 +12,29 @@ set $down j
 set $up k
 set $right l
 ## Apps ##
-# Terminal
-set $term foot
-# Dropdown terminal
-set $dropdown_terminal foot --app-id=foot-scratchpad
-# Menu (Rofi)
+set $term kitty
+set $file_manager kitty -e ranger
+set $alt_file_manager pcmanfm
+set $dropdown_terminal kitty --class scratchpad -o background_opacity=0.9
 set $menu rofi -show drun
-# Power menu (Rofi)
-set $powermenu exec rofi -show power
-# Window menu (Rofi)
-set $windowmenu exec rofi -show window
-# Screenshot menu (Rofi)
+set $powermenu rofi -show power
+set $windowmenu rofi -show window
 set $screenshot_script ~/.config/rofi/scripts/screenshot.sh
-# Screen recording menu (Rofi)
 set $screen_record_script ~/.config/rofi/scripts/screenrecord.sh
-# Symbols and emojis menu (Rofi)
 set $symbolsmenu ~/.config/rofi/scripts/emojis.sh
-# Clipboard history menu (Rofi)
 set $cliphistmenu ~/.config/rofi/scripts/cliphist.sh
-# Web browser
-set $web_browser firefox
-# RSS feed
-set $newsboat foot --app-id=newsboat -- newsboat
-# Keybind helper
-set $swaykeybinds foot --app-id=swaykeybinds sh -c '$HOME/.local/bin/sway-keybinds.sh; read -p "Press enter to close..."'
-# Woomer
+set $rofitools ~/.config/sway/scripts/rofi-tools.sh
+set $rofiapps ~/.config/sway/scripts/rofi-apps.sh
+set $web_browser helium-browser
+set $alt_web_browser zen-browser --new-window
+set $newsboat kitty --class newsboat -e newsboat
+set $music_player kitty -e rmpc
+set $emacsclient emacsclient -c
+set $nvim kitty --class nvim -e nvim
+set $pulsemixer kitty --class pulsemixer -e pulsemixer
+set $cycle_sink ~/.config/sway/scripts/cycle-sink.sh
+set $tts_selection ~/.config/hypr/scripts/tts-selection.sh
+set $keybinds kitty --class swaykeybinds -e sh -c '$HOME/.config/sway/scripts/keybinds.sh; read -p "Press enter to close..."'
 set $woomer $HOME/.cargo/bin/woomer
 
 ### Autostart + Window rules ###
@@ -52,12 +50,17 @@ exec Telegram
 for_window [app_id="org.telegram.desktop"] move container to workspace number 9
 # Dropdown Terminal
 exec $dropdown_terminal
-for_window [app_id="foot-scratchpad"] floating enabled, move to scratchpad 
+for_window [app_id="scratchpad"] floating enabled, move to scratchpad
 # Newsfeed
 exec $newsboat
 for_window [app_id="newsboat"] move container to workspace number 6
 # Sway Keybinds
 for_window [app_id="swaykeybinds"] floating enabled
+for_window [app_id="pulsemixer"] {
+    floating enable
+    resize set 1000 400
+    move position center
+}
 for_window [app_id="firefox"] {
   move container to workspace number 3
   workspace number 3
@@ -80,7 +83,7 @@ exec swayidle -w \
 input type:keyboard {
     xkb_layout us,ca
     xkb_variant ,multix
-    xkb_options caps:escape,grp:win_space_toggle
+    xkb_options caps:escape,grp:win_space_toggle,fkeys:basic_13-24
     xkb_numlock enabled
 }
 
@@ -90,42 +93,65 @@ input type:keyboard {
 ## Programs and scripts ##
     bindsym $mod+Return exec $term
     bindsym $mod+Shift+Return exec $dropdown_terminal
-    bindsym $mod+shift+n exec $newsboat
+    bindsym $mod+e exec $file_manager
+    bindsym $mod+Shift+e exec $alt_file_manager
+    bindsym $mod+a exec $nvim
+    bindsym $mod+Shift+a exec $emacsclient
     bindsym $mod+w exec $web_browser
+    bindsym $mod+Shift+w exec $alt_web_browser
     bindsym $mod+d exec $menu
+    bindsym $mod+b exec $rofiapps
+    bindsym $mod+Control+f exec sh -c 'exec "$HOME/.dotfiles/scripts/set-global-font.sh" --pick'
+    bindsym $mod+Shift+n exec $newsboat
+    bindsym $mod+s exec $rofitools
     bindsym $mod+Shift+s exec $screenshot_script
     bindsym $mod+Shift+Control+s exec $screen_record_script
-    bindsym $mod+tab $windowmenu
-    bindsym $mod+Shift+slash exec $swaykeybinds
-    bindsym $mod+s exec $symbolsmenu
+    bindsym $mod+tab exec $windowmenu
+    bindsym $mod+F1 exec $keybinds
+    bindsym $mod+Control+slash exec $keybinds
     bindsym $mod+v exec $cliphistmenu
     bindsym $mod+c exec $woomer
+    bindsym $mod+Control+o exec $tts_selection
 ## Kill, reload and quit ##
     bindsym $mod+q kill
-    bindsym $mod+shift+q $powermenu
-    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+q exec $powermenu
+    bindsym $mod+Control+Shift+slash reload
+    bindsym $mod+Shift+semicolon exec ~/.local/bin/wallust-random-light
+    bindsym $mod+Shift+slash exec ~/.local/bin/wallust-random-dark
+## Audio; Alt bindings are 60% keyboard friendly fallbacks for arrows.
+    bindsym $mod+Up exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+
+    bindsym $mod+Down exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-
+    bindsym $mod+Left exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+    bindsym $mod+Right exec $cycle_sink
+    bindsym $mod+Alt+k exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+
+    bindsym $mod+Alt+j exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-
+    bindsym $mod+Alt+h exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+    bindsym $mod+Alt+l exec $cycle_sink
+    bindsym $mod+Shift+Up exec $pulsemixer
+    bindsym $mod+Alt+p exec $pulsemixer
 ## Focus ##
     bindsym $mod+$left focus left
     bindsym $mod+$down focus down
     bindsym $mod+$up focus up
     bindsym $mod+$right focus right
-    bindsym $mod+g focus mode_toggle
+    bindsym $mod+u [urgent=latest] focus
 ## Move and move to scratchpad ##
     bindsym $mod+Shift+$left move left
     bindsym $mod+Shift+$down move down
     bindsym $mod+Shift+$up move up
     bindsym $mod+Shift+$right move right
-    bindsym $mod+Shift+1 move container to workspace number 1; workspace number 1
-    bindsym $mod+Shift+2 move container to workspace number 2; workspace number 2
-    bindsym $mod+Shift+3 move container to workspace number 3; workspace number 3
-    bindsym $mod+Shift+4 move container to workspace number 4; workspace number 4
-    bindsym $mod+Shift+5 move container to workspace number 5; workspace number 5
-    bindsym $mod+Shift+6 move container to workspace number 6; workspace number 6
-    bindsym $mod+Shift+7 move container to workspace number 7; workspace number 7
-    bindsym $mod+Shift+8 move container to workspace number 8; workspace number 8
-    bindsym $mod+Shift+9 move container to workspace number 9; workspace number 9
-    bindsym $mod+Shift+0 move container to workspace number 10; workspace number 10
+    bindsym $mod+Control+$left move left
+    bindsym $mod+Control+$down move down
+    bindsym $mod+Control+$up move up
+    bindsym $mod+Control+$right move right
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
     bindsym $mod+Shift+minus move scratchpad
+    bindsym $mod+Shift+equal move scratchpad
 ## Switch workspace and show scratchpad ##
     bindsym $mod+1 workspace number 1
     bindsym $mod+2 workspace number 2
@@ -133,37 +159,59 @@ input type:keyboard {
     bindsym $mod+4 workspace number 4
     bindsym $mod+5 workspace number 5
     bindsym $mod+6 workspace number 6
-    bindsym $mod+7 workspace number 7
-    bindsym $mod+8 workspace number 8
-    bindsym $mod+9 workspace number 9
-    bindsym $mod+0 workspace number 10
-    bindsym $mod+z workspace prev
-    bindsym $mod+x workspace next
-    bindsym $mod+Shift+z exec ~/.local/bin/workspace_cycle.sh prev
-    bindsym $mod+Shift+x exec ~/.local/bin/workspace_cycle.sh next
+    bindsym $mod+z workspace prev_on_output
+    bindsym $mod+x workspace next_on_output
+    bindsym $mod+Shift+z workspace prev
+    bindsym $mod+Shift+x workspace next
     bindsym $mod+minus scratchpad show
-    bindsym $mod+equal [app_id="foot-scratchpad"] scratchpad show
+    bindsym $mod+equal [app_id="scratchpad"] scratchpad show
 ##  Layout Control ##
-    bindsym $mod+period layout toggle split tabbed
+    bindsym $mod+o layout toggle splith splitv
+    bindsym $mod+backslash layout toggle split tabbed
+    bindsym $mod+bracketleft focus prev sibling
+    bindsym $mod+bracketright focus next sibling
+    bindsym $mod+Shift+bracketleft move left
+    bindsym $mod+Shift+bracketright move right
+    bindsym $mod+comma resize shrink width 40px
+    bindsym $mod+period resize grow width 40px
+    bindsym $mod+t layout stacking
+    bindsym $mod+Shift+t layout tabbed
+    bindsym $mod+Control+t layout split
     bindsym $mod+shift+period border toggle
     bindsym $mod+m split toggle
 ## Window states ##
     bindsym $mod+f fullscreen
     bindsym $mod+Shift+f floating toggle
     bindsym $mod+p sticky toggle
+    bindsym $mod+Shift+c move position center
+    bindsym $mod+g layout tabbed
+    bindsym $mod+Shift+g layout split
 ## Bottom Bar states ##
     bindsym $mod+slash exec swaymsg bar mode toggle bottom_bar
+    bindsym --to-code F13 exec ~/.config/waybar/scripts/idle-inhibit.sh toggle
+    bindsym --to-code F14 exec ~/.config/hypr/scripts/hypridle-suspend.sh toggle
 
 #### Modes ####
 mode "resize" {
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
+    bindsym b resize shrink width 20px
+    bindsym f resize grow width 20px
+    bindsym p resize shrink height 20px
+    bindsym n resize grow height 20px
+    bindsym Shift+b move left 20px
+    bindsym Shift+f move right 20px
+    bindsym Shift+p move up 20px
+    bindsym Shift+n move down 20px
+    bindsym c move position center
+
+    bindsym $left resize shrink width 20px
+    bindsym $down resize grow height 20px
+    bindsym $up resize shrink height 20px
+    bindsym $right resize grow width 20px
 
     # Return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
+    bindsym g mode "default"
 }
 bindsym $mod+r mode "resize"
 
@@ -182,7 +230,7 @@ bar {
 }
 
 ### Look and feel & Default behavior ###
-font pango:Iosevka 8
+font pango:Liberation Mono 8
 workspace_layout default
 default_border pixel 2
 default_floating_border normal 2
