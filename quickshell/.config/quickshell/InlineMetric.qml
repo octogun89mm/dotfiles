@@ -14,13 +14,13 @@ Item {
   property int graphWidth: 28
 
   implicitHeight: Theme.chipHeight
-  implicitWidth: row.implicitWidth + Theme.padMd * 2
+  implicitWidth: row.implicitWidth + Theme.padSm * 2
 
   Row {
     id: row
     anchors.verticalCenter: parent.verticalCenter
     anchors.left: parent.left
-    anchors.leftMargin: Theme.padMd
+    anchors.leftMargin: Theme.padSm
     spacing: Theme.padSm
 
     Text {
@@ -47,8 +47,6 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
       visible: root.showDetail && root.detail !== ""
       text: root.detail
-      width: detailMetrics.width
-      elide: Text.ElideRight
       color: Theme.textDim
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontCaption
@@ -147,10 +145,4 @@ Item {
     text: "0000"
   }
 
-  TextMetrics {
-    id: detailMetrics
-    font.family: Theme.fontFamily
-    font.pixelSize: Theme.fontCaption
-    text: "000000000000"
-  }
 }

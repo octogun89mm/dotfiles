@@ -7,7 +7,7 @@ import Quickshell.Io
 Singleton {
   id: root
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.config/waybar/scripts/idle-inhibit.sh"
+  readonly property string scriptPath: home + "/.config/quickshell/scripts/idle-inhibit.sh"
 
   property bool active: false
   property string icon: "󰈉"

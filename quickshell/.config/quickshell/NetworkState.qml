@@ -18,8 +18,10 @@ Singleton {
   property real lastRx: -1
   property real lastTx: -1
   property real lastStamp: 0
+  property real currentStamp: 0
 
   function refresh() {
+    currentStamp += 1000
     if (!networkProc.running) networkProc.exec([scriptPath])
   }
 
@@ -47,7 +49,7 @@ Singleton {
 
         try {
           const data = JSON.parse(text.trim())
-          const now = Date.now()
+          const now = root.currentStamp
           const rx = Number(data.rx || 0)
           const tx = Number(data.tx || 0)
 

@@ -9,8 +9,7 @@ Rectangle {
 
   readonly property bool shouldShow: !onlyWhenActive || TailscaleState.connected
 
-  visible: true
-  opacity: shouldShow ? 1 : 0
+  visible: shouldShow
   color: "transparent"
   implicitWidth: Theme.fontSmall + 3 + Theme.padMd
   implicitHeight: Theme.chipHeight

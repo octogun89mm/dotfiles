@@ -1,22 +1,11 @@
 import QtQuick
-import Quickshell
-import Quickshell.Io
 import "../wallust.js" as Wallust
+import "../"
 
 Column {
   id: root
-  readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string metricsScript: home + "/.dotfiles/rust-tools/target/release/system-metrics"
 
   property bool active: false
-  property string cpuUsage: "--"
-  property string cpuTemp: "--"
-  property string memoryUsed: "--"
-  property string memoryTotal: "--"
-  property string gpuUsage: "--"
-  property string gpuTemp: "--"
-  property string gpuVramUsed: "--"
-  property string gpuVramTotal: "--"
 
   property var cpuUsageHistory: []
   property var cpuTempHistory: []
@@ -34,8 +23,12 @@ Column {
   MetricCard {
     id: cpuCard
     title: "CPU"
-    value: root.cpuUsage.padStart(2, "0") + "%"
-    detail: root.cpuTemp.padStart(2, "0") + "°C"
+    value: MetricsState.cpuUsage >= 0
+      ? String(Math.round(MetricsState.cpuUsage)).padStart(2, "0") + "%"
+      : "--"
+    detail: MetricsState.cpuTemp >= 0
+      ? String(Math.round(MetricsState.cpuTemp)).padStart(2, "0") + "°C"
+      : "--"
     height: root.graphCardHeight
     graphs: [
       {values: root.cpuUsageHistory, color: Wallust.accent, label: "USE", maxValue: 100},
@@ -46,13 +39,19 @@ Column {
   MetricCard {
     id: gpuCard
     title: "GPU"
-    value: root.gpuUsage.padStart(2, "0") + "%"
-    detail: root.gpuVramUsed + " / " + root.gpuVramTotal + "G"
-    detail2: root.gpuTemp.padStart(2, "0") + "°C"
+    value: MetricsState.gpuUsage >= 0
+      ? String(Math.round(MetricsState.gpuUsage)).padStart(2, "0") + "%"
+      : "--"
+    detail: MetricsState.gpuVramTotalGb > 0
+      ? MetricsState.gpuVramUsedGb.toFixed(1) + " / " + MetricsState.gpuVramTotalGb.toFixed(1) + "G"
+      : "--"
+    detail2: MetricsState.gpuTemp >= 0
+      ? String(Math.round(MetricsState.gpuTemp)).padStart(2, "0") + "°C"
+      : "--"
     height: root.graphCardHeight
     graphs: [
       {values: root.gpuUsageHistory, color: Wallust.base0B, label: "USE", maxValue: 100},
-      {values: root.gpuVramHistory, color: Wallust.base0E, label: "VRAM", maxValue: parseFloat(root.gpuVramTotal) || 16},
+      {values: root.gpuVramHistory, color: Wallust.base0E, label: "VRAM", maxValue: MetricsState.gpuVramTotalGb > 0 ? MetricsState.gpuVramTotalGb : 16},
       {values: root.gpuTempHistory, color: Wallust.base08, label: "TMP", maxValue: 100}
     ]
   }
@@ -60,11 +59,13 @@ Column {
   MetricCard {
     id: memoryCard
     title: "MEMORY"
-    value: root.memoryUsed.padStart(4, "0") + " / " + root.memoryTotal + "G"
+    value: MetricsState.memUsed >= 0 && MetricsState.memTotal >= 0
+      ? MetricsState.memUsed.toFixed(1).padStart(4, "0") + " / " + MetricsState.memTotal.toFixed(1) + "G"
+      : "--"
     height: root.graphCardHeight
     graphs: [
       {values: root.memUsageHistory, color: Wallust.accent, label: "USE", maxValue: 100},
-      {values: root.memLoadHistory, color: Wallust.base0E, label: "LOAD", maxValue: parseFloat(root.memoryTotal) || 32}
+      {values: root.memLoadHistory, color: Wallust.base0E, label: "LOAD", maxValue: MetricsState.memTotal > 0 ? MetricsState.memTotal : 32}
     ]
   }
 
@@ -72,73 +73,34 @@ Column {
     return arr.concat([val]).slice(-maxHistory)
   }
 
-  function refreshMetrics() {
-    metricsProcess.exec([metricsScript])
-  }
-
-  function formatInt(value, fallback) {
-    if (value === null || value === undefined || value === "") return fallback
-    const n = parseFloat(String(value))
-    return isNaN(n) ? fallback : String(Math.round(n))
+  function sampleMetrics() {
+    if (MetricsState.cpuUsage >= 0)
+      root.cpuUsageHistory = root.pushHistory(root.cpuUsageHistory, MetricsState.cpuUsage)
+    if (MetricsState.cpuTemp >= 0)
+      root.cpuTempHistory = root.pushHistory(root.cpuTempHistory, MetricsState.cpuTemp)
+    if (MetricsState.gpuUsage >= 0)
+      root.gpuUsageHistory = root.pushHistory(root.gpuUsageHistory, MetricsState.gpuUsage)
+    if (MetricsState.gpuVramUsedGb >= 0)
+      root.gpuVramHistory = root.pushHistory(root.gpuVramHistory, MetricsState.gpuVramUsedGb)
+    if (MetricsState.gpuTemp >= 0)
+      root.gpuTempHistory = root.pushHistory(root.gpuTempHistory, MetricsState.gpuTemp)
+    if (MetricsState.memPercent >= 0)
+      root.memUsageHistory = root.pushHistory(root.memUsageHistory, MetricsState.memPercent)
+    if (MetricsState.memUsed >= 0)
+      root.memLoadHistory = root.pushHistory(root.memLoadHistory, MetricsState.memUsed)
   }
 
   onActiveChanged: {
-    if (active) refreshMetrics()
+    if (active) {
+      MetricsState.refresh()
+      sampleMetrics()
+    }
   }
 
   Timer {
     interval: 3000
     running: root.active
     repeat: true
-    onTriggered: root.refreshMetrics()
-  }
-
-  Process {
-    id: metricsProcess
-    stdout: StdioCollector {
-      waitForEnd: true
-      onStreamFinished: {
-        if (!text || !text.trim()) return
-        try {
-          const data = JSON.parse(text)
-          root.cpuUsage = root.formatInt(data.cpu, "--")
-          root.cpuTemp = root.formatInt(data.cpu_temp, "--")
-          root.memoryUsed = data.mem_used || "--"
-          root.memoryTotal = data.mem_total || "--"
-          root.gpuUsage = root.formatInt(data.gpu, "--")
-          root.gpuTemp = root.formatInt(data.gpu_temp, "--")
-
-          const used = parseFloat(data.gpu_vram_used)
-          const total = parseFloat(data.gpu_vram_total)
-          root.gpuVramUsed = isNaN(used) ? "--" : (used / 1024).toFixed(1)
-          root.gpuVramTotal = isNaN(total) ? "--" : (total / 1024).toFixed(1)
-
-          var v
-          v = parseFloat(data.cpu)
-          if (!isNaN(v)) root.cpuUsageHistory = root.pushHistory(root.cpuUsageHistory, v)
-          v = parseFloat(data.cpu_temp)
-          if (!isNaN(v)) root.cpuTempHistory = root.pushHistory(root.cpuTempHistory, v)
-          v = parseFloat(data.gpu)
-          if (!isNaN(v)) root.gpuUsageHistory = root.pushHistory(root.gpuUsageHistory, v)
-          v = parseFloat(data.gpu_vram_used)
-          if (!isNaN(v)) root.gpuVramHistory = root.pushHistory(root.gpuVramHistory, v / 1024)
-          v = parseFloat(data.gpu_temp)
-          if (!isNaN(v)) root.gpuTempHistory = root.pushHistory(root.gpuTempHistory, v)
-
-          var memUsed = parseFloat(data.mem_used)
-          var memTotal = parseFloat(data.mem_total)
-          if (!isNaN(memUsed) && !isNaN(memTotal) && memTotal > 0) {
-            root.memUsageHistory = root.pushHistory(root.memUsageHistory, memUsed / memTotal * 100)
-            root.memLoadHistory = root.pushHistory(root.memLoadHistory, memUsed)
-          }
-        } catch (e) {
-          console.warn("SystemColumn: failed to parse JSON:", e)
-        }
-      }
-    }
-  }
-
-  Process {
-    id: controlProcess
+    onTriggered: root.sampleMetrics()
   }
 }

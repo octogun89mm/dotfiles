@@ -8,6 +8,11 @@ honours [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`):
 - **MINOR** — new packages or user-visible features.
 - **PATCH** — fixes, small tweaks, lockfile bumps.
 
+## [Unreleased]
+
+### Added
+- **qtile** package with multi-monitor support, Wallust integration, and system status widgets (CPU governor, Tailscale).
+
 ## [0.2.1] - 2026-05-13
 
 ### Added

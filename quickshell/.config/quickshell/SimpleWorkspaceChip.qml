@@ -35,9 +35,8 @@ Rectangle {
   readonly property bool isOccupied: windowIcons.length > 0 || (workspaceData ? workspaceData.toplevels.values.length > 0 : false)
 
   color: "transparent"
-  implicitWidth: 54
+  implicitWidth: Math.max(20, chipContent.implicitWidth + Theme.padSm * 2)
   implicitHeight: Theme.chipHeight
-  clip: true
 
   Rectangle {
     anchors.fill: parent
@@ -103,15 +102,15 @@ Rectangle {
 
         Text {
           id: countLabel
-          anchors.left: iconLabel.right
+          anchors.left: parent.isSvg ? iconImage.right : iconLabel.right
           anchors.leftMargin: 1
           anchors.top: parent.top
-          anchors.topMargin: -1
+          anchors.topMargin: -2
           visible: modelData.count > 1
           text: modelData.count
           color: root.isFocused || root.isVisible ? Theme.foreground : Theme.textDim
           font.family: Theme.fontFamily
-          font.pixelSize: 9
+          font.pixelSize: 8
           font.bold: true
         }
       }

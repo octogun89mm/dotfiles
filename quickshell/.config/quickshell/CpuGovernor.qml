@@ -4,7 +4,7 @@ import Quickshell.Io
 
 Item {
   id: root
-  implicitWidth: layout.implicitWidth + Theme.padMd * 2
+  implicitWidth: layout.implicitWidth + Theme.padSm * 2
   implicitHeight: Theme.chipHeight
 
   property string currentGovernor: "..."

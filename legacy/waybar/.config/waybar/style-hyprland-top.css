@@ -47,6 +47,19 @@ tooltip {
   color: @fg;
 }
 
+/* JUBOTAI WIDGET */
+#custom-jubotai.jubotai-on {
+  color: @c14;
+}
+
+#custom-jubotai.jubotai-partial {
+  color: @c11;
+}
+
+#custom-jubotai.jubotai-off {
+  color: @fg;
+}
+
 /* STATUS NOTIFIER (SYSTRAY) */
 #tray menu {
   background-color: @bg;

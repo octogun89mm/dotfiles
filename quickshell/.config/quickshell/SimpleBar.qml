@@ -145,7 +145,7 @@ Scope {
                 id: metricsRow
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
-                spacing: Theme.padMd
+                spacing: Theme.padXs
 
                 InlineMetric {
                   anchors.verticalCenter: parent.verticalCenter
@@ -194,7 +194,7 @@ Scope {
                   history: MetricsState.gpuHistory
                   accentColor: Theme.success
                   detail: (MetricsState.gpuTemp >= 0 ? Math.round(MetricsState.gpuTemp) + "C" : "")
-                    + (MetricsState.gpuVramTotal > 0 ? " V" + MetricsState.gpuVramUsed.toFixed(1) + "/" + MetricsState.gpuVramTotal.toFixed(1) + "G" : "")
+                    + (MetricsState.gpuVramTotalGb > 0 ? " " + MetricsState.gpuVramUsedGb.toFixed(1) + "/" + MetricsState.gpuVramTotalGb.toFixed(0) + "G" : "")
                   showDetail: BarDetailState.level >= 2
                   showGraph: BarDetailState.level >= 3
                   graphWidth: 80
@@ -245,15 +245,9 @@ Scope {
             Vpn { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             IdleInhibitor { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
             MicIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenActive: true }
+            Jubotai { anchors.verticalCenter: parent.verticalCenter }
+            JubotaiConvo { anchors.verticalCenter: parent.verticalCenter }
             SuspendIndicator { anchors.verticalCenter: parent.verticalCenter; onlyWhenDisabled: false }
-
-            SimpleWindowCount {
-              monitorName: barWindow.modelData.name
-            }
-
-            NetworkChip {
-              anchors.verticalCenter: parent.verticalCenter
-            }
           }
 
           Row {
@@ -276,9 +270,8 @@ Scope {
 
             Rectangle {
               anchors.verticalCenter: parent.verticalCenter
-              implicitWidth: 72
+              implicitWidth: trayInWorkspace.implicitWidth + Theme.padSm * 2
               implicitHeight: Theme.chipHeight
-              clip: true
               color: trayHover.containsMouse ? Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.06) : "transparent"
 
               Tray {
@@ -310,16 +303,14 @@ Scope {
 
             Item {
               anchors.verticalCenter: parent.verticalCenter
-              visible: true
-              opacity: ThemeNameState.name !== "" ? 1 : 0
-              implicitWidth: 128
+              visible: ThemeNameState.name !== ""
+              implicitWidth: themeNameText.implicitWidth
               implicitHeight: themeNameText.implicitHeight
 
               Text {
                 id: themeNameText
                 anchors.fill: parent
                 text: ThemeNameState.name
-                elide: Text.ElideRight
                 color: themeNameMouse.containsMouse ? Theme.text : Theme.textDim
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSmall

@@ -17,6 +17,9 @@ Singleton {
   property real gpuTemp: -1
   property real gpuVramUsed: -1
   property real gpuVramTotal: -1
+
+  readonly property real gpuVramUsedGb: gpuVramUsed >= 0 ? gpuVramUsed / 1024 : -1
+  readonly property real gpuVramTotalGb: gpuVramTotal >= 0 ? gpuVramTotal / 1024 : -1
   property real memUsed: -1
   property real memTotal: -1
   property real memPercent: -1

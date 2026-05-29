@@ -7,7 +7,7 @@ import Quickshell.Io
 Singleton {
   id: root
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.config/waybar/scripts/tailscale.sh"
+  readonly property string scriptPath: home + "/.config/quickshell/scripts/tailscale.sh"
 
   property bool connected: false
   property string icon: "󰖃"

@@ -7,12 +7,13 @@ import Quickshell.Io
 Singleton {
   id: root
   readonly property string home: Quickshell.env("HOME") || ""
-  readonly property string scriptPath: home + "/.config/quickshell/scripts/expressvpn.sh"
+  readonly property string scriptPath: home + "/.config/quickshell/scripts/jubotai.sh"
 
-  property bool connected: false
-  property string icon: "󰒙"
-  property string tooltip: "ExpressVPN is disconnected"
-  property string statusText: "DISCONNECTED"
+  property bool on: false
+  property bool partial: false
+  property string icon: "󰚩"
+  property string tooltip: "JuBotAI is off"
+  property string statusText: "OFF"
   property bool ready: false
   property bool pendingToggleFeedback: false
 
@@ -30,16 +31,13 @@ Singleton {
 
     try {
       const data = JSON.parse(text)
-      const nextConnected = data.class === "vpn-connected"
-      const changed = ready && nextConnected !== connected
-
-      connected = nextConnected
-      icon = data.alt || (connected ? "󰒘" : "󰒙")
-      tooltip = data.tooltip || "ExpressVPN"
-      statusText = connected ? "CONNECTED" : "DISCONNECTED"
-
+      on = data.class === "jubotai-on"
+      partial = data.class === "jubotai-partial"
+      icon = data.alt || "󰚩"
+      tooltip = data.tooltip || "JuBotAI"
+      statusText = data.text || (on ? "ON" : (partial ? "HALF" : "OFF"))
     } catch (e) {
-      console.warn("VpnState: failed to parse JSON:", e)
+      console.warn("JubotaiState: failed to parse JSON:", e)
     }
 
     ready = true
@@ -49,7 +47,7 @@ Singleton {
   Component.onCompleted: refreshStatus()
 
   Timer {
-    interval: 10000
+    interval: 5000
     running: true
     repeat: true
     onTriggered: root.refreshStatus()

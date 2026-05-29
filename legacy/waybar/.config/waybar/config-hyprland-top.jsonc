@@ -15,6 +15,8 @@
     "custom/separator",
     "custom/idle-inhibit",
     "custom/separator",
+    "custom/jubotai",
+    "custom/separator",
     "hyprland/window"
   ],
   "modules-center": [
@@ -160,6 +162,14 @@
     "on-click": "~/.config/waybar/scripts/expressvpn.sh toggle",
     "interval": "once",
     "signal": 9
+  },
+  "custom/jubotai": {
+    "exec": "~/.config/waybar/scripts/jubotai.sh",
+    "return-type": "json",
+    "format": "<span font_family='Symbols Nerd Font Mono' font_size='medium'>{alt}</span>",
+    "on-click": "~/.config/waybar/scripts/jubotai.sh toggle",
+    "interval": 5,
+    "signal": 10
   },
   "custom/weather": {
     "exec": "~/.config/waybar/scripts/weather.py",

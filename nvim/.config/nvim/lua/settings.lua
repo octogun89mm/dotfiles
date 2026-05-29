@@ -7,7 +7,7 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 -- Turn syntax on
-vim.opt.syntax = "on"
+vim.cmd("syntax enable")
 -- Ignore cases when searching
 vim.opt.ignorecase = true
 vim.opt.smartcase = true

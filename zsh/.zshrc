@@ -6,7 +6,6 @@
 export EDITOR="nvim"
 export VISUAL="nvim"
 [[ -S "/run/user/$UID/gcr/ssh" ]] && export SSH_AUTH_SOCK="/run/user/$UID/gcr/ssh"
-# export SUDO_ASKPASS="/usr/bin/ksshaskpass"
 
 # --- History ---
 export HISTFILE="$HOME/.zsh_history"
@@ -17,6 +16,9 @@ setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_REDUCE_BLANKS
 setopt HIST_VERIFY
@@ -54,6 +56,7 @@ fpath=(
 )
 
 autoload -Uz compinit colors
+zmodload zsh/complist
 colors
 compinit -d "$ZSH_CACHE_DIR/zcompdump"
 
@@ -132,13 +135,39 @@ alias cdnt="cd ~/Notes"
 alias newmatrix='neo-matrix -C ~/.config/neo/colors -m "Fuck Off"'
 alias sysinfo='macchina'
 
+mkcd() {
+  if (( $# != 1 )); then
+    print -u2 "usage: mkcd <directory>"
+    return 2
+  fi
+
+  mkdir -p -- "$1" && cd -- "$1"
+}
+
 # --- Vi Mode ---
 bindkey -v
 export KEYTIMEOUT=1
 
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey -M viins '^[[A' up-line-or-beginning-search
+bindkey -M viins '^[[B' down-line-or-beginning-search
+bindkey -M vicmd '^[[A' up-line-or-beginning-search
+bindkey -M vicmd '^[[B' down-line-or-beginning-search
+
 # --- Zsh Options ---
 # Include dotfiles in globs
 setopt globdots
+setopt autocd
+setopt numericglobsort
+setopt auto_list
+setopt auto_menu
+cdpath=(
+  $HOME
+  $HOME/Projects
+  $HOME/repos
+)
 
 # Prevent accidental terminal freezes from software flow control.
 [[ -t 0 ]] && stty -ixon 2>/dev/null
@@ -262,6 +291,12 @@ set-full-prompt
 # --- Completion tweaks ---
 # Remove ../ and ./ from completion results
 zstyle ':completion:*' special-dirs false
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*' list-dirs-first true
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} 'ma=48;5;238;38;5;15;1'
 
 # Dart CLI Completion (if installed)
 [[ -f ~/.config/.dart-cli-completion/zsh-config.zsh ]] && . ~/.config/.dart-cli-completion/zsh-config.zsh || true
@@ -318,9 +353,56 @@ command -v fzf >/dev/null 2>&1 && source <(source_fzf_zsh)
 # FZF function for editing files
 fe() { fzf -m --preview='bat --color=always {}' --bind 'enter:become(nvim {+})'; }
 
-# Extract .7z archives
+# Extract common archives using the tools installed on this machine.
+extract() {
+  if (( $# != 1 )); then
+    print -u2 "usage: extract <archive>"
+    return 2
+  fi
+
+  local archive="$1"
+  if [[ ! -f $archive ]]; then
+    print -u2 "extract: not a file: $archive"
+    return 1
+  fi
+
+  case "${archive:l}" in
+    (*.tar|*.tar.gz|*.tgz|*.tar.bz2|*.tbz|*.tbz2|*.tar.xz|*.txz|*.tar.lzma|*.tlz|*.tar.zst|*.tzst)
+      tar -xf "$archive"
+      ;;
+    (*.zip)
+      unzip "$archive"
+      ;;
+    (*.7z|*.rar)
+      7z x "$archive"
+      ;;
+    (*.gz)
+      gunzip -- "$archive"
+      ;;
+    (*.bz2)
+      bunzip2 -- "$archive"
+      ;;
+    (*.xz)
+      unxz -- "$archive"
+      ;;
+    (*.lzma)
+      unlzma -- "$archive"
+      ;;
+    (*.zst)
+      unzstd -- "$archive"
+      ;;
+    (*.lz4)
+      unlz4 -- "$archive"
+      ;;
+    (*)
+      print -u2 "extract: unsupported archive type: $archive"
+      return 1
+      ;;
+  esac
+}
+
 ex7z() {
-    7z x "$1" -o"${1%.7z}"
+  extract "$1"
 }
 
 # --- AIChat shell integration ---
