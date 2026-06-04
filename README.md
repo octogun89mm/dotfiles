@@ -16,6 +16,7 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **sway-rpi** | Lightweight Raspberry Pi Sway package, excluded from default install and installed explicitly with `./install.sh sway-rpi` |
 | **zsh-rpi** | Minimal Raspberry Pi zsh package without vi mode, excluded from default install and installed explicitly with `./install.sh zsh-rpi` |
 | **tmux** | Terminal multiplexer config |
+| **emacs** | Minimal Emacs config (Gruber Darker theme) run as an always-on `emacs --fg-daemon`; `emacsclient` is the default `$EDITOR` |
 | **scripts** | Repo-local helper scripts such as `set-font.sh` for swapping the monospace family across configs |
 
 ## Current State
@@ -45,7 +46,7 @@ The Quickshell config is modular and currently includes:
 
 See [CHANGELOG.md](CHANGELOG.md) for a per-release summary of changes.
 
-The editor has moved to Emacs. The previous `lazy.nvim`-based Neovim config is archived under `legacy/nvim/` — kept in-repo for reference but no longer stowed (revive with `stow -d ~/.dotfiles/legacy -t ~ nvim`). A fresh, minimal Emacs config is being built up separately and its Wallust theme is generated to `~/.config/emacs/juju-theme.el`.
+The editor has moved to Emacs. The previous `lazy.nvim`-based Neovim config is archived under `legacy/nvim/` — kept in-repo for reference but no longer stowed (revive with `stow -d ~/.dotfiles/legacy -t ~ nvim`). Emacs is now the editor: a minimal config in the `emacs` package, themed with **Gruber Darker**, running as an always-on systemd `--user` daemon (`emacs.service`) that `emacsclient` attaches to.
 
 ## Screenshots
 
