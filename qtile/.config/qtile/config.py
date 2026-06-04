@@ -69,7 +69,7 @@ keys = [
     Key([mod, "shift"], "b", lazy.function(lambda q: q.hide_show_bar("bottom"))),
 
     # System controls
-    Key([], "F13", lazy.spawn("/home/juju/.config/waybar/scripts/idle-inhibit.sh toggle")),
+    Key([], "F13", lazy.spawn("~/.config/waybar/scripts/idle-inhibit.sh toggle")),
     Key([], "F14", lazy.spawn("~/.dotfiles/rust-tools/target/release/hypridle-suspend toggle")),
     # Discord controls (global shortcuts)
     Key([], "F21", lazy.spawn("wtype -M ctrl -M shift m")),

@@ -26,12 +26,7 @@ FILES=(
   "$DOTFILES/rofi/.config/rofi/themes/wallpaper.rasi"
   "$DOTFILES/eww/.config/eww/eww.scss"
   "$DOTFILES/eww/.config/eww/bar.scss"
-  "$DOTFILES/waybar/.config/waybar/style-hyprland-top.css"
-  "$DOTFILES/waybar/.config/waybar/style-hyprland-secondary.css"
   "$DOTFILES/sway/.config/sway/config"
-  "$DOTFILES/sway-rpi/.config/sway/config"
-  "$DOTFILES/sway-rpi/.config/waybar/style.css"
-  "$DOTFILES/sway-rpi/.config/foot/foot.ini"
   # Configs outside the dotfiles repo (optional — skipped silently if absent)
   "$HOME/.config/foot/foot.ini"
 )

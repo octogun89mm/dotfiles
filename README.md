@@ -11,10 +11,8 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **eww** | Legacy bar config and helper scripts still kept in-repo for migration reuse |
 | **rofi** | App launcher, clipboard history fallback, screenshot/screenrecord/OCR/wallpaper/emoji picker scripts |
 | **foot** | Foot terminal config and shared Wallust color include |
-| **waybar** | Secondary bar config and utility scripts reused by other packages |
 | **sway** | Sway compositor config (legacy) |
-| **sway-rpi** | Lightweight Raspberry Pi Sway package, excluded from default install and installed explicitly with `./install.sh sway-rpi` |
-| **zsh-rpi** | Minimal Raspberry Pi zsh package without vi mode, excluded from default install and installed explicitly with `./install.sh zsh-rpi` |
+| **qtile** | Qtile (Wayland) config with multi-monitor support, Wallust integration, and system status widgets (CPU governor, Tailscale) |
 | **tmux** | Terminal multiplexer config |
 | **emacs** | Minimal Emacs config (Gruber Darker theme) run as an always-on `emacs --fg-daemon`; `emacsclient` is the default `$EDITOR` |
 | **scripts** | Repo-local helper scripts such as `set-font.sh` for swapping the monospace family across configs |

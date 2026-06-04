@@ -7,7 +7,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DOTFILES_DIR"
 
 STOW_TARGET="$HOME"
-SKIP_DIRS=(assets legacy sway-rpi zsh-rpi)
+SKIP_DIRS=(assets legacy)
 
 if [[ -t 1 ]]; then
   C_BOLD=$'\e[1m'; C_GREEN=$'\e[32m'; C_YELLOW=$'\e[33m'

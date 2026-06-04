@@ -8,10 +8,25 @@ honours [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR.PATCH`):
 - **MINOR** — new packages or user-visible features.
 - **PATCH** — fixes, small tweaks, lockfile bumps.
 
-## [Unreleased]
+## [1.0.0] - 2026-06-04
 
 ### Added
-- **qtile** package with multi-monitor support, Wallust integration, and system status widgets (CPU governor, Tailscale).
+- **emacs** package: minimal config themed with Gruber Darker, run as an
+  always-on `emacs --fg-daemon`; `emacsclient` is now the default `$EDITOR`/`$VISUAL`.
+- **qtile** package with multi-monitor support, Wallust integration, and system
+  status widgets (CPU governor, Tailscale).
+- **quickshell** Jubotai chat widget (status indicator + conversation popup) and
+  helper scripts (Tailscale, ExpressVPN, idle-inhibit).
+- **rofi** `deactivate-screens.sh` helper.
+
+### Changed
+- **nvim** archived to `legacy/nvim` (no longer stowed) — the editor has moved to Emacs.
+- **waybar** archived to `legacy/waybar`; the desktop bar is now Quickshell.
+
+### Removed
+- **Raspberry Pi packages** (`sway-rpi`, `zsh-rpi`, `theme-rpi`, `ironbar-rpi`)
+  relocated to a separate Pi dotfiles repo. **Breaking:** they are no longer
+  installable from this repo.
 
 ## [0.2.1] - 2026-05-13
 
