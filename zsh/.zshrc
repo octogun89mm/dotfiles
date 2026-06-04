@@ -3,8 +3,10 @@
 # =========================
 
 # --- Environment Variables ---
-export EDITOR="nvim"
-export VISUAL="nvim"
+# Attach to the always-on Emacs daemon (systemd --user emacs.service).
+# -t: terminal frame (git commits, etc.); -a '': start a daemon if none is running.
+export EDITOR="emacsclient -t -a ''"
+export VISUAL="emacsclient -c -a ''"
 [[ -S "/run/user/$UID/gcr/ssh" ]] && export SSH_AUTH_SOCK="/run/user/$UID/gcr/ssh"
 
 # --- History ---

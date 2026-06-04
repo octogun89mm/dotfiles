@@ -16,7 +16,6 @@ My dotfiles, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 | **sway-rpi** | Lightweight Raspberry Pi Sway package, excluded from default install and installed explicitly with `./install.sh sway-rpi` |
 | **zsh-rpi** | Minimal Raspberry Pi zsh package without vi mode, excluded from default install and installed explicitly with `./install.sh zsh-rpi` |
 | **tmux** | Terminal multiplexer config |
-| **nvim** | Lazy.nvim-based Neovim config with built-in treesitter, LSP, completion, Telescope, git tooling, AI helpers, and focused editing UX |
 | **scripts** | Repo-local helper scripts such as `set-font.sh` for swapping the monospace family across configs |
 
 ## Current State
@@ -46,16 +45,7 @@ The Quickshell config is modular and currently includes:
 
 See [CHANGELOG.md](CHANGELOG.md) for a per-release summary of changes.
 
-The Neovim config currently includes:
-
-- `lazy.nvim` plugin management with a small modular Lua layout
-- LSP via Mason and `nvim-lspconfig` for Lua, Python, JSON, HTML, QML, and CSS, including a separate GTK CSS flow for Waybar files
-- completion with `nvim-cmp`, LuaSnip, path/buffer sources, and command-line completion
-- built-in treesitter with bundled queries for Lua, Python, JSON, Vim, Vimdoc, and Markdown
-- Telescope file finding, buffer switching, and file-browser picker
-- git workflow support through Neogit and Gitsigns
-- AI-assisted editing through CodeCompanion chat/inline actions and Minuet inline completion against a local `llama.cpp` endpoint
-- `which-key` leader menus, Zen Mode, multi-cursor editing, indent guides, color previews, persistent undo, and a global `lualine` statusline
+The editor has moved to Emacs. The previous `lazy.nvim`-based Neovim config is archived under `legacy/nvim/` — kept in-repo for reference but no longer stowed (revive with `stow -d ~/.dotfiles/legacy -t ~ nvim`). A fresh, minimal Emacs config is being built up separately and its Wallust theme is generated to `~/.config/emacs/juju-theme.el`.
 
 ## Screenshots
 
