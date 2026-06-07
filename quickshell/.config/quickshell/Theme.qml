@@ -23,7 +23,7 @@ QtObject {
   readonly property color info: Wallust.info
 
   // Typography — 4-step scale
-  readonly property string fontFamily: "Iosevka"
+  readonly property string fontFamily: "Maple Mono NF"
   readonly property string iconFamily: "Symbols Nerd Font Mono"
   readonly property int fontCaption: 10
   readonly property int fontSmall: 11
