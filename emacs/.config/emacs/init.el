@@ -8,6 +8,11 @@
   (package-refresh-contents))
 (setq use-package-always-ensure t)
 
+;; --- Load Secrets ---
+(let ((secrets-file (locate-user-emacs-file "secrets.el")))
+  (if (and secrets-file (file-exists-p secrets-file))
+      (load secrets-file t)))
+
 ;; --- Keep machine-written customizations out of init.el ---
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (when (file-exists-p custom-file)
@@ -45,4 +50,38 @@
   :config
   (load-theme 'gruber-darker t))
 
-;;; init.el ends here
+;; --- LLM Integration via gptel ---
+(use-package gptel
+  :bind ("C-c g" . gptel-menu)
+  :config
+  ;; Local llama.cpp: Connected to the systemd-managed service on :8080
+  ;; Only the model actually loaded into the server is listed here.
+  (defvar my/llama-cpp
+    (gptel-make-openai "llama.cpp"
+      :host "localhost:8080"
+      :protocol "http"
+      :stream t
+      :key "no-key"
+      :models '(gemma-4-12B-it-qat-UD-Q4_K_XL)))
+
+  ;; OpenRouter
+  (defvar my/openrouter
+    (gptel-make-openai "OpenRouter"
+      :host "openrouter.ai"
+      :endpoint "/api/v1/chat/completions"
+      :stream t
+      :key gptel-key-openrouter
+      :models '(anthropic/claude-3.5-sonnet openai/gpt-4o)))
+
+  ;; OpenAI
+  (defvar my/openai
+    (gptel-make-openai "OpenAI"
+      :host "api.openai.com"
+      :endpoint "/v1/chat/completions"
+      :stream t
+      :key gptel-key-openai
+      :models '(gpt-4o)))
+
+  ;; Set defaults
+  (setq gptel-backend my/llama-cpp
+        gptel-model 'gemma-4-12B-it-qat-UD-Q4_K_XL))
