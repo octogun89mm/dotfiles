@@ -1,0 +1,10 @@
+[package]
+name = "llama-choose"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+rusqlite = { workspace = true }
+ratatui = { workspace = true }
+serde_json = { workspace = true }
+walkdir = { workspace = true }
