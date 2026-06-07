@@ -7,7 +7,7 @@ from qtile_extras import widget as extra_widget
 from colors import colors
 
 mod = "mod4"
-terminal = "kitty"
+terminal = "ghostty"
 webbrowser = "helium-browser"
 
 @hook.subscribe.startup_once

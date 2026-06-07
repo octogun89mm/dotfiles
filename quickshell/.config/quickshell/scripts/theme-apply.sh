@@ -36,8 +36,8 @@ if command -v dunstctl >/dev/null 2>&1; then
   dunstctl reload >/dev/null 2>&1 || true
 fi
 
-if command -v kitty >/dev/null 2>&1 && [[ -f "$home/.config/kitty/themes/wallust.conf" ]]; then
-  kitty @ set-colors --all --configured "$home/.config/kitty/themes/wallust.conf" >/dev/null 2>&1 || true
+if command -v ghostty >/dev/null 2>&1; then
+  ghostty +validate-config >/dev/null 2>&1 || true
 fi
 
 if [[ -x "$home/.config/quickshell/scripts/restart.sh" ]]; then

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # JuBotAI quickshell module: status + toggle for the Discord bot AND its
-# llama-server brain. On toggle, spawns two named kitty windows (one for
+# llama-server brain. On toggle, spawns two named Ghostty windows (one for
 # llama-choose, one for bot.py). Toggle-off kills both and closes the windows.
 
 set -uo pipefail
@@ -9,8 +9,8 @@ BOT_DIR="$HOME/Projects/JuBotAI"
 BOT_CMD_MATCH='\.venv/bin/python -u bot\.py'
 LLAMA_BIN=llama-server
 LLAMA_PORT=3002
-KITTY_LLAMA_CLASS=jubotai-llama
-KITTY_BOT_CLASS=jubotai-bot
+GHOSTTY_LLAMA_CLASS=jubotai-llama
+GHOSTTY_BOT_CLASS=jubotai-bot
 
 bot_pid()   { pgrep -f "$BOT_CMD_MATCH" | head -n1; }
 llama_pid() { pgrep -x "$LLAMA_BIN"      | head -n1; }
@@ -42,11 +42,11 @@ status() {
 }
 
 start() {
-    kitty --class "$KITTY_LLAMA_CLASS" --title "jubotai-llama" \
-          --hold -e bash -lc 'export PATH="$HOME/.local/bin:$HOME/repos/llama.cpp/build/bin:$PATH"; exec llama-choose' >/dev/null 2>&1 &
+    ghostty --class="$GHOSTTY_LLAMA_CLASS" --title="jubotai-llama" \
+          --wait-after-command=true -e bash -lc 'export PATH="$HOME/.local/bin:$HOME/repos/llama.cpp/build/bin:$PATH"; exec llama-choose' >/dev/null 2>&1 &
     disown
-    kitty --class "$KITTY_BOT_CLASS" --title "jubotai-bot" \
-          --hold -e bash -lc "
+    ghostty --class="$GHOSTTY_BOT_CLASS" --title="jubotai-bot" \
+          --wait-after-command=true -e bash -lc "
               cd '$BOT_DIR' || exit 1
               for i in {1..60}; do
                   if ss -tln 2>/dev/null | grep -q ':${LLAMA_PORT}'; then break; fi
@@ -68,8 +68,8 @@ stop() {
     b=$(bot_pid);   [[ -n "$b" ]] && kill -9 "$b" 2>/dev/null
     l=$(llama_pid); [[ -n "$l" ]] && kill -9 "$l" 2>/dev/null
     if command -v hyprctl >/dev/null 2>&1; then
-        hyprctl dispatch closewindow "class:^${KITTY_LLAMA_CLASS}$" >/dev/null 2>&1
-        hyprctl dispatch closewindow "class:^${KITTY_BOT_CLASS}$"   >/dev/null 2>&1
+        hyprctl dispatch closewindow "class:^${GHOSTTY_LLAMA_CLASS}$" >/dev/null 2>&1
+        hyprctl dispatch closewindow "class:^${GHOSTTY_BOT_CLASS}$"   >/dev/null 2>&1
     fi
 }
 

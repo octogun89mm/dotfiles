@@ -71,14 +71,8 @@ fn main() {
     run_cmd("hyprctl", &["reload"]);
     run_cmd("dunstctl", &["reload"]);
 
-    // Update kitty colors
-    let kitty_colors = format!("{}/.config/kitty/themes/wallust.conf", home);
-    if Path::new(&kitty_colors).exists() {
-        run_cmd(
-            "kitty",
-            &["@", "set-colors", "--all", "--configured", &kitty_colors],
-        );
-    }
+    // Validate Ghostty after wallust regenerates the optional color include.
+    run_cmd("ghostty", &["+validate-config"]);
 
     // Notify
     run_cmd(

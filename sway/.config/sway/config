@@ -12,10 +12,10 @@ set $down j
 set $up k
 set $right l
 ## Apps ##
-set $term kitty
-set $file_manager kitty -e ranger
+set $term ghostty
+set $file_manager ghostty -e ranger
 set $alt_file_manager pcmanfm
-set $dropdown_terminal kitty --class scratchpad -o background_opacity=0.9
+set $dropdown_terminal ghostty --class=scratchpad --background-opacity=0.9 -e zsh
 set $menu rofi -show drun
 set $powermenu rofi -show power
 set $windowmenu rofi -show window
@@ -27,14 +27,14 @@ set $rofitools ~/.config/sway/scripts/rofi-tools.sh
 set $rofiapps ~/.config/sway/scripts/rofi-apps.sh
 set $web_browser helium-browser
 set $alt_web_browser zen-browser --new-window
-set $newsboat kitty --class newsboat -e newsboat
-set $music_player kitty -e rmpc
+set $newsboat ghostty --class=newsboat -e newsboat
+set $music_player ghostty -e rmpc
 set $emacsclient emacsclient -c
-set $nvim kitty --class nvim -e nvim
-set $pulsemixer kitty --class pulsemixer -e pulsemixer
+set $nvim ghostty --class=nvim -e nvim
+set $pulsemixer ghostty --class=pulsemixer -e pulsemixer
 set $cycle_sink ~/.config/sway/scripts/cycle-sink.sh
 set $tts_selection ~/.config/hypr/scripts/tts-selection.sh
-set $keybinds kitty --class swaykeybinds -e sh -c '$HOME/.config/sway/scripts/keybinds.sh; read -p "Press enter to close..."'
+set $keybinds ghostty --class=swaykeybinds -e sh -c '$HOME/.config/sway/scripts/keybinds.sh; read -p "Press enter to close..."'
 set $woomer $HOME/.cargo/bin/woomer
 
 ### Autostart + Window rules ###

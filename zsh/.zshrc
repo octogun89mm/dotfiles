@@ -196,7 +196,7 @@ zstyle ':vcs_info:git:*' actionformats '%b%u%c%m (%a)'
 
 # Reset extended keyboard modes that TUIs can leave enabled after a crash/kill.
 reset_terminal_input_modes() {
-  [[ $TERM == xterm-kitty* ]] && printf '\e[<u\e[<u\e[<u\e[>4;0m'
+  [[ $TERM == xterm-ghostty* ]] && printf '\e[<u\e[<u\e[<u\e[>4;0m'
 }
 
 # Hook to detect untracked files and show ** indicator

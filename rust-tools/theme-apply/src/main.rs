@@ -2,7 +2,7 @@
 //!
 //! Usage: theme-apply <theme-name>
 //!
-//! Runs wallust cs/theme, updates cache, reloads hyprland/dunst/kitty, restarts quickshell.
+//! Runs wallust cs/theme, updates cache, reloads hyprland/dunst/ghostty, restarts quickshell.
 
 use std::env;
 use std::fs;
@@ -56,14 +56,8 @@ fn main() {
     run_cmd("hyprctl", &["reload"]);
     run_cmd("dunstctl", &["reload"]);
 
-    // Update kitty colors
-    let kitty_colors = format!("{}/.config/kitty/themes/wallust.conf", home);
-    if Path::new(&kitty_colors).exists() {
-        run_cmd(
-            "kitty",
-            &["@", "set-colors", "--all", "--configured", &kitty_colors],
-        );
-    }
+    // Validate Ghostty after wallust regenerates the optional color include.
+    run_cmd("ghostty", &["+validate-config"]);
 
     // Restart quickshell
     let restart_bin = format!(

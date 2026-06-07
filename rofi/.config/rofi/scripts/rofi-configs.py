@@ -26,13 +26,13 @@ path = configs.get(choice)
 if not path:
     exit(1)
 
-terminal = os.environ.get("TERMINAL", "kitty")
+terminal = os.environ.get("TERMINAL", "ghostty")
 editor = os.environ.get("EDITOR", "nvim")
 
 cmd = f'exec "{editor}" "{path}"'
 
 subprocess.Popen(
-    [terminal, "--", "sh", "-c", cmd],
+    [terminal, "-e", "sh", "-c", cmd],
     stdout = subprocess.DEVNULL,
     stderr = subprocess.DEVNULL,
 )

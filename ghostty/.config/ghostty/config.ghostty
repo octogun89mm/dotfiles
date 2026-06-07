@@ -1,0 +1,23 @@
+font-family = Maple Mono NF
+font-size = 10.5
+
+config-file = ?themes/wallust.conf
+
+background-opacity = 1
+background-opacity-cells = true
+window-decoration = none
+gtk-titlebar = false
+window-theme = ghostty
+copy-on-select = true
+confirm-close-surface = false
+
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title,ssh-env,ssh-terminfo,path
+
+quick-terminal-position = top
+quick-terminal-size = 45%
+quick-terminal-autohide = false
+gtk-quick-terminal-layer = overlay
+
+keybind = ctrl+shift+grave_accent=toggle_quick_terminal
+keybind = ctrl+shift+p=toggle_command_palette

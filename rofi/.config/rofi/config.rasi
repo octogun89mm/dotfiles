@@ -2,7 +2,7 @@ configuration {
   modes: "drun,run,window,power,filebrowser";
   no-default-theme: true;
   window-format: "{t}";
-  terminal: "kitty";
+  terminal: "ghostty";
   me-select-entry: "";
   me-accept-entry: "!MousePrimary";
   hover-select: true;
