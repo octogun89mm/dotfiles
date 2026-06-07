@@ -64,6 +64,7 @@ return {
     -- =========================
     -- Enable default servers
     -- =========================
+    vim.lsp.config.rust_analyzer = { capabilities = capabilities }
     vim.lsp.config.html = { capabilities = capabilities }
     vim.lsp.config.qmlls = {
       capabilities = capabilities,
@@ -75,7 +76,7 @@ return {
       end,
     }
 
-    vim.lsp.enable{ "lua_ls", "pyright", "jsonls", "ruff", "html", "qmlls" }
+    vim.lsp.enable{ "lua_ls", "pyright", "jsonls", "ruff", "html", "qmlls", "rust_analyzer" }
 
     -- =========================
     -- Web CSS LSP with Waybar exclusion
