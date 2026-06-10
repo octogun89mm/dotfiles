@@ -23,6 +23,14 @@ Item {
 
     Text {
       anchors.verticalCenter: parent.verticalCenter
+      text: "N"
+      color: Theme.text
+      font.family: Theme.fontFamily
+      font.pixelSize: Theme.fontMd
+    }
+
+    Text {
+      anchors.verticalCenter: parent.verticalCenter
       text: "↓"
       color: Theme.textMuted
       font.family: Theme.fontFamily
