@@ -2,7 +2,7 @@ import Quickshell
 import QtQuick
 
 // Flat swaybar-like bar, docked flush to the top edge.
-// No per-module boxes, no hairline dividers — just a 1px bottom border.
+// No per-module boxes, no hairline dividers, no borders.
 Variants {
   model: Quickshell.screens
 
@@ -29,17 +29,6 @@ Variants {
       anchors.fill: parent
       color: Theme.bg
       radius: 0
-
-      // 1px bottom border, subtle
-      Rectangle {
-        anchors {
-          bottom: parent.bottom
-          left: parent.left
-          right: parent.right
-        }
-        height: Theme.hairline
-        color: Theme.border
-      }
 
       // LEFT cluster: monitor badge, this monitor's workspaces, active window title
       Row {
