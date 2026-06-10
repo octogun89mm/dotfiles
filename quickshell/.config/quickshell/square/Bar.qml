@@ -9,8 +9,6 @@ Variants {
   PanelWindow {
     id: barWindow
     required property var modelData
-    readonly property int screenIndex: Quickshell.screens.indexOf(modelData)
-    readonly property color accentColor: Theme.monitorAccent(screenIndex)
 
     screen: modelData
     color: "transparent"
@@ -30,7 +28,7 @@ Variants {
       color: Theme.bg
       radius: 0
 
-      // LEFT cluster: monitor badge, this monitor's workspaces, active window title
+      // LEFT cluster: workspaces (all monitors, colour-coded), active window title
       Row {
         id: leftCluster
         anchors {
@@ -40,15 +38,7 @@ Variants {
         }
         spacing: 0
 
-        MonitorBadge {
-          screenIndex: barWindow.screenIndex
-          accentColor: barWindow.accentColor
-          anchors.verticalCenter: parent.verticalCenter
-        }
-
         Workspaces {
-          screenName: barWindow.modelData.name
-          accentColor: barWindow.accentColor
           anchors.verticalCenter: parent.verticalCenter
         }
 

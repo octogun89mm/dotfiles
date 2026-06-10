@@ -52,11 +52,11 @@ QtObject {
   // Animation — keep snappy, near-instant
   readonly property int animFast: 80
 
-  // Per-monitor accent colours, keyed by Quickshell.screens index (0-based).
-  // screen 1 -> accent, screen 2 -> accentAlt, screen 3 -> info, 4th+ -> success
+  // Per-monitor accent colours, keyed by Hyprland monitor id (0-based).
+  // id 0 -> accent, id 1 -> accentAlt, id 2 -> info, 4th+ -> success
   readonly property var monitorAccents: [accent, accentAlt, info, success]
 
-  function monitorAccent(screenIndex) {
-    return monitorAccents[screenIndex % monitorAccents.length]
+  function monitorAccent(monitorId) {
+    return monitorAccents[monitorId % monitorAccents.length]
   }
 }

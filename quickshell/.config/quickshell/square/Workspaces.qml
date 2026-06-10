@@ -1,16 +1,15 @@
 import QtQuick
 import Quickshell.Hyprland
 
-// Swaybar-style workspace buttons for THIS monitor only.
-// Empty/nonexistent workspaces are hidden entirely.
-// focused = solid monitor-accent fill, bg-coloured text.
-// occupied-but-unfocused = text on a slightly elevated surface.
-// urgent = critical fill.
+// All workspaces, on every bar — each cell wears the colour of the
+// monitor it lives on. Exactly one solid cell per screen (its active
+// workspace), so any single bar is a complete map of every monitor.
+//   solid fill          = active workspace of that monitor
+//   bold + solid fill   = where the keyboard focus is
+//   coloured understripe = occupied, inactive
+//   critical fill       = urgent
 Row {
   id: root
-
-  required property var screenName
-  required property color accentColor
 
   spacing: 0
 
@@ -22,34 +21,47 @@ Row {
     }
   }
 
-  readonly property var workspacesHere: {
+  readonly property var allWorkspaces: {
     return Hyprland.workspaces.values
-      .filter(ws => ws.monitor && ws.monitor.name === root.screenName
-        && !ws.name.startsWith("special:"))
+      .filter(ws => !ws.name.startsWith("special:"))
       .sort((a, b) => a.id - b.id)
   }
 
   Repeater {
-    model: root.workspacesHere
+    model: root.allWorkspaces
 
     Rectangle {
       id: cell
       required property var modelData
       readonly property var ws: modelData
+      readonly property bool active: ws.active
       readonly property bool focused: ws.focused
       readonly property bool urgent: ws.urgent === true
       readonly property bool occupied: ws.toplevels.values.length > 0
+      readonly property color monitorColor: ws.monitor
+        ? Theme.monitorAccent(ws.monitor.id)
+        : Theme.surface
 
       implicitWidth: label.implicitWidth + Theme.padLg * 2
       implicitHeight: Theme.barHeight
       radius: 0
       color: cell.urgent ? Theme.critical
-        : cell.focused ? root.accentColor
-        : cell.occupied ? Theme.surface
+        : cell.active ? cell.monitorColor
         : Theme.bg
 
       Behavior on color {
         ColorAnimation { duration: Theme.animFast }
+      }
+
+      Rectangle {
+        visible: !cell.active && !cell.urgent && cell.occupied
+        anchors {
+          bottom: parent.bottom
+          left: parent.left
+          right: parent.right
+        }
+        height: Theme.stripe
+        color: cell.monitorColor
       }
 
       Text {
@@ -59,7 +71,9 @@ Row {
         font.family: Theme.fontFamily
         font.pixelSize: Theme.fontMd
         font.bold: cell.focused || cell.urgent
-        color: (cell.focused || cell.urgent) ? Theme.bg : Theme.text
+        color: (cell.active || cell.urgent) ? Theme.bg
+          : cell.occupied ? Theme.text
+          : Theme.textDim
       }
 
       MouseArea {
