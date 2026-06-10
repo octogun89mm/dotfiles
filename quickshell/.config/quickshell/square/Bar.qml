@@ -1,15 +1,17 @@
 import Quickshell
 import QtQuick
 
-// Full-width bar, docked flush to the top edge (matches classic Bar.qml).
-// No outer margins, no rounding — square brutalist blocks separated by
-// hairline dividers, with a 2px accent line along the bottom edge.
+// Flat swaybar-like bar, docked flush to the top edge.
+// No per-module boxes, no hairline dividers — just a 1px bottom border.
 Variants {
   model: Quickshell.screens
 
   PanelWindow {
     id: barWindow
     required property var modelData
+    readonly property int screenIndex: Quickshell.screens.indexOf(modelData)
+    readonly property color accentColor: Theme.monitorAccent(screenIndex)
+
     screen: modelData
     color: "transparent"
 
@@ -28,18 +30,18 @@ Variants {
       color: Theme.bg
       radius: 0
 
-      // 2px accent line along the bar's inner edge (bottom, facing workspace)
+      // 1px bottom border, subtle
       Rectangle {
         anchors {
           bottom: parent.bottom
           left: parent.left
           right: parent.right
         }
-        height: Theme.stripe
-        color: Theme.borderActive
+        height: Theme.hairline
+        color: Theme.border
       }
 
-      // LEFT cluster
+      // LEFT cluster: monitor badge, this monitor's workspaces, active window title
       Row {
         id: leftCluster
         anchors {
@@ -49,74 +51,65 @@ Variants {
         }
         spacing: 0
 
+        MonitorBadge {
+          screenIndex: barWindow.screenIndex
+          accentColor: barWindow.accentColor
+          anchors.verticalCenter: parent.verticalCenter
+        }
+
         Workspaces {
           screenName: barWindow.modelData.name
+          accentColor: barWindow.accentColor
+          anchors.verticalCenter: parent.verticalCenter
         }
 
-        Block {
-          dividerLeft: true
-          ActiveWindowTitle {}
-        }
-      }
-
-      // CENTER cluster
-      Row {
-        anchors.centerIn: parent
-        spacing: 0
-
-        Block {
-          dividerLeft: true
-          dividerRight: true
-          ClockBlock {}
+        Item {
+          width: Theme.padLg
+          height: 1
         }
 
-        Block {
-          dividerRight: true
-          DateBlock {}
+        ActiveWindowTitle {
+          anchors.verticalCenter: parent.verticalCenter
         }
       }
 
-      // RIGHT cluster
+      // RIGHT cluster: plain text modules, generous gaps, clock far right
       Row {
         anchors {
           right: parent.right
           top: parent.top
           bottom: parent.bottom
+          rightMargin: Theme.padLg
         }
-        spacing: 0
-        layoutDirection: Qt.RightToLeft
+        spacing: Theme.gapLg
 
-        Block {
-          dividerLeft: true
-          VolumeBlock {}
-        }
-
-        Block {
-          dividerLeft: true
-          KeyboardBlock {}
+        TrayBlock {
+          anchors.verticalCenter: parent.verticalCenter
         }
 
-        Block {
-          dividerLeft: true
-          collapsed: !MicState.active
-          accentTop: true
-          accentColor: Theme.critical
-          MicBlock {}
+        MetricsBlock {
+          anchors.verticalCenter: parent.verticalCenter
         }
 
-        Block {
-          dividerLeft: true
-          NetworkBlock {}
+        NetworkBlock {
+          anchors.verticalCenter: parent.verticalCenter
         }
 
-        Block {
-          dividerLeft: true
-          MetricsBlock {}
+        MicBlock {
+          visible: MicState.active
+          anchors.verticalCenter: parent.verticalCenter
         }
 
-        Block {
-          dividerLeft: true
-          TrayBlock {}
+        KeyboardBlock {
+          anchors.verticalCenter: parent.verticalCenter
+        }
+
+        VolumeBlock {
+          anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Clock {
+          anchors.verticalCenter: parent.verticalCenter
         }
       }
     }

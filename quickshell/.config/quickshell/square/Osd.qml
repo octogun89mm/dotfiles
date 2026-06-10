@@ -52,19 +52,8 @@ Scope {
         color: Theme.bg
         border.width: Theme.hairline
         border.color: Theme.border
-        implicitWidth: content.implicitWidth + Theme.padLg * 2 + Theme.stripe
+        implicitWidth: content.implicitWidth + Theme.padLg * 2
         implicitHeight: Theme.barHeight + Theme.padSm * 2
-
-        // Top accent stripe
-        Rectangle {
-          anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-          }
-          height: Theme.stripe
-          color: Theme.accent
-        }
 
         Row {
           id: content
@@ -74,7 +63,7 @@ Scope {
           Text {
             anchors.verticalCenter: parent.verticalCenter
             text: OsdState.icon
-            color: Theme.accent
+            color: Theme.text
             font.family: Theme.iconFamily
             font.pixelSize: Theme.fontLg + 2
           }

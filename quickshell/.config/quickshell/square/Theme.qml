@@ -46,6 +46,17 @@ QtObject {
   readonly property int barHeight: 30
   readonly property int wsCellSize: 30
 
+  // Right-side module gap (swaybar-like generous spacing)
+  readonly property int gapLg: 18
+
   // Animation — keep snappy, near-instant
   readonly property int animFast: 80
+
+  // Per-monitor accent colours, keyed by Quickshell.screens index (0-based).
+  // screen 1 -> accent, screen 2 -> accentAlt, screen 3 -> info, 4th+ -> success
+  readonly property var monitorAccents: [accent, accentAlt, info, success]
+
+  function monitorAccent(screenIndex) {
+    return monitorAccents[screenIndex % monitorAccents.length]
+  }
 }

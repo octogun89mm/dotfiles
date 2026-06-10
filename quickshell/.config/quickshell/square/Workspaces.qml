@@ -1,13 +1,16 @@
 import QtQuick
 import Quickshell.Hyprland
 
-// Fixed-width square workspace cells, numbered 1-10.
-// Empty = dim text on bg. Occupied = text colour + thin accent stripe (top).
-// Focused = solid accent fill, bg-coloured text.
+// Swaybar-style workspace buttons for THIS monitor only.
+// Empty/nonexistent workspaces are hidden entirely.
+// focused = solid monitor-accent fill, bg-coloured text.
+// occupied-but-unfocused = text on a slightly elevated surface.
+// urgent = critical fill.
 Row {
   id: root
 
   required property var screenName
+  required property color accentColor
 
   spacing: 0
 
@@ -19,75 +22,50 @@ Row {
     }
   }
 
-  function workspaceFor(idx) {
-    const list = Hyprland.workspaces.values
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].id === idx) return list[i]
-    }
-    return null
-  }
-
-  function isOnThisMonitor(ws) {
-    if (!ws || !ws.monitor) return false
-    return ws.monitor.name === root.screenName
+  readonly property var workspacesHere: {
+    return Hyprland.workspaces.values
+      .filter(ws => ws.monitor && ws.monitor.name === root.screenName
+        && !ws.name.startsWith("special:"))
+      .sort((a, b) => a.id - b.id)
   }
 
   Repeater {
-    model: 10
+    model: root.workspacesHere
 
     Rectangle {
       id: cell
-      required property int index
-      readonly property int wsId: index + 1
-      readonly property var ws: root.workspaceFor(wsId)
-      readonly property bool occupied: ws !== null && ws.toplevels.values.length > 0
-      readonly property bool focused: ws !== null && ws.focused && root.isOnThisMonitor(ws)
+      required property var modelData
+      readonly property var ws: modelData
+      readonly property bool focused: ws.focused
+      readonly property bool urgent: ws.urgent === true
+      readonly property bool occupied: ws.toplevels.values.length > 0
 
-      width: Theme.wsCellSize
-      height: Theme.barHeight
+      implicitWidth: label.implicitWidth + Theme.padLg * 2
+      implicitHeight: Theme.barHeight
       radius: 0
-      color: focused ? Theme.accent : Theme.bg
+      color: cell.urgent ? Theme.critical
+        : cell.focused ? root.accentColor
+        : cell.occupied ? Theme.surface
+        : Theme.bg
 
       Behavior on color {
         ColorAnimation { duration: Theme.animFast }
       }
 
-      // Hairline divider between cells
-      Rectangle {
-        anchors {
-          top: parent.top
-          bottom: parent.bottom
-          right: parent.right
-        }
-        width: Theme.hairline
-        color: Theme.border
-      }
-
-      // Occupied (not focused) — thin accent stripe along the bottom
-      Rectangle {
-        visible: cell.occupied && !cell.focused
-        anchors {
-          bottom: parent.bottom
-          left: parent.left
-          right: parent.right
-        }
-        height: Theme.stripe
-        color: Theme.accent
-      }
-
       Text {
+        id: label
         anchors.centerIn: parent
-        text: String(cell.wsId)
+        text: cell.ws.name
         font.family: Theme.fontFamily
         font.pixelSize: Theme.fontMd
-        font.bold: cell.focused || cell.occupied
-        color: cell.focused ? Theme.bg : (cell.occupied ? Theme.text : Theme.textDim)
+        font.bold: cell.focused || cell.urgent
+        color: (cell.focused || cell.urgent) ? Theme.bg : Theme.text
       }
 
       MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-        onClicked: Hyprland.dispatch("workspace " + cell.wsId)
+        onClicked: Hyprland.dispatch("workspace " + cell.ws.id)
       }
     }
   }

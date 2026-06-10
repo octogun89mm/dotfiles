@@ -9,7 +9,7 @@ Item {
 
   property string windowTitle: ""
   property string windowClass: ""
-  readonly property int maxChars: 40
+  readonly property int maxChars: 50
 
   readonly property string formattedTitle: {
     if (!windowClass && !windowTitle) return ""
