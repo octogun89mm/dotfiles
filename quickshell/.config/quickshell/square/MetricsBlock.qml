@@ -1,23 +1,30 @@
 import QtQuick
 
-// Compact "C 12% M 38%" metric readout.
+// Compact vitals readout: "C 12% 40° M 38% G 26% 45° V 91%"
 Item {
   id: root
 
   implicitHeight: Theme.barHeight
   implicitWidth: label.implicitWidth
 
-  readonly property string cpuText: MetricsState.cpuUsage >= 0
-    ? Math.round(MetricsState.cpuUsage) + "%"
-    : "--"
-  readonly property string memText: MetricsState.memPercent >= 0
-    ? Math.round(MetricsState.memPercent) + "%"
-    : "--"
+  function pct(v) {
+    return v >= 0 ? Math.round(v) + "%" : "--"
+  }
+
+  function deg(v) {
+    return v >= 0 ? " " + Math.round(v) + "°" : ""
+  }
+
+  readonly property string vitals:
+    "C " + pct(MetricsState.cpuUsage) + deg(MetricsState.cpuTemp)
+    + "  M " + pct(MetricsState.memPercent)
+    + "  G " + pct(MetricsState.gpuUsage) + deg(MetricsState.gpuTemp)
+    + "  V " + pct(MetricsState.vramPercent)
 
   Text {
     id: label
     anchors.verticalCenter: parent.verticalCenter
-    text: "C " + root.cpuText + " M " + root.memText
+    text: root.vitals
     color: Theme.text
     font.family: Theme.fontFamily
     font.pixelSize: Theme.fontMd

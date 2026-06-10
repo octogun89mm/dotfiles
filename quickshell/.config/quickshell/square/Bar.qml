@@ -28,27 +28,11 @@ Variants {
       color: Theme.bg
       radius: 0
 
-      // LEFT cluster: workspaces (all monitors, colour-coded), active window title
-      Row {
-        id: leftCluster
+      // LEFT cluster: workspaces (all monitors, colour-coded)
+      Workspaces {
         anchors {
           left: parent.left
-          top: parent.top
-          bottom: parent.bottom
-        }
-        spacing: 0
-
-        Workspaces {
-          anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Item {
-          width: Theme.padLg
-          height: 1
-        }
-
-        ActiveWindowTitle {
-          anchors.verticalCenter: parent.verticalCenter
+          verticalCenter: parent.verticalCenter
         }
       }
 
@@ -58,7 +42,7 @@ Variants {
           right: parent.right
           top: parent.top
           bottom: parent.bottom
-          rightMargin: Theme.padLg
+          rightMargin: Theme.padSm
         }
         spacing: Theme.gapLg
 

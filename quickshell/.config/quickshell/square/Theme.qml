@@ -43,8 +43,7 @@ QtObject {
   readonly property int stripe: 2
 
   // Bar geometry
-  readonly property int barHeight: 30
-  readonly property int wsCellSize: 30
+  readonly property int barHeight: 24
 
   // Right-side module gap (swaybar-like generous spacing)
   readonly property int gapLg: 18

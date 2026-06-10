@@ -12,7 +12,11 @@ Singleton {
   readonly property string scriptPath: home + "/.config/quickshell/scripts/system-metrics.sh"
 
   property real cpuUsage: -1
+  property real cpuTemp: -1
   property real memPercent: -1
+  property real gpuUsage: -1
+  property real gpuTemp: -1
+  property real vramPercent: -1
 
   function refresh() {
     if (metricsProc.running) return
@@ -41,10 +45,18 @@ Singleton {
             return isNaN(n) ? -1 : n
           }
           root.cpuUsage = num(d.cpu)
+          root.cpuTemp = num(d.cpu_temp)
+          root.gpuUsage = num(d.gpu)
+          root.gpuTemp = num(d.gpu_temp)
           const memUsed = num(d.mem_used)
           const memTotal = num(d.mem_total)
           root.memPercent = (memTotal > 0 && memUsed >= 0)
             ? (memUsed / memTotal * 100)
+            : -1
+          const vramUsed = num(d.gpu_vram_used)
+          const vramTotal = num(d.gpu_vram_total)
+          root.vramPercent = (vramTotal > 0 && vramUsed >= 0)
+            ? (vramUsed / vramTotal * 100)
             : -1
         } catch (e) {
           console.warn("MetricsState: failed to parse:", e)

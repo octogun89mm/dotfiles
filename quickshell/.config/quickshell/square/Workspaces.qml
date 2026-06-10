@@ -70,7 +70,7 @@ Row {
         text: cell.ws.name
         font.family: Theme.fontFamily
         font.pixelSize: Theme.fontMd
-        font.bold: cell.focused || cell.urgent
+        font.bold: true
         color: (cell.active || cell.urgent) ? Theme.bg
           : cell.occupied ? Theme.text
           : Theme.textDim
