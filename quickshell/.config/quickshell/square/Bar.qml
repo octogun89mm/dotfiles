@@ -42,7 +42,7 @@ Variants {
           right: parent.right
           top: parent.top
           bottom: parent.bottom
-          rightMargin: 0
+          rightMargin: Theme.padMd
         }
         spacing: Theme.gapLg
 
@@ -54,7 +54,7 @@ Variants {
           anchors.verticalCenter: parent.verticalCenter
         }
 
-        NetworkBlock {
+        NetSpeedBlock {
           anchors.verticalCenter: parent.verticalCenter
         }
 
