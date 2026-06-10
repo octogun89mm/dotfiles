@@ -1,7 +1,8 @@
 import QtQuick
 import Quickshell
 
-// "HH:mm" bold Theme.text, followed by "ddd dd" Theme.textMuted.
+// "ddd dd" Theme.textMuted, then "HH:mm" bold — time sits at the bar's
+// right edge.
 Item {
   id: root
 
@@ -20,19 +21,19 @@ Item {
 
     Text {
       anchors.verticalCenter: parent.verticalCenter
+      text: Qt.formatDate(clock.date, "ddd dd")
+      color: Theme.textMuted
+      font.family: Theme.fontFamily
+      font.pixelSize: Theme.fontMd
+    }
+
+    Text {
+      anchors.verticalCenter: parent.verticalCenter
       text: Qt.formatTime(clock.date, "HH:mm")
       color: Theme.text
       font.family: Theme.fontFamily
       font.pixelSize: Theme.fontMd
       font.bold: true
-    }
-
-    Text {
-      anchors.verticalCenter: parent.verticalCenter
-      text: Qt.formatDate(clock.date, "ddd dd")
-      color: Theme.textMuted
-      font.family: Theme.fontFamily
-      font.pixelSize: Theme.fontMd
     }
   }
 }

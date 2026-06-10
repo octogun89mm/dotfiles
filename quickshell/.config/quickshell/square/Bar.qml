@@ -42,7 +42,7 @@ Variants {
           right: parent.right
           top: parent.top
           bottom: parent.bottom
-          rightMargin: Theme.padSm
+          rightMargin: 0
         }
         spacing: Theme.gapLg
 
