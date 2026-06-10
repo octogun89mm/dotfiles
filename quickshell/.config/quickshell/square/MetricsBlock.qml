@@ -7,12 +7,14 @@ Item {
   implicitHeight: Theme.barHeight
   implicitWidth: label.implicitWidth
 
+  // Values are left-padded so the readout keeps a constant width and
+  // never pushes its neighbours around.
   function pct(v) {
-    return v >= 0 ? Math.round(v) + "%" : "--"
+    return (v >= 0 ? String(Math.round(v)) : "--").padStart(3) + "%"
   }
 
   function deg(v) {
-    return v >= 0 ? " " + Math.round(v) + "°" : ""
+    return v >= 0 ? " " + String(Math.round(v)).padStart(2) + "°" : ""
   }
 
   readonly property string vitals:
