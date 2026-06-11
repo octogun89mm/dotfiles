@@ -7,6 +7,7 @@ Rectangle {
 
   required property int workspaceId
   required property string displayName
+  property int leadingGap: 0
   property var windowIcons: []
 
   readonly property var workspaceData: {
@@ -33,24 +34,41 @@ Rectangle {
     return false
   }
   readonly property bool isOccupied: windowIcons.length > 0 || (workspaceData ? workspaceData.toplevels.values.length > 0 : false)
+  readonly property bool isHighlighted: isFocused || isVisible
+  readonly property int baseChipWidth: Math.max(20, chipContent.implicitWidth + Theme.padSm * 2)
+  readonly property int chipWidth: baseChipWidth + (isFocused ? Theme.padLg : isVisible ? Theme.padMd : 0)
 
   color: "transparent"
-  implicitWidth: Math.max(20, chipContent.implicitWidth + Theme.padSm * 2)
+  implicitWidth: leadingGap + chipWidth
   implicitHeight: Theme.chipHeight
 
+  Behavior on implicitWidth {
+    NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+  }
+
   Rectangle {
-    anchors.fill: parent
+    x: root.leadingGap
+    width: root.chipWidth
+    height: parent.height
     visible: root.isFocused
     gradient: Gradient {
       GradientStop { position: 0.0; color: "transparent" }
       GradientStop { position: 1.0; color: Qt.rgba(Theme.accent.r, Theme.accent.g, Theme.accent.b, 0.35) }
     }
+
+    Behavior on x { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on width { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
   }
 
   Row {
     id: chipContent
-    anchors.centerIn: parent
+    anchors.verticalCenter: parent.verticalCenter
+    x: root.leadingGap + Math.round((root.chipWidth - implicitWidth) / 2)
     spacing: 2
+
+    Behavior on x {
+      NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+    }
 
     Text {
       anchors.verticalCenter: parent.verticalCenter
@@ -119,11 +137,14 @@ Rectangle {
 
   Rectangle {
     anchors.bottom: parent.bottom
-    anchors.horizontalCenter: parent.horizontalCenter
+    x: root.leadingGap + 2
     visible: root.isFocused || root.isVisible
-    width: parent.width - 4
+    width: root.chipWidth - 4
     height: root.isFocused ? Theme.stripe : Theme.hairline
     color: root.isFocused ? Theme.accent : Theme.border
+
+    Behavior on x { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
+    Behavior on width { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
   }
 
   MouseArea {

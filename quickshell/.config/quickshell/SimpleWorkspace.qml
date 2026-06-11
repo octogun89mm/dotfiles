@@ -27,14 +27,17 @@ Item {
     return ""
   }
 
-  property var entries: [
-    { kind: "ws", id: 1 },
-    { kind: "ws", id: 2 },
-    { kind: "ws", id: 3 },
-    { kind: "ws", id: 4 },
-    { kind: "ws", id: 5 },
-    { kind: "ws", id: 6 }
-  ]
+  readonly property var wsGroups: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+  property var entries: {
+    const out = []
+    for (let g = 0; g < wsGroups.length; g++) {
+      for (let i = 0; i < wsGroups[g].length; i++) {
+        out.push({ kind: "ws", id: wsGroups[g][i], newGroup: g > 0 && i === 0 })
+      }
+    }
+    return out
+  }
 
   Connections {
     target: Hyprland
@@ -129,6 +132,7 @@ Item {
         required property var modelData
         workspaceId: modelData.id
         displayName: String(modelData.id)
+        leadingGap: modelData.newGroup ? Theme.padMd : 0
         windowIcons: root.iconsForWorkspace(modelData.id)
       }
     }
