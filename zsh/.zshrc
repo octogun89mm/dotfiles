@@ -115,8 +115,6 @@ if (( $+commands[thefuck] )); then
   }
   zle -N fuck-command-line
   bindkey -M emacs '\e\e' fuck-command-line
-  bindkey -M vicmd '\e\e' fuck-command-line
-  bindkey -M viins '\e\e' fuck-command-line
 fi
 
 if [[ -z $ZSH_DISABLE_AUTOSUGGESTIONS ]]; then
@@ -131,11 +129,14 @@ fi
 alias zshconfig="$EDITOR ~/.zshrc"
 alias ls="eza -a --color=always --icons=always --group-directories-first"
 alias ll="eza -a -l --color=always --icons=always --group-directories-first"
+alias lz="eza -a --color=always --icons=always --group-directories-first"
 alias clr="clear"
 alias nb="newsboat -x open"
 alias cdnt="cd ~/Notes"
 alias newmatrix='neo-matrix -C ~/.config/neo/colors -m "Fuck Off"'
 alias sysinfo='macchina'
+alias cdx='codex-tmux'
+alias codex-ssh='codex-tmux'
 
 mkcd() {
   if (( $# != 1 )); then
@@ -146,17 +147,24 @@ mkcd() {
   mkdir -p -- "$1" && cd -- "$1"
 }
 
-# --- Vi Mode ---
-bindkey -v
-export KEYTIMEOUT=1
-
+# --- Line Editing ---
+# Prefix-aware history search on Up/Down arrows.
 autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
-bindkey -M viins '^[[A' up-line-or-beginning-search
-bindkey -M viins '^[[B' down-line-or-beginning-search
-bindkey -M vicmd '^[[A' up-line-or-beginning-search
-bindkey -M vicmd '^[[B' down-line-or-beginning-search
+bindkey '^[[A' up-line-or-beginning-search
+bindkey '^[[B' down-line-or-beginning-search
+
+# Edit the current command line in $EDITOR (CTRL-x CTRL-e). Save & quit to run it.
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
+# Ctrl+Arrow word navigation.
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
+bindkey '^[[5C' forward-word
+bindkey '^[[5D' backward-word
 
 # --- Zsh Options ---
 # Include dotfiles in globs
@@ -246,26 +254,6 @@ precmd() {
   fi
 }
 
-# Vi mode indicator (nerd font arrows, color switches by mode)
-VI_MODE='%B%F{green}❯%f%b'
-function zle-line-init zle-keymap-select {
-  case $KEYMAP in
-    vicmd)
-      VI_MODE='%B%F{red}❮%f%b'
-      # steady block + red cursor
-      printf '\e[2 q\e]12;#ff5555\a'
-      ;;
-    *)
-      VI_MODE='%B%F{green}❯%f%b'
-      # steady block + green cursor
-      printf '\e[2 q\e]12;#50fa7b\a'
-      ;;
-  esac
-  zle reset-prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
-
 # Transient prompt - simplify previous prompt after command execution
 function zle-line-finish {
   PROMPT='%F{%(?.green.red)}❯%f '
@@ -286,11 +274,28 @@ function set-full-prompt {
   PROMPT=$'
 %F{cyan}%n@%m%f
 %{\x1b[3m%}%~%{\x1b[23m%}${EXIT_STATUS}${GIT_INFO}
-${LLM_INFO}${VENV_INFO}${VI_MODE} '
+${LLM_INFO}${VENV_INFO}%B%F{green}❯%f%b '
 }
 set-full-prompt
 
 # --- Completion tweaks ---
+# Show descriptions next to flags/matches (fish-style). 'verbose' is zsh's
+# default but stated here so it survives future style experiments;
+# auto-description covers options whose spec has an argument but no text.
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' auto-description 'specify: %d'
+
+# Fish-style fallback for commands with no completion function: when the
+# current word looks like a flag, build completions by parsing the command's
+# `--help` output (_gnu_generic); otherwise keep normal default completion.
+_help_fallback() {
+  if [[ $words[CURRENT] == -* ]]; then
+    _gnu_generic "$@" && return
+  fi
+  _default "$@"
+}
+compdef _help_fallback -default-
+
 # Remove ../ and ./ from completion results
 zstyle ':completion:*' special-dirs false
 zstyle ':completion:*' menu select
