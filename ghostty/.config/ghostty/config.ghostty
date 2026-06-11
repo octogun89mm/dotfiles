@@ -1,5 +1,6 @@
 font-family = Maple Mono NF
 font-size = 10.5
+font-feature = -calt, -liga, -dlig, -clig
 
 config-file = ?themes/wallust.conf
 
@@ -8,6 +9,8 @@ background-opacity-cells = true
 window-decoration = none
 gtk-titlebar = false
 window-theme = ghostty
+gtk-custom-css = custom.css
+gtk-wide-tabs = false
 copy-on-select = true
 confirm-close-surface = false
 
