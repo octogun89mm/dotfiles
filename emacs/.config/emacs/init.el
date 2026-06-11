@@ -23,7 +23,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(blink-cursor-mode -1)
+(blink-cursor-mode 1)
 (global-hl-line-mode 1)
 
 ;; Relative line numbers (Neovim relativenumber muscle memory)
@@ -31,7 +31,7 @@
 (global-display-line-numbers-mode 1)
 
 ;; Font + a little breathing room around the frame
-(add-to-list 'default-frame-alist '(font . "Iosevka-10"))
+(add-to-list 'default-frame-alist '(font . "Maple Mono NF-10"))
 (add-to-list 'default-frame-alist '(internal-border-width . 5))
 
 ;; Keep the cursor away from the window edges (like scrolloff)
@@ -54,15 +54,15 @@
 (use-package gptel
   :bind ("C-c g" . gptel-menu)
   :config
-  ;; Local llama.cpp: Connected to the systemd-managed service on :8080
+  ;; Local llama.cpp: Connected to the systemd-managed service on :3002
   ;; Only the model actually loaded into the server is listed here.
   (defvar my/llama-cpp
     (gptel-make-openai "llama.cpp"
-      :host "localhost:8080"
+      :host "localhost:3002"
       :protocol "http"
       :stream t
       :key "no-key"
-      :models '(gemma-4-12B-it-qat-UD-Q4_K_XL)))
+      :models '(qwen3.6-35b-a3b)))
 
   ;; OpenRouter
   (defvar my/openrouter
@@ -71,7 +71,7 @@
       :endpoint "/api/v1/chat/completions"
       :stream t
       :key gptel-key-openrouter
-      :models '(anthropic/claude-3.5-sonnet openai/gpt-4o)))
+      :models '(deepseek/deepseek-v4-flash openai/gpt-4o)))
 
   ;; OpenAI
   (defvar my/openai
@@ -84,4 +84,4 @@
 
   ;; Set defaults
   (setq gptel-backend my/llama-cpp
-        gptel-model 'gemma-4-12B-it-qat-UD-Q4_K_XL))
+        gptel-model 'qwen3.6-35b-a3b))
