@@ -1,5 +1,6 @@
 import Quickshell
 import QtQuick
+import "." as Square
 
 // Flat swaybar-like bar, docked flush to the top edge.
 // No per-module boxes, no hairline dividers, no borders.
@@ -36,43 +37,82 @@ Variants {
         }
       }
 
-      // RIGHT cluster: plain text modules, generous gaps, clock far right
+      // CENTER: clock and date
+      Clock {
+        anchors.centerIn: parent
+      }
+
+      // RIGHT cluster: compact status groups
       Row {
         anchors {
           right: parent.right
           top: parent.top
           bottom: parent.bottom
           rightMargin: Theme.padMd
-        }
-        spacing: Theme.gapLg
+      }
+        spacing: Theme.padLg
 
-        TrayBlock {
+        Row {
           anchors.verticalCenter: parent.verticalCenter
-        }
+          spacing: Theme.padMd
 
-        MetricsBlock {
-          anchors.verticalCenter: parent.verticalCenter
-        }
+          Square.TmuxSessions {
+            anchors.verticalCenter: parent.verticalCenter
+          }
 
-        NetSpeedBlock {
-          anchors.verticalCenter: parent.verticalCenter
-        }
+          Square.NotificationBlock {
+            anchors.verticalCenter: parent.verticalCenter
+            screenName: barWindow.modelData.name
+          }
 
-        MicBlock {
-          visible: MicState.active
-          anchors.verticalCenter: parent.verticalCenter
-        }
-
-        KeyboardBlock {
-          anchors.verticalCenter: parent.verticalCenter
+          TrayBlock {
+            anchors.verticalCenter: parent.verticalCenter
+          }
         }
 
-        VolumeBlock {
+        Rectangle {
           anchors.verticalCenter: parent.verticalCenter
+          width: Theme.hairline
+          height: 12
+          color: Theme.border
         }
 
-        Clock {
+        Row {
           anchors.verticalCenter: parent.verticalCenter
+          spacing: Theme.padMd
+
+          MetricsBlock {
+            anchors.verticalCenter: parent.verticalCenter
+          }
+
+          NetSpeedBlock {
+            anchors.verticalCenter: parent.verticalCenter
+          }
+        }
+
+        Rectangle {
+          anchors.verticalCenter: parent.verticalCenter
+          width: Theme.hairline
+          height: 12
+          color: Theme.border
+        }
+
+        Row {
+          anchors.verticalCenter: parent.verticalCenter
+          spacing: Theme.padMd
+
+          MicBlock {
+            visible: MicState.active
+            anchors.verticalCenter: parent.verticalCenter
+          }
+
+          KeyboardBlock {
+            anchors.verticalCenter: parent.verticalCenter
+          }
+
+          VolumeBlock {
+            anchors.verticalCenter: parent.verticalCenter
+          }
         }
       }
     }
