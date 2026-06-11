@@ -6,6 +6,7 @@
 
 use std::io;
 
+use crate::meta::truncate;
 use ratatui::{
     crossterm::event::{self, Event, KeyCode, KeyEventKind},
     layout::{Alignment, Constraint, Direction, Layout},
@@ -27,6 +28,7 @@ pub struct ModelView {
     pub ctx: String,
     pub offload: String,
     pub kv_cache: String,
+    pub spec: Option<String>,
     pub launches: u64,
     pub last_used: String,
     pub tg_avg: Option<f64>,
@@ -60,13 +62,38 @@ fn fmt_score(v: Option<f64>) -> String {
         .unwrap_or_else(|| "not run".into())
 }
 
+/// Average of whichever benchmark scores exist, if any.
+fn bench_avg(m: &ModelView) -> Option<f64> {
+    match (m.chat_score, m.code_score) {
+        (Some(c), Some(d)) => Some((c + d) / 2.0),
+        (Some(s), None) | (None, Some(s)) => Some(s),
+        (None, None) => None,
+    }
+}
+
+/// Below this benchmark average a model is failing more than it passes.
+const BENCH_FLUNK: f64 = 40.0;
+
 /// A blunt keep/cull recommendation, the feature the user actually asked for.
 pub fn verdict(m: &ModelView) -> (String, Color) {
     if m.missing {
         return ("file missing — drop the INI entry".into(), Color::Red);
     }
-    if m.launches == 0 {
-        return ("never launched — cull candidate".into(), Color::Magenta);
+    let bench = bench_avg(m);
+    if m.launches == 0 && m.tg_n == 0 {
+        // Benchmarks run through the router, which never records a launch, so
+        // a benched-but-unlaunched model is not automatically cull bait.
+        return match bench {
+            Some(b) if b < BENCH_FLUNK => (
+                format!("flunks benchmarks ({b:.0}/100) — cull candidate"),
+                Color::Red,
+            ),
+            Some(b) => (
+                format!("benchmarked {b:.0}/100 — launch it to measure speed"),
+                Color::DarkGray,
+            ),
+            None => ("never launched — cull candidate".into(), Color::Magenta),
+        };
     }
     if m.tg_n == 0 {
         return (
@@ -74,23 +101,17 @@ pub fn verdict(m: &ModelView) -> (String, Color) {
             Color::DarkGray,
         );
     }
-    match m.tg_avg {
-        Some(v) if v < 8.0 => (
+    match (m.tg_avg, bench) {
+        (Some(v), _) if v < 8.0 => (
             format!("slow (~{v:.0} t/s) — keep only if you need it"),
             Color::Red,
         ),
-        Some(v) if v < 20.0 => (format!("usable (~{v:.0} t/s)"), Color::Yellow),
+        (Some(v), Some(b)) if b < BENCH_FLUNK => (
+            format!("{v:.0} t/s but flunks benchmarks ({b:.0}/100)"),
+            Color::Yellow,
+        ),
+        (Some(v), _) if v < 20.0 => (format!("usable (~{v:.0} t/s)"), Color::Yellow),
         _ => ("healthy — keep".into(), Color::Green),
-    }
-}
-
-fn truncate(s: &str, max: usize) -> String {
-    if s.chars().count() <= max {
-        s.to_string()
-    } else {
-        let mut t: String = s.chars().take(max.saturating_sub(1)).collect();
-        t.push('…');
-        t
     }
 }
 
@@ -338,6 +359,9 @@ fn detail_paragraph(m: &ModelView) -> Paragraph<'static> {
     ]));
     lines.push(kv("KV cache", m.kv_cache.clone()));
     lines.push(kv("Offload", m.offload.clone()));
+    if let Some(spec) = &m.spec {
+        lines.push(kv("Spec", spec.clone()));
+    }
     lines.push(kv("File", truncate(&m.path, 44)));
     lines.push(Line::raw(""));
 

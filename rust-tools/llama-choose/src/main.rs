@@ -53,6 +53,7 @@ fn main() {
         None => interactive(),
         Some("stats") => cmd_stats(),
         Some("bench") => cmd_bench(args.get(2), args.get(3)),
+        Some("launch") => cmd_launch(args.get(2), args.get(3)),
         Some("stop") => cmd_stop(),
         Some("-h" | "--help" | "help") => {
             print_help();
@@ -74,6 +75,7 @@ fn print_help() {
          llama-choose          interactive model picker (default)\n  \
          llama-choose stats    print the usage / tokens-per-second table\n  \
          llama-choose bench ALIAS|all [chat|code]\n                       run dynamic correctness benchmarks via the router\n  \
+         llama-choose launch ALIAS [server|phone|shared|cli]\n                       launch one model non-interactively (default: server)\n  \
          llama-choose stop     stop the running inference server\n  \
          llama-choose -h       show this help\n\n\
          configured models are read from ~/.local/share/llama-models.ini\n\
@@ -126,6 +128,20 @@ fn offload_str(m: &Model) -> String {
     }
 }
 
+fn spec_str(m: &Model) -> Option<String> {
+    let ty = m.get("spec-type")?;
+    let drafter = if m.get("model-draft").is_some() {
+        "external drafter"
+    } else {
+        "embedded"
+    };
+    let n = m
+        .get("spec-draft-n-max")
+        .map(|n| format!(", n={n}"))
+        .unwrap_or_default();
+    Some(format!("{ty} ({drafter}{n})"))
+}
+
 fn kv_cache_str(m: &Model) -> String {
     match (m.get("cache-type-k"), m.get("cache-type-v")) {
         (Some(k), Some(v)) if k == v => k.to_string(),
@@ -148,7 +164,7 @@ fn zero_stats() -> db::ModelStats {
     }
 }
 
-fn build_views(models: &[Model], conn: &Connection) -> Vec<ModelView> {
+fn build_views(models: &[Model], conn: Option<&Connection>) -> Vec<ModelView> {
     let now = db::now();
     models
         .iter()
@@ -160,12 +176,21 @@ fn build_views(models: &[Model], conn: &Connection) -> Vec<ModelView> {
                 .unwrap_or_else(|| "(no model path)".into());
             let size_opt = path.as_ref().and_then(|p| meta::file_size(p));
             let missing = path.is_none() || size_opt.is_none();
-            let s = db::stats_for(conn, &m.stats_key).unwrap_or_else(|_| zero_stats());
-            let spark = db::recent_tg(conn, &m.stats_key, 32)
+            let s = conn
+                .and_then(|c| db::stats_for(c, &m.stats_key).ok())
+                .unwrap_or_else(zero_stats);
+            let spark = conn
+                .map(|c| db::recent_tg(c, &m.stats_key, 32))
+                .unwrap_or_default()
                 .iter()
                 .map(|x| x.round().max(0.0) as u64)
                 .collect();
-            let benchmark = db::benchmark_scores_for(conn, &m.stats_key);
+            let benchmark = conn
+                .map(|c| db::benchmark_scores_for(c, &m.stats_key))
+                .unwrap_or(db::BenchmarkScores {
+                    chat: None,
+                    code: None,
+                });
             ModelView {
                 alias: m.alias.clone(),
                 desc: m.desc.clone(),
@@ -180,6 +205,7 @@ fn build_views(models: &[Model], conn: &Connection) -> Vec<ModelView> {
                 ctx: m.ctx_size().map(format_ctx).unwrap_or_else(|| "?".into()),
                 offload: offload_str(m),
                 kv_cache: kv_cache_str(m),
+                spec: spec_str(m),
                 launches: s.launches,
                 last_used: meta::relative_time(s.last_used, now),
                 tg_avg: s.tg_avg,
@@ -226,11 +252,9 @@ fn interactive() -> i32 {
     let (llama_pids, vllm_pids) = running_pids();
     let running = !llama_pids.is_empty() || !vllm_pids.is_empty();
 
+    // Stats are decoration; a broken stats DB must never block the picker.
     let conn = db::open().ok();
-    let views = match &conn {
-        Some(c) => build_views(&models, c),
-        None => Vec::new(),
-    };
+    let views = build_views(&models, conn.as_ref());
 
     let mut term = ratatui::init();
     let decision = run_tui(&mut term, running, &views);
@@ -339,9 +363,10 @@ fn tailscale_ip() -> Option<String> {
         .filter(|s| !s.is_empty())
 }
 
-/// Confirm the model file (and mmproj, if any) exist before we bother spawning.
+/// Confirm the model file (and mmproj/MTP drafter, if any) exist before we
+/// bother spawning.
 fn require_files(m: &Model) -> Result<(), String> {
-    for key in ["model", "mmproj"] {
+    for key in ["model", "model-draft", "mmproj"] {
         if let Some(p) = m.get(key) {
             if !std::path::Path::new(p).is_file() {
                 return Err(format!("missing {key} file: {p}"));
@@ -507,7 +532,7 @@ fn cmd_stats() -> i32 {
         }
     };
 
-    let mut views = build_views(&models, &conn);
+    let mut views = build_views(&models, Some(&conn));
     // Most-used first; never-launched models sink to the bottom as cull bait.
     views.sort_by(|a, b| {
         b.launches
@@ -533,7 +558,7 @@ fn cmd_stats() -> i32 {
         };
         println!(
             "{:<24} {:<6} {:>5}  {:<9} {:>9}  {:>5} {:>5} {:>5}  {:<8}  {}",
-            truncate(&v.alias, 24),
+            meta::truncate(&v.alias, 24),
             if v.configured { "INI" } else { "disk" },
             v.launches,
             v.last_used,
@@ -550,6 +575,43 @@ fn cmd_stats() -> i32 {
         );
     }
     0
+}
+
+/// Launch one model by alias without the TUI, e.g. from a script or tmux.
+/// Uses the exact same launch path as the picker, so stats still accrue.
+fn cmd_launch(alias: Option<&String>, mode: Option<&String>) -> i32 {
+    let Some(alias) = alias else {
+        eprintln!("usage: llama-choose launch ALIAS [server|phone|shared|cli]");
+        return 2;
+    };
+    let mode = mode.map(String::as_str).unwrap_or("server");
+    if !matches!(mode, "server" | "phone" | "shared" | "cli") {
+        eprintln!("llama-choose: launch mode must be server, phone, shared, or cli");
+        return 2;
+    }
+
+    let models = match load_models() {
+        Ok(m) => m,
+        Err(e) => {
+            eprintln!("llama-choose: {e}");
+            return 1;
+        }
+    };
+    let Some(model) = models.iter().find(|m| &m.alias == alias) else {
+        eprintln!("llama-choose: unknown model alias '{alias}'");
+        return 1;
+    };
+
+    let (llama_pids, vllm_pids) = running_pids();
+    if !llama_pids.is_empty() || !vllm_pids.is_empty() {
+        eprintln!(
+            "llama-choose: an inference server is already running ('llama-choose stop' first)"
+        );
+        return 1;
+    }
+
+    let conn = db::open().ok();
+    launch_model(model, mode, conn.as_ref())
 }
 
 fn cmd_bench(alias: Option<&String>, suite: Option<&String>) -> i32 {
@@ -599,6 +661,7 @@ fn cmd_bench(alias: Option<&String>, suite: Option<&String>) -> i32 {
     for model in selected {
         for &suite in &suites {
             println!("{} {} benchmark:", model.alias, suite.kind());
+            let previous = db::latest_benchmark(&conn, &model.stats_key, suite.kind());
             let result = match benchmark::run(&model.alias, suite) {
                 Ok(result) => result,
                 Err(e) => {
@@ -618,21 +681,14 @@ fn cmd_bench(alias: Option<&String>, suite: Option<&String>) -> i32 {
                 eprintln!("llama-choose: cannot save benchmark: {e}");
                 return 1;
             }
+            let was = previous
+                .map(|p| format!(", was {p:.0}"))
+                .unwrap_or_default();
             println!(
-                "  score: {:.0}/100 ({}/{})",
+                "  score: {:.0}/100 ({}/{}{was})",
                 result.score, result.passed, result.total
             );
         }
     }
     0
-}
-
-fn truncate(s: &str, max: usize) -> String {
-    if s.chars().count() <= max {
-        s.to_string()
-    } else {
-        let mut t: String = s.chars().take(max.saturating_sub(1)).collect();
-        t.push('…');
-        t
-    }
 }

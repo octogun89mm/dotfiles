@@ -16,6 +16,19 @@ use crate::db;
 
 const UI_CONFIG_FILE: &str = "/home/juju/.config/llama.cpp/ui-config.json";
 
+/// Resolve a llama.cpp binary: prefer the home repo build (which is not on
+/// PATH; its RPATH already covers the sibling shared libs), fall back to the
+/// bare name for a regular PATH lookup.
+pub fn resolve_bin(name: &str) -> String {
+    let home = std::env::var("HOME").unwrap_or_else(|_| "/root".into());
+    let candidate = format!("{home}/repos/llama.cpp/build/bin/{name}");
+    if std::path::Path::new(&candidate).is_file() {
+        candidate
+    } else {
+        name.to_string()
+    }
+}
+
 /// Translate INI key/values into `llama` long-option flags.
 ///
 /// `key = value` becomes `--key value`; the boolean form `key = true`
@@ -39,7 +52,7 @@ pub fn build_load_args(model: &Model) -> Vec<String> {
 
 /// `llama-server` command for a single model in a server-style mode.
 pub fn build_server_command(model: &Model, host: &str, port: u16, parallel: u32) -> Vec<String> {
-    let mut cmd = vec!["llama-server".to_string()];
+    let mut cmd = vec![resolve_bin("llama-server")];
     cmd.extend(build_load_args(model));
     cmd.extend([
         "--alias".into(),
@@ -63,7 +76,7 @@ pub fn build_server_command(model: &Model, host: &str, port: u16, parallel: u32)
 /// `llama-server` router mode: serve every model in the preset file.
 pub fn build_router_command(ini_path: &str, host: &str, port: u16, parallel: u32) -> Vec<String> {
     vec![
-        "llama-server".into(),
+        resolve_bin("llama-server"),
         "--models-preset".into(),
         ini_path.to_string(),
         "--host".into(),
@@ -87,7 +100,7 @@ pub fn build_cli_command(model: &Model, lib_dir: &str) -> (Vec<(String, String)>
         Ok(existing) if !existing.is_empty() => format!("{lib_dir}:{existing}"),
         _ => lib_dir.to_string(),
     };
-    let mut cmd = vec!["llama-cli".to_string()];
+    let mut cmd = vec![resolve_bin("llama-cli")];
     cmd.extend(build_load_args(model));
     cmd.extend(["--conversation".into(), "--color".into(), "auto".into()]);
     (vec![("LD_LIBRARY_PATH".into(), ld)], cmd)
@@ -219,6 +232,14 @@ pub fn run_with_scrape(cmd: &[String], alias: &str) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn resolve_bin_falls_back_to_path_lookup_when_repo_build_is_absent() {
+        // resolve_bin reads HOME; the scrape test below also rewrites HOME,
+        // so just point it somewhere without a llama.cpp build.
+        std::env::set_var("HOME", std::env::temp_dir());
+        assert_eq!(resolve_bin("llama-server"), "llama-server");
+    }
 
     #[test]
     fn parses_generation_line() {

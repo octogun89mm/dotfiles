@@ -144,6 +144,8 @@ fn is_standalone_gguf(path: &Path) -> bool {
     let lower = name.to_ascii_lowercase();
     lower.ends_with(".gguf")
         && !lower.contains("mmproj")
+        && !lower.starts_with("mtp-")
+        && !lower.ends_with("-mtp.gguf")
         && shard_number(&lower).is_none_or(|n| n == 1)
 }
 
@@ -201,7 +203,11 @@ fn discovered_model(path: PathBuf) -> Model {
 pub fn merge_discovered(models: Vec<Model>, root: &Path) -> Result<Vec<Model>, String> {
     let configured_paths: HashSet<PathBuf> = models
         .iter()
-        .filter_map(Model::model_path)
+        .flat_map(|m| {
+            ["model", "model-draft", "mmproj"]
+                .into_iter()
+                .filter_map(|k| m.get(k).map(PathBuf::from))
+        })
         .filter_map(|p| p.canonicalize().ok())
         .collect();
 
@@ -238,6 +244,8 @@ mod tests {
         )
         .unwrap();
         std::fs::write(root.join("mmproj-model-Q8_0.gguf"), b"projector").unwrap();
+        std::fs::write(root.join("mtp-some-model.gguf"), b"drafter").unwrap();
+        std::fs::write(root.join("some-model-Q4_0-MTP.gguf"), b"drafter").unwrap();
         std::fs::write(root.join("split-00001-of-00002.gguf"), b"first").unwrap();
         std::fs::write(root.join("split-00002-of-00002.gguf"), b"second").unwrap();
         std::fs::create_dir_all(root.join(".cache")).unwrap();
@@ -277,6 +285,9 @@ mod tests {
             .iter()
             .any(|m| m.alias == "split-00001-of-00002" && !m.configured));
         assert!(!merged.iter().any(|m| m.alias.contains("mmproj")));
+        assert!(!merged
+            .iter()
+            .any(|m| m.alias.to_ascii_lowercase().contains("mtp")));
         assert!(!merged.iter().any(|m| m.alias.contains("00002-of")));
         assert!(!merged.iter().any(|m| m.alias == "cached"));
         assert!(!merged.iter().any(|m| m.alias == "download"));

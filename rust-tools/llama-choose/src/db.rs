@@ -128,7 +128,7 @@ pub fn benchmark_scores_for(conn: &Connection, alias: &str) -> BenchmarkScores {
     }
 }
 
-fn latest_benchmark(conn: &Connection, alias: &str, kind: &str) -> Option<f64> {
+pub fn latest_benchmark(conn: &Connection, alias: &str, kind: &str) -> Option<f64> {
     conn.query_row(
         "SELECT score FROM benchmarks
          WHERE alias = ?1 AND kind = ?2

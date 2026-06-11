@@ -60,6 +60,17 @@ pub fn detect_quant(path: &Path) -> String {
     "?".to_string()
 }
 
+/// Truncate to `max` characters, ellipsised.
+pub fn truncate(s: &str, max: usize) -> String {
+    if s.chars().count() <= max {
+        s.to_string()
+    } else {
+        let mut t: String = s.chars().take(max.saturating_sub(1)).collect();
+        t.push('…');
+        t
+    }
+}
+
 /// Compact relative time like `3h ago`, `2d ago`, or `never`.
 pub fn relative_time(then: Option<i64>, now: i64) -> String {
     let Some(then) = then else {
